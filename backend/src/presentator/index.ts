@@ -31,7 +31,7 @@ const app = new Hono<{
 app.use(
 	'*',
 	cors({
-		origin: ['http://localhost:3000', 'https://review-app-two-delta.vercel.app'], // TODO 本番環境用を追加
+		origin: ['http://localhost:3000'], // TODO 本番環境用を追加
 		credentials: true,
 	})
 );
