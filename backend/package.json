@@ -8,22 +8,32 @@
 		"start": "wrangler dev",
 		"test": "vitest",
 		"cf-typegen": "wrangler types",
+		"drizzle:create:migration": "npx drizzle-kit generate",
 		"wrangler:apply:local": "npx wrangler d1 migrations apply app --local",
 		"db:studio:local": "npx cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.5.2",
 		"@cloudflare/workers-types": "^4.20241230.0",
+		"@types/react": "^19.0.2",
+		"@types/react-dom": "^19.0.2",
 		"drizzle-kit": "^0.30.1",
 		"typescript": "^5.5.2",
 		"vitest": "2.1.8",
 		"wrangler": "^3.60.3"
 	},
 	"dependencies": {
+		"@auth/core": "^0.34.2",
+		"@auth/drizzle-adapter": "^1.7.4",
+		"@hono/auth-js": "^1.0.15",
 		"@hono/zod-validator": "^0.4.2",
 		"@libsql/client": "^0.14.0",
+		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.38.3",
 		"hono": "^4.6.15",
+		"next-auth": "^4.24.11",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
 		"zod": "^3.24.1"
 	}
 }
