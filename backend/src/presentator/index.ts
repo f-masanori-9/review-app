@@ -25,7 +25,6 @@ const app = new Hono<{
 	Bindings: Bindings;
 	Variables: {
 		d1Drizzle: DrizzleD1Database<Record<string, never>>;
-		AUTH_SECRET: string;
 	};
 }>();
 
