@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { SessionProvider, authConfigManager } from "@hono/auth-js/react";
 
 authConfigManager.setConfig({
-  baseUrl: "http://localhost:8787",
+  baseUrl: `${process.env.NEXT_PUBLIC_ENDPOINT}`,
   credentials: "include",
 });
 
