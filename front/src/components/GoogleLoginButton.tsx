@@ -7,7 +7,7 @@ export const GoogleLoginButton = () => {
         signIn(
           "google",
           {
-            callbackUrl: `${process.env.NEXT_PUBLIC_ENDPOINT}/api/auth/callback/google`,
+            callbackUrl: "http://localhost:8787/api/auth/callback/google",
           },
           { prompt: "login" }
         )
