@@ -5,7 +5,7 @@ export const GoogleLoginButton = () => {
     <button
       onClick={() =>
         signIn("google", {
-          callbackUrl: `/api/auth/callback/google`,
+          redirectTo: `/api/auth/callback/google`,
         })
       }
     >
