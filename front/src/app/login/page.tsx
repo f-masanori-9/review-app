@@ -20,7 +20,7 @@ export default function Login() {
               const res = await signIn(
                 "google",
                 {
-                  callbackUrl: "/afterGoogleAuth",
+                  callbackUrl: `${process.env.NEXT_PUBLIC_ENDPOINT}/afterGoogleAuth`,
                 }
 
                 // {
