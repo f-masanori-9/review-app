@@ -10,6 +10,7 @@
 		"cf-typegen": "wrangler types",
 		"drizzle:create:migration": "npx drizzle-kit generate",
 		"wrangler:apply:local": "npx wrangler d1 migrations apply app --local",
+		"wrangler:apply:prod": "npx wrangler d1 migrations apply app",
 		"db:studio:local": "npx cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio"
 	},
 	"devDependencies": {
