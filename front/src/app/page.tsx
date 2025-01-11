@@ -1,12 +1,7 @@
 "use client";
 import { useSession } from "@hono/auth-js/react";
-import { hc } from "hono/client";
-import {
-  GetNotesRoute,
-  PostNotesRoute,
-} from "../../../backend/src/presentator";
+import { PostNotesRoute } from "../../../backend/src/presentator/routeTypes";
 import { useEffect } from "react";
-import { Hono } from "hono";
 import { generateApiClient } from "@/libs/apiClient";
 import { useRouter } from "next/navigation";
 
@@ -35,7 +30,7 @@ const NotLoggedIn = () => {
 
   useEffect(() => {
     router.push("/login");
-  }, []);
+  }, [router]);
 
   return <div>ログインしてません</div>;
 };

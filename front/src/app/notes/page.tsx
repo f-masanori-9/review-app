@@ -42,7 +42,7 @@ type Note = {
   title: string;
   content: string;
 };
-export const NoteList: FC<{
+const NoteList: FC<{
   notes: Note[];
   onClickItem: (noteId: string) => void;
 }> = ({ notes, onClickItem }) => {

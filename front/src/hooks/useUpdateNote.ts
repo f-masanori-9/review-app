@@ -1,6 +1,6 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { PatchNotesRoute } from "../../../backend/src/presentator";
+import { PatchNotesRoute } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
 
 const patchNoteApiClient = generateApiClient<PatchNotesRoute>();

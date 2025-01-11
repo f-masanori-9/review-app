@@ -1,6 +1,6 @@
 import { generateApiClient } from "@/libs/apiClient";
-import useSWR, { mutate } from "swr";
-import { GetNoteRoute, GetNotesRoute } from "../../../backend/src/presentator";
+import useSWR from "swr";
+import { GetNoteRoute } from "../../../backend/src/presentator/routeTypes";
 
 const client = generateApiClient<GetNoteRoute>();
 

@@ -27,7 +27,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../backend/src/presentator/index.ts"
+    "../backend/src/presentator/routeTypes.ts",
+    "../backend/node_modules/@cloudflare/**/*.d.ts", // cloudflare workers types
+    "../global.type.ts"
   ],
   "exclude": ["node_modules"]
 }

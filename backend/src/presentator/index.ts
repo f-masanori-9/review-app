@@ -78,7 +78,7 @@ app.get('/afterGoogleAuth', verifyAuth(), (c) => {
 	return c.redirect('http://localhost:3000');
 });
 
-const getNotesRoute = app.get('/api/notes', verifyAuth(), async (c) => {
+export const getNotesRoute = app.get('/api/notes', verifyAuth(), async (c) => {
 	const auth = c.get('authUser');
 	const userId = auth.token?.sub;
 	const d1Drizzle = c.get('d1Drizzle');
@@ -89,7 +89,7 @@ const getNotesRoute = app.get('/api/notes', verifyAuth(), async (c) => {
 	return c.json(notes_);
 });
 
-const getNoteRoute = app.get('/api/note/:noteId', verifyAuth(), async (c) => {
+export const getNoteRoute = app.get('/api/note/:noteId', verifyAuth(), async (c) => {
 	const userId = c.get('authUser').token?.sub;
 	const noteId = c.req.param('noteId');
 	const d1Drizzle = c.get('d1Drizzle');
@@ -107,7 +107,7 @@ const postNotesSchema = z.object({
 	content: z.string(),
 });
 
-const postNotesRoute = app.post('/api/notes', verifyAuth(), zValidator('json', postNotesSchema), async (c) => {
+export const postNotesRoute = app.post('/api/notes', verifyAuth(), zValidator('json', postNotesSchema), async (c) => {
 	const auth = c.get('authUser');
 	const d1Drizzle = c.get('d1Drizzle');
 	const body = c.req.valid('json');
@@ -139,7 +139,7 @@ const patchNotesSchema = z.object({
 	content: z.string(),
 });
 
-const patchNotesRoute = app.patch('/api/note/:noteId', verifyAuth(), zValidator('json', patchNotesSchema), async (c) => {
+export const patchNotesRoute = app.patch('/api/note/:noteId', verifyAuth(), zValidator('json', patchNotesSchema), async (c) => {
 	const usecase = new UpdateNoteUseCase(new NoteRepository(c.get('d1Drizzle')));
 	const userId = c.get('authUser').token?.sub;
 	const noteId = c.req.param('noteId');
@@ -150,10 +150,5 @@ const patchNotesRoute = app.patch('/api/note/:noteId', verifyAuth(), zValidator(
 	});
 	return c.json(result);
 });
-
-export type GetNoteRoute = typeof getNoteRoute;
-export type GetNotesRoute = typeof getNotesRoute;
-export type PostNotesRoute = typeof postNotesRoute;
-export type PatchNotesRoute = typeof patchNotesRoute;
 
 export { app };
