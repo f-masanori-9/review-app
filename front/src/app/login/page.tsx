@@ -17,17 +17,9 @@ export default function Login() {
         <button
           onClick={async () => {
             try {
-              const res = await signIn(
-                "google",
-                {
-                  callbackUrl: `${process.env.NEXT_PUBLIC_ENDPOINT}/afterGoogleAuth`,
-                }
-
-                // {
-                //   redirect: true,
-                // }
-                // { prompt: "login" }
-              );
+              const res = await signIn("google", {
+                callbackUrl: `/afterGoogleAuth`,
+              });
               console.log(res);
             } catch (e) {
               console.error(e);

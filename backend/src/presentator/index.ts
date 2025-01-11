@@ -32,7 +32,13 @@ const app = new Hono<{
 app.use(
 	'*',
 	cors({
-		origin: ['http://localhost:3000', 'https://review-app-two-delta.vercel.app'], // TODO 本番環境用を追加
+		origin: [
+			'http://localhost:3000',
+			'https://review-app-two-delta.vercel.app',
+			'https://review-dqn8l8utd-fmasanori9s-projects.vercel.app',
+		],
+		allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+		allowHeaders: ['Content-Type', 'Authorization', 'referer', 'x-auth-return-redirect'],
 		credentials: true,
 	})
 );
@@ -59,12 +65,6 @@ app.use(
 			],
 			session: {
 				strategy: 'jwt',
-			},
-			pages: {
-				signIn: '/auth/signin',
-				signOut: '/auth/signout',
-				error: '/auth/error', // エラーページ
-				verifyRequest: '/auth/verify-request', // 確認メール送信後のページ
 			},
 		};
 	})
