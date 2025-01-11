@@ -4,13 +4,9 @@ export const GoogleLoginButton = () => {
   return (
     <button
       onClick={() =>
-        signIn(
-          "google",
-          {
-            callbackUrl: `${process.env.NEXT_PUBLIC_ENDPOINT}/api/auth/callback/google`,
-          },
-          { prompt: "login" }
-        )
+        signIn("google", {
+          callbackUrl: `/api/auth/callback/google`,
+        })
       }
     >
       Googleでログイン

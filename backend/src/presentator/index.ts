@@ -25,6 +25,7 @@ const app = new Hono<{
 	Bindings: Bindings;
 	Variables: {
 		d1Drizzle: DrizzleD1Database<Record<string, never>>;
+		AUTH_SECRET: string;
 	};
 }>();
 
@@ -58,6 +59,12 @@ app.use(
 			],
 			session: {
 				strategy: 'jwt',
+			},
+			pages: {
+				signIn: '/auth/signin',
+				signOut: '/auth/signout',
+				error: '/auth/error', // エラーページ
+				verifyRequest: '/auth/verify-request', // 確認メール送信後のページ
 			},
 		};
 	})
