@@ -1,14 +1,14 @@
 "use client";
-import { useSession } from "@hono/auth-js/react";
+import { useSession } from "next-auth/react";
 import { PostNotesRoute } from "../../../backend/src/presentator/routeTypes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { generateApiClient } from "@/libs/apiClient";
 import { useRouter } from "next/navigation";
+import { hc } from "hono/client";
 
 export default function Home() {
   const { data: session, status } = useSession();
 
-  // return <div>Loading...</div>;
   if (status === "loading") {
     return <div>Loading...</div>;
   }

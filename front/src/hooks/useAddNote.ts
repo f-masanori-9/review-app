@@ -7,16 +7,20 @@ const postNoteApiClient = generateApiClient<PostNotesRoute>();
 
 export const useAddNote = () => {
   const addNote = useCallback(async () => {
-    const response = await postNoteApiClient.api.notes.$post({
-      json: {
-        title: "title",
-        content: "content",
-      },
-    });
-    mutateNotes();
+    try {
+      const response = await postNoteApiClient.api.notes.$post({
+        json: {
+          title: "title",
+          content: "content",
+        },
+      });
+      mutateNotes();
 
-    const note = await response.json();
-    return note;
+      const note = await response.json();
+      return note;
+    } catch (e) {
+      console.error(e);
+    }
   }, []);
 
   return { addNote };

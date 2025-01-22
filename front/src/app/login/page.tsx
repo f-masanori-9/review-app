@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useSession, signIn } from "@hono/auth-js/react";
+import { useSession, signIn } from "next-auth/react";
 
 export default function Login() {
   const { data: session, status } = useSession();
@@ -17,9 +17,7 @@ export default function Login() {
         <button
           onClick={async () => {
             try {
-              const res = await signIn("google", {
-                callbackUrl: `/afterGoogleAuth`,
-              });
+              const res = await signIn("google");
               console.log(res);
             } catch (e) {
               console.error(e);
