@@ -1,6 +1,6 @@
 import { authConfig } from "@/auth";
 
-export const { handlers, auth } = authConfig;
+const { handlers } = authConfig;
 
 export const GET = handlers.GET;
 
