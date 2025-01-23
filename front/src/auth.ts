@@ -15,7 +15,7 @@ export const authConfig = NextAuth({
   callbacks: {
     signIn: async (params: { user: User; account: Account | null }) => {
       console.log(params.user);
-      await fetch("http://localhost:8787/api/auth/signup/google", {
+      await fetch(`${process.env.INTERNAL_ENDPOINT}/api/auth/signup/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

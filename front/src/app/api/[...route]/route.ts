@@ -20,11 +20,14 @@ app.all("*", async (c) => {
   const reqHeaders = c.req.raw.headers;
   reqHeaders.append("X-User-Id", userId);
   reqHeaders.append("X-api-key", process.env.API_KEY || "");
-  const response = await fetch(`http://localhost:8787${c.req.path}`, {
-    method: c.req.method,
-    headers: c.req.raw.headers,
-    body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
-  });
+  const response = await fetch(
+    `${process.env.INTERNAL_ENDPOINT}${c.req.path}`,
+    {
+      method: c.req.method,
+      headers: c.req.raw.headers,
+      body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
+    }
+  );
 
   return c.newResponse(response.body, response.status as StatusCode, {
     "Content-Type": response.headers.get("Content-Type") || "",
