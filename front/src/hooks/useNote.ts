@@ -8,6 +8,7 @@ export const generateKey = (noteId: string) => ({
   noteId,
   name: "useNote",
 });
+
 export const useNote = (noteId: string) => {
   return useSWR(generateKey(noteId), async ({ noteId }) => {
     const response = await client.api.note[":noteId"].$get({
