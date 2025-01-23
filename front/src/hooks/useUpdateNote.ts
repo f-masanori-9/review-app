@@ -17,6 +17,7 @@ export const useUpdateNote = () => {
     mutateNotes();
 
     const note = await response.json();
+
     return note;
   }, []);
 
