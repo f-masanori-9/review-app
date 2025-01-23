@@ -30,6 +30,7 @@ app.all("*", async (c) => {
         "X-api-key": process.env.API_KEY || "",
       },
       body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
+      cache: "no-store",
     }
   );
 
