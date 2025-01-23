@@ -21,7 +21,7 @@ app.all("*", async (c) => {
   // reqHeaders.append("X-User-Id", userId);
   // reqHeaders.append("X-api-key", process.env.API_KEY || "");
   const response = await fetch(
-    `${process.env.INTERNAL_ENDPOINT}${c.req.path}`,
+    `${process.env.INTERNAL_ENDPOINT}${c.req.path}?test=nocache`,
     {
       method: c.req.method,
       headers: {
