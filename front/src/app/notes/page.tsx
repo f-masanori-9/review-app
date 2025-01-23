@@ -16,7 +16,9 @@ export default function Page() {
       <AddButton
         onClick={async () => {
           const addedNote = await addNote();
-          router.push(`/notes/${addedNote.id}`);
+          if (addedNote) {
+            router.push(`/notes/${addedNote.id}`);
+          }
         }}
       />
       <NoteList

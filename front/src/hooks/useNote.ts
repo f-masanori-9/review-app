@@ -1,8 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import useSWR from "swr";
-import { GetNoteRoute } from "../../../backend/src/presentator/routeTypes";
+import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 
-const client = generateApiClient<GetNoteRoute>();
+const client = generateApiClient<EndPointType>();
 
 export const generateKey = (noteId: string) => ({
   noteId,

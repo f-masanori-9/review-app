@@ -1,11 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const { data: session, status } = useSession();
-  // return <div>Loading...</div>;
+  const { status } = useSession();
   if (status === "loading") {
     return <div>Loading...</div>;
   }
@@ -30,5 +30,15 @@ export default function Login() {
     );
   }
 
-  return <>ログインしてます{JSON.stringify(session)}</>;
+  return <AlreadyLoggedIn />;
 }
+
+const AlreadyLoggedIn = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/notes");
+  }, [router]);
+
+  return null;
+};

@@ -8,18 +8,22 @@ const app = new Hono().basePath("/api");
 // NOTE: GET以外のリクエストボディはJSONであることを前提としている（もしJSON以外を使う場合は、その都度設定を変える）
 app.all("*", async (c) => {
   const session = await authConfig.auth();
+  const userId = session?.user?.id;
   // TODO: セッションがなかったら
+  if (!userId) {
+    return c.newResponse(JSON.stringify({ message: "Unauthorized" }), 401, {
+      "Content-Type": "application/json",
+    });
+  }
 
   const reqMethod = c.req.method;
+  const reqHeaders = c.req.raw.headers;
+  reqHeaders.append("X-User-Id", userId);
+  reqHeaders.append("X-api-key", process.env.API_KEY || "");
   const response = await fetch(`http://localhost:8787${c.req.path}`, {
     method: c.req.method,
     headers: c.req.raw.headers,
-    body: reqMethod === "GET" ? undefined : await c.req.json(),
-  });
-
-  let headers: Record<string, string | string[]> = {};
-  response.headers.forEach((value, key) => {
-    headers[key] = value;
+    body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
   });
 
   return c.newResponse(response.body, response.status as StatusCode, {

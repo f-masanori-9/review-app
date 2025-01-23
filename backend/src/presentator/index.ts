@@ -9,25 +9,16 @@ import { cors } from 'hono/cors';
 import { drizzle } from 'drizzle-orm/d1';
 
 import { DrizzleD1Database } from 'drizzle-orm/d1';
-import { notes } from '../../drizzle/schema';
+import { notes, users } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 import { Note } from '../models/Note';
 import { HTTPException } from 'hono/http-exception';
-import { createMiddleware } from 'hono/factory';
-import { UpdateNoteUseCase } from '../usecases/UpdateNoteUseCase';
-import { NoteRepository } from '../repositories/NoteRepository';
+import { createFactory, createMiddleware } from 'hono/factory';
+import { Environment } from './type';
+import { patchNotesHandler } from './handlers/patchNotesHandler';
+import { getNoteHandler } from './handlers/getNoteRoute';
 
-type Bindings = {
-	DB: D1Database;
-};
-
-const app = new Hono<{
-	Bindings: Bindings;
-	Variables: {
-		d1Drizzle: DrizzleD1Database<Record<string, never>>;
-		AUTH_SECRET: string;
-	};
-}>();
+const app = new Hono<Environment>();
 
 app.use(
 	'*',
@@ -38,7 +29,7 @@ app.use(
 			'https://review-dqn8l8utd-fmasanori9s-projects.vercel.app',
 		],
 		allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-		allowHeaders: ['Content-Type', 'Authorization', 'referer', 'x-auth-return-redirect'],
+		allowHeaders: ['Content-Type', 'Authorization', 'referer', 'x-auth-return-redirect', 'X-CSRF-Token', 'X-api-key'],
 		credentials: true,
 	})
 );
@@ -51,24 +42,26 @@ const setD1DrizzleMiddleware = createMiddleware(async (c, next) => {
 
 app.use(setD1DrizzleMiddleware);
 
-app.use(
-	'*',
-	initAuthConfig((c) => {
-		return {
-			secret: c.env.AUTH_SECRET,
-			adapter: DrizzleAdapter(drizzle(c.env.DB)),
-			providers: [
-				Google({
-					clientId: c.env.GOOGLE_ID,
-					clientSecret: c.env.GOOGLE_SECRET,
-				}),
-			],
-			session: {
-				strategy: 'jwt',
-			},
-		};
-	})
-);
+const verifyApiKey = createMiddleware(async (c, next) => {
+	const apiKey = c.req.header('X-api-key');
+	if (apiKey !== c.env.API_KEY) {
+		return c.text('Unauthorized', 401);
+	}
+	await next();
+});
+
+app.use(verifyApiKey);
+
+const setUserIdMiddleware = createMiddleware(async (c, next) => {
+	const userId = c.req.header('X-User-Id');
+	if (!userId) {
+		return c.text('Unauthorized', 401);
+	}
+	c.set('userId', userId);
+	await next();
+});
+
+app.use(setUserIdMiddleware);
 
 app.onError((err, c) => {
 	console.error(err);
@@ -79,16 +72,10 @@ app.onError((err, c) => {
 	return c.text('Other Error', 500);
 });
 
-app.use('/api/auth/*', authHandler());
-app.get('/afterGoogleAuth', verifyAuth(), (c) => {
-	// localhost1:3000 にリダイレクト
-	return c.redirect('http://localhost:3000');
-});
-
-export const getNotesRoute = app.get('/api/notes', verifyAuth(), async (c) => {
-	const auth = c.get('authUser');
-	const userId = auth.token?.sub;
+export const getNotesRoute = app.get('/api/notes', async (c) => {
+	const userId = c.get('userId');
 	const d1Drizzle = c.get('d1Drizzle');
+
 	const notes_ = await d1Drizzle
 		.select()
 		.from(notes)
@@ -96,30 +83,18 @@ export const getNotesRoute = app.get('/api/notes', verifyAuth(), async (c) => {
 	return c.json(notes_);
 });
 
-export const getNoteRoute = app.get('/api/note/:noteId', verifyAuth(), async (c) => {
-	const userId = c.get('authUser').token?.sub;
-	const noteId = c.req.param('noteId');
-	const d1Drizzle = c.get('d1Drizzle');
-	const note = (
-		await d1Drizzle
-			.select()
-			.from(notes)
-			.where(and(eq(notes.id, noteId), eq(notes.userId, userId || '')))
-	)[0];
-	return c.json(note);
-});
-
 const postNotesSchema = z.object({
 	title: z.string(),
 	content: z.string(),
 });
 
-export const postNotesRoute = app.post('/api/notes', verifyAuth(), zValidator('json', postNotesSchema), async (c) => {
-	const auth = c.get('authUser');
+export const postNotesRoute = app.post('/api/notes', zValidator('json', postNotesSchema), async (c) => {
+	const userId = c.get('userId');
+	console.log(userId);
 	const d1Drizzle = c.get('d1Drizzle');
 	const body = c.req.valid('json');
 	const note = Note.createNew({
-		userId: auth.token?.sub || '',
+		userId,
 		title: body.title,
 		content: body.content,
 	});
@@ -141,21 +116,25 @@ export const postNotesRoute = app.post('/api/notes', verifyAuth(), zValidator('j
 	return c.json(note);
 });
 
-const patchNotesSchema = z.object({
-	noteId: z.string(),
-	content: z.string(),
+const signupByGoogleSchema = z.object({
+	userId: z.string(),
+	name: z.string(),
+});
+export const signupByGoogleRoute = app.post('/api/auth/signup/google', zValidator('json', signupByGoogleSchema), async (c) => {
+	const d1Drizzle = c.get('d1Drizzle');
+	const body = c.req.valid('json');
+
+	const existingUser = await d1Drizzle.select().from(users).where(eq(users.id, body.userId)).get();
+	if (existingUser) {
+		return c.json({ existingUser });
+	}
+	const res = await d1Drizzle
+		.insert(users)
+		.values([{ id: body.userId, name: body.name }])
+		.get();
+	return c.json({ res });
 });
 
-export const patchNotesRoute = app.patch('/api/note/:noteId', verifyAuth(), zValidator('json', patchNotesSchema), async (c) => {
-	const usecase = new UpdateNoteUseCase(new NoteRepository(c.get('d1Drizzle')));
-	const userId = c.get('authUser').token?.sub;
-	const noteId = c.req.param('noteId');
-	const result = await usecase.execute({
-		userId: userId || '',
-		noteId,
-		content: c.req.valid('json').content,
-	});
-	return c.json(result);
-});
+const route = app.patch('/api/note/:noteId', ...patchNotesHandler).get('/api/note/:noteId', ...getNoteHandler);
 
-export { app };
+export { app, route };

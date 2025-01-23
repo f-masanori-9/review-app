@@ -1,10 +1,9 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { PostNotesRoute } from "../../../backend/src/presentator/routeTypes";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { generateApiClient } from "@/libs/apiClient";
 import { useRouter } from "next/navigation";
-import { hc } from "hono/client";
 
 export default function Home() {
   const { data: session, status } = useSession();
