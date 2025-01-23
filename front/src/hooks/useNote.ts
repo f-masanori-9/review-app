@@ -14,6 +14,7 @@ export const useNote = (noteId: string) => {
     const response = await client.api.note[":noteId"].$get({
       param: { noteId },
     });
+
     return response.json();
   });
 };
