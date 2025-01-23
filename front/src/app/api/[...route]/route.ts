@@ -17,7 +17,7 @@ app.all("*", async (c) => {
   }
 
   const reqMethod = c.req.method;
-  const reqHeaders = c.req.raw.headers;
+  const reqHeaders = new Headers(c.req.raw.headers);
   reqHeaders.append("X-User-Id", userId);
   reqHeaders.append("X-api-key", process.env.API_KEY || "");
   const response = await fetch(
