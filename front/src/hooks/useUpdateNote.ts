@@ -1,9 +1,9 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { PatchNotesRoute } from "../../../backend/src/presentator/routeTypes";
+import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
 
-const patchNoteApiClient = generateApiClient<PatchNotesRoute>();
+const patchNoteApiClient = generateApiClient<EndPointType>();
 
 export const useUpdateNote = () => {
   const updateNote = useCallback(async (noteId: string, content: string) => {
