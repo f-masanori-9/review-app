@@ -24,7 +24,7 @@ app.all("*", async (c) => {
     `${process.env.INTERNAL_ENDPOINT}${c.req.path}`,
     {
       method: c.req.method,
-      headers: c.req.raw.headers,
+      headers: reqHeaders,
       body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
     }
   );

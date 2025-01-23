@@ -29,7 +29,7 @@ app.use(
 			'https://review-dqn8l8utd-fmasanori9s-projects.vercel.app',
 		],
 		allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-		allowHeaders: ['Content-Type', 'Authorization', 'referer', 'x-auth-return-redirect', 'X-CSRF-Token', 'X-api-key'],
+		allowHeaders: ['Content-Type', 'Authorization', 'referer', 'x-auth-return-redirect', 'X-CSRF-Token', 'X-api-key', 'X-User-Id'],
 		credentials: true,
 	})
 );
