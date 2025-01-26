@@ -1,7 +1,6 @@
 export class Note {
 	readonly id: string;
 	readonly userId: string;
-	readonly title: string;
 	readonly content: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
@@ -9,7 +8,6 @@ export class Note {
 	constructor(params: ExcludeMethods<Note>) {
 		this.id = params.id;
 		this.userId = params.userId;
-		this.title = params.title;
 		this.content = params.content;
 		this.createdAt = params.createdAt;
 		this.updatedAt = params.updatedAt;
@@ -19,7 +17,6 @@ export class Note {
 		return new Note({
 			id: crypto.randomUUID(),
 			userId,
-			title,
 			content,
 			createdAt: new Date(),
 			updatedAt: new Date(),
@@ -38,7 +35,6 @@ export class Note {
 		return {
 			id: this.id,
 			userId: this.userId,
-			title: this.title,
 			content: this.content,
 			createdAt: this.createdAt,
 			updatedAt: this.updatedAt,

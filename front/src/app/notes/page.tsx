@@ -12,7 +12,7 @@ export default function Page() {
   const { addNote } = useAddNote();
 
   return (
-    <div className="p-4">
+    <div className="">
       <AddButton
         onClick={async () => {
           const addedNote = await addNote();
@@ -41,7 +41,6 @@ const AddButton: FC<{ onClick: () => void }> = ({ onClick }) => {
 
 type Note = {
   id: string;
-  title: string;
   content: string;
 };
 const NoteList: FC<{
@@ -56,7 +55,6 @@ const NoteList: FC<{
           className="bg-cyan-300 [&:not(:last-child)]:border-b-2"
           onClick={() => onClickItem(note.id)}
         >
-          <h2>{note.title}</h2>
           <p>{note.content}</p>
         </div>
       ))}

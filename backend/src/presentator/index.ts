@@ -104,7 +104,6 @@ export const postNotesRoute = app.post('/api/notes', zValidator('json', postNote
 			{
 				id: note.id,
 				userId: note.userId,
-				title: note.title,
 				content: note.content,
 				createdAt: note.createdAt,
 				updatedAt: note.updatedAt,

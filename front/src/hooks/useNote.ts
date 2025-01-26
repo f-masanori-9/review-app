@@ -1,6 +1,7 @@
 import { generateApiClient } from "@/libs/apiClient";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { EndPointType } from "../../../backend/src/presentator/routeTypes";
+import { useCallback } from "react";
 
 const client = generateApiClient<EndPointType>();
 
@@ -17,4 +18,12 @@ export const useNote = (noteId: string) => {
 
     return response.json();
   });
+};
+
+export const useMutateNote = () => {
+  const mutateNote = useCallback(async (noteId: string) => {
+    await mutate(generateKey(noteId));
+  }, []);
+
+  return { mutateNote };
 };

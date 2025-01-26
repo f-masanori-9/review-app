@@ -2,7 +2,7 @@
 
 import { useNote } from "@/hooks/useNote";
 import { useUpdateNote } from "@/hooks/useUpdateNote";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,6 @@ export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
 const PageCore: FC<{
   note: {
     id: string;
-    title: string;
     content: string;
   };
 }> = ({ note }) => {
@@ -32,12 +31,23 @@ const PageCore: FC<{
   const { updateNote } = useUpdateNote();
 
   const updateNoteDebounced = useMemo(() => {
-    return debounce(updateNote, 1000);
+    return debounce(updateNote, 1000, {
+      maxWait: 2000,
+    });
   }, [updateNote]);
 
   const toBack = () => {
     router.push("/notes");
   };
+
+  useEffect(() => {
+    return () => {
+      if (updateNoteDebounced.flush) {
+        updateNoteDebounced.flush();
+      }
+      updateNoteDebounced.cancel();
+    };
+  }, [updateNoteDebounced]);
 
   return (
     <div>

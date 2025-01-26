@@ -11,7 +11,6 @@ export const notes = sqliteTable('notes', {
 	userId: text('userId')
 		.notNull()
 		.references(() => users.id, { onDelete: 'cascade' }),
-	title: text('title').notNull(), // タイトル
 	content: text('content').default('').notNull(), // 内容
 	createdAt: integer({ mode: 'timestamp' }).notNull().default(new Date()),
 	updatedAt: integer({ mode: 'timestamp' }).notNull().default(new Date()),
