@@ -1,16 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
 
 import { useNotes } from "@/hooks/useNotes";
-import { useAddNote } from "@/hooks/useAddNote";
 import { Loading } from "@/components/Loading";
 import { FC } from "react";
+import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 
 export default function Page() {
-  const router = useRouter();
-
   const { data: notes = [], isLoading } = useNotes();
-  const { addNote } = useAddNote();
 
   if (isLoading) {
     return <Loading />;
@@ -34,10 +30,15 @@ const OneNote: FC<{
     content: string;
   };
 }> = ({ note }) => {
+  const { updateNoteDebounced } = useUpdateNoteDebounced();
+
   return (
     <textarea
       className="w-full h-24 p-2  border-gray border-[1px] bg-lightPrimary rounded-md"
       defaultValue={note.content}
+      onChange={(e) => {
+        updateNoteDebounced(note.id, e.target.value);
+      }}
     />
   );
 };

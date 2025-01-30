@@ -1,12 +1,11 @@
 "use client";
 
 import { useNote } from "@/hooks/useNote";
-import { useUpdateNote } from "@/hooks/useUpdateNote";
-import { FC, useEffect, useMemo } from "react";
+import { FC } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/Loading";
+import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 
 export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
   const { data, isLoading } = useNote(noteId);
@@ -29,26 +28,11 @@ const PageCore: FC<{
 }> = ({ note }) => {
   const router = useRouter();
 
-  const { updateNote } = useUpdateNote();
-
-  const updateNoteDebounced = useMemo(() => {
-    return debounce(updateNote, 1000, {
-      maxWait: 2000,
-    });
-  }, [updateNote]);
+  const { updateNoteDebounced } = useUpdateNoteDebounced();
 
   const toBack = () => {
     router.push("/notes");
   };
-
-  useEffect(() => {
-    return () => {
-      if (updateNoteDebounced.flush) {
-        updateNoteDebounced.flush();
-      }
-      updateNoteDebounced.cancel();
-    };
-  }, [updateNoteDebounced]);
 
   return (
     <div>
