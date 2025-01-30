@@ -16,9 +16,13 @@ export default function Page() {
     return <Loading />;
   }
 
-  return notes.map((note) => {
-    return <OneNote key={note.id} note={note} />;
-  });
+  return (
+    <div className="p-1">
+      {notes.map((note) => {
+        return <OneNote key={note.id} note={note} />;
+      })}
+    </div>
+  );
 }
 
 const OneNote: FC<{
@@ -32,7 +36,7 @@ const OneNote: FC<{
 }> = ({ note }) => {
   return (
     <textarea
-      className="w-full h-24 p-2 mr-2 ml-2 border-gray border-[1px] bg-lightPrimary rounded-md"
+      className="w-full h-24 p-2  border-gray border-[1px] bg-lightPrimary rounded-md"
       defaultValue={note.content}
     />
   );
