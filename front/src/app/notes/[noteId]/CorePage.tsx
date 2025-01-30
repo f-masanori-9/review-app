@@ -6,13 +6,14 @@ import { FC, useEffect, useMemo } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/Loading";
 
 export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
   const { data, isLoading } = useNote(noteId);
   const existingNote = data;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (!existingNote) {
     return <div>Not Found</div>;
@@ -53,7 +54,7 @@ const PageCore: FC<{
     <div>
       <IoIosArrowBack onClick={toBack} title="Back" size={24} color="#" />
       <textarea
-        className="w-full h-96 p-3"
+        className="w-full h-96 p-3 m-1 border-primary"
         defaultValue={note.content || ""}
         onChange={(e) => {
           updateNoteDebounced(note.id, e.target.value);

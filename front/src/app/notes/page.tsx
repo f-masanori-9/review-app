@@ -1,36 +1,49 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import { useNotes } from "@/hooks/useNotes";
 import { useAddNote } from "@/hooks/useAddNote";
 import { Loading } from "@/components/Loading";
-
+import { CiSquarePlus } from "react-icons/ci";
 export default function Page() {
   const router = useRouter();
 
   const { data: notes = [], isLoading } = useNotes();
   const { addNote } = useAddNote();
 
-  if (isLoading) {
+  const [isLoadingNotes, setIsLoadingNote] = useState(false);
+  const onClickAddNote = async () => {
+    setIsLoadingNote(true);
+    try {
+      const addedNote = await addNote();
+      if (addedNote) {
+        router.push(`/notes/${addedNote.id}`);
+      }
+    } finally {
+      setIsLoadingNote(false);
+    }
+  };
+
+  if (isLoading || isLoadingNotes) {
     return <Loading />;
   }
   return (
-    <div className="">
-      <AddButton
-        onClick={async () => {
-          const addedNote = await addNote();
-          if (addedNote) {
-            router.push(`/notes/${addedNote.id}`);
-          }
-        }}
-      />
+    <div className="p-4">
       <NoteList
         notes={notes}
         onClickItem={(noteId) => {
           router.push(`/notes/${noteId}`);
         }}
       />
+      <div className="fixed z-50 bottom-10  cursor-pointer">
+        <CiSquarePlus
+          onClick={onClickAddNote}
+          className="border-primary"
+          color="#06b6d4"
+          size={52}
+        />
+      </div>
     </div>
   );
 }
@@ -53,7 +66,7 @@ const NoteList: FC<{
   onClickItem: (noteId: string) => void;
 }> = ({ notes, onClickItem }) => {
   return (
-    <div className="rounded-md m-4">
+    <div className="rounded-md">
       {notes.map((note) => (
         <OneNote key={note.id} note={note} onClickItem={onClickItem} />
       ))}
@@ -70,7 +83,7 @@ const OneNote: FC<{ note: Note; onClickItem: (noteId: string) => void }> = ({
   return (
     <div
       key={note.id}
-      className="bg-cyan-300 [&:not(:last-child)]:border-b-2"
+      className="bg-lightPrimary [&:not(:last-child)]:border-b-2 px-2 py-[2px] cursor-pointer"
       onClick={() => onClickItem(note.id)}
     >
       <p className="truncate font-bold">{title}</p>
