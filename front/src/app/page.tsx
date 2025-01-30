@@ -13,6 +13,14 @@ export default function Home() {
       <div>{session ? "ログイン中" : "ログアウト中"}</div>
       <button
         onClick={() => {
+          router.push("/notes");
+        }}
+      >
+        ノート一覧
+      </button>
+      <div></div>
+      <button
+        onClick={() => {
           router.push("/login");
         }}
       >

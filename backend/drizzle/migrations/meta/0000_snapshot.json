@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7801e5f1-6a0a-47f4-a8d4-414954dd27d9",
+  "id": "bf2c45f9-722d-4a39-a0db-2868523a0af4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "notes": {
@@ -21,13 +21,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "content": {
           "name": "content",
           "type": "text",
@@ -42,7 +35,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-01-23T16:32:04.384Z\"'"
+          "default": "(strftime('%s', 'now'))"
         },
         "updatedAt": {
           "name": "updatedAt",
@@ -50,7 +43,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-01-23T16:32:04.384Z\"'"
+          "default": "(strftime('%s', 'now'))"
         }
       },
       "indexes": {
@@ -104,7 +97,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-01-23T16:32:04.384Z\"'"
+          "default": "(strftime('%s', 'now'))"
         },
         "updatedAt": {
           "name": "updatedAt",
@@ -112,7 +105,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-01-23T16:32:04.384Z\"'"
+          "default": "(strftime('%s', 'now'))"
         }
       },
       "indexes": {

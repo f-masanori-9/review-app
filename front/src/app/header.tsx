@@ -2,8 +2,12 @@
 
 import ClickAwayListener from "react-click-away-listener";
 import { useState } from "react";
+import { useSignOut } from "@/hooks/useSignOut";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+  const router = useRouter();
+
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
     setOpenMenu(!openMenu);
@@ -12,6 +16,8 @@ export const Header = () => {
   const handleClickAway = () => {
     setOpenMenu(false);
   };
+
+  const { signOut } = useSignOut();
 
   return (
     <div className="App">
@@ -58,7 +64,25 @@ export const Header = () => {
                   : "fixed right-[-100%] ease-linear duration-600"
               }
             >
-              <ul className="mt-6">省略</ul>
+              <ul
+                className="mt-6"
+                onClick={() => {
+                  router.push("/notes");
+                }}
+              >
+                ノート一覧
+              </ul>
+              <ul
+                className="mt-6"
+                onClick={() => {
+                  router.push("/reviewNotes");
+                }}
+              >
+                ノート復習
+              </ul>
+              <ul className="mt-6" onClick={() => signOut()}>
+                ログアウト
+              </ul>
             </nav>
           </ClickAwayListener>
         </header>
