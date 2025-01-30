@@ -1,5 +1,6 @@
 "use client";
 
+import { Loading } from "@/components/Loading";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -21,7 +22,13 @@ export const AuthGuard = ({ children }: { children: ReactNode }) => {
     }
   }, [session, status, router, pathname]);
 
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading") return <Loading />;
+
+  if (!session) {
+    if (pathname === "/login") return <>{children}</>;
+    if (pathname === "/") return <>{children}</>;
+    return <Loading />;
+  }
 
   return <>{children}</>;
 };

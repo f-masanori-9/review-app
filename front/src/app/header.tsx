@@ -13,6 +13,9 @@ export const Header = () => {
     setOpenMenu(!openMenu);
   };
 
+  const closeMenu = () => {
+    setOpenMenu(false);
+  };
   const handleClickAway = () => {
     setOpenMenu(false);
   };
@@ -36,6 +39,8 @@ export const Header = () => {
                     ? "text-left fixed bg-slate-50 right-0 top-0 w-8/12 h-screen flex flex-col justify-start pt-8 px-3 ease-linear duration-300"
                     : "fixed right-[-100%] ease-linear duration-600"
                 }
+                // NOTE: メニュー遷移時にメニューを閉じるため
+                onClick={closeMenu}
               >
                 <ul
                   className="mt-6"

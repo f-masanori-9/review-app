@@ -4,6 +4,7 @@ import "./globals.css";
 import { HonoSessionProvider } from "@/providers/HonoSessionProvider";
 import { AuthGuard } from "./AuthGuard";
 import { Header } from "./header";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="jp">
+      <Head>
+        <title>review-notes</title>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
