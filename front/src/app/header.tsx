@@ -4,9 +4,11 @@ import ClickAwayListener from "react-click-away-listener";
 import { FC, useState } from "react";
 import { useSignOut } from "@/hooks/useSignOut";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const Header = () => {
   const router = useRouter();
+  const { status } = useSession();
 
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
@@ -22,6 +24,41 @@ export const Header = () => {
 
   const { signOut } = useSignOut();
 
+  const menuItems =
+    status === "unauthenticated"
+      ? [
+          {
+            label: "トップ",
+            onClick: () => {
+              router.push("/");
+            },
+          },
+          {
+            label: "登録/ログイン",
+            onClick: () => {
+              router.push("/login");
+            },
+          },
+        ]
+      : [
+          {
+            label: "ノート一覧",
+            onClick: () => {
+              router.push("/notes");
+            },
+          },
+          {
+            label: "ノート復習",
+            onClick: () => {
+              router.push("/reviewNotes");
+            },
+          },
+          {
+            label: "ログアウト",
+            onClick: () => signOut(),
+          },
+        ];
+
   return (
     <div className="App">
       <div className="container mx-auto px-3">
@@ -36,31 +73,26 @@ export const Header = () => {
               <nav
                 className={
                   openMenu
-                    ? "text-left fixed bg-slate-50 right-0 top-0 w-8/12 h-screen flex flex-col justify-start pt-8 px-3 ease-linear duration-300"
+                    ? "z-11 text-left fixed bg-slate-50 right-0 top-0 w-8/12 h-screen flex flex-col justify-start pt-8 px-3 ease-linear duration-300"
                     : "fixed right-[-100%] ease-linear duration-600"
                 }
-                // NOTE: メニュー遷移時にメニューを閉じるため
-                onClick={closeMenu}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               >
-                <ul
-                  className="mt-6"
-                  onClick={() => {
-                    router.push("/notes");
-                  }}
-                >
-                  ノート一覧
-                </ul>
-                <ul
-                  className="mt-6"
-                  onClick={() => {
-                    router.push("/reviewNotes");
-                  }}
-                >
-                  ノート復習
-                </ul>
-                <ul className="mt-6" onClick={() => signOut()}>
-                  ログアウト
-                </ul>
+                {menuItems.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      item.onClick();
+                      // NOTE: メニュー遷移時にメニューを閉じるため
+                      closeMenu();
+                    }}
+                    className="py-2 "
+                  >
+                    {item.label}
+                  </button>
+                ))}
               </nav>
             </div>
           </ClickAwayListener>

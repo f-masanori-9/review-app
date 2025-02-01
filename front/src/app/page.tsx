@@ -1,31 +1,10 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
 export default function Home() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
   return (
     <>
-      <div>メモアプリだよ</div>{" "}
-      <div>{session ? "ログイン中" : "ログアウト中"}</div>
-      <button
-        onClick={() => {
-          router.push("/notes");
-        }}
-      >
-        ノート一覧
-      </button>
-      <div></div>
-      <button
-        onClick={() => {
-          router.push("/login");
-        }}
-      >
-        ログインはこちら
-      </button>
+      <div>復習ができるメモアプリです。</div>
+      <div>ログインして利用してください。</div>
     </>
   );
 }
