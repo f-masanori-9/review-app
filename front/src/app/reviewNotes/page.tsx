@@ -2,8 +2,9 @@
 
 import { useNotes } from "@/hooks/useNotes";
 import { Loading } from "@/components/Loading";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
+import { TextAreaWithDynamicRows } from "@/components/TextAreaWithDynamicRows";
 
 export default function Page() {
   const { data: notes = [], isLoading } = useNotes();
@@ -32,13 +33,18 @@ const OneNote: FC<{
 }> = ({ note }) => {
   const { updateNoteDebounced } = useUpdateNoteDebounced();
 
+  const [isFocusing, setIsForcusing] = useState(false);
   return (
-    <textarea
-      className="w-full h-24 p-2  border-gray border-[1px] bg-lightPrimary rounded-md"
+    <TextAreaWithDynamicRows
+      className={`w-full ${
+        isFocusing ? "" : "h-14"
+      } p-2 border-gray border-[1px] bg-lightPrimary rounded-md{}`}
       defaultValue={note.content}
-      onChange={(e) => {
-        updateNoteDebounced(note.id, e.target.value);
+      onChange={(v) => {
+        updateNoteDebounced(note.id, v);
       }}
+      onFocus={() => setIsForcusing(true)}
+      onBlur={() => setIsForcusing(false)}
     />
   );
 };

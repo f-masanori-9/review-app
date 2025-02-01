@@ -1,19 +1,33 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/Loading";
 
 export default function Login() {
   const { status } = useSession();
-  if (status === "loading") {
-    return <div>Loading...</div>;
+  const [isLoading, setIsLoading] = useState(false);
+  if (status === "loading" || isLoading) {
+    return <Loading />;
   }
 
   if (status !== "authenticated") {
     return (
       <div className="p-4 flex flex-col items-center">
-        <GoogleLoginButton />
+        <GoogleLoginButton
+          onClickGoogleLogin={async () => {
+            try {
+              setIsLoading(true);
+              const res = await signIn("google");
+              console.log(res);
+            } catch (e) {
+              console.error(e);
+            } finally {
+              setIsLoading(false);
+            }
+          }}
+        />
       </div>
     );
   }
@@ -21,17 +35,12 @@ export default function Login() {
   return <AlreadyLoggedIn />;
 }
 
-const GoogleLoginButton = () => {
+const GoogleLoginButton: FC<{ onClickGoogleLogin: () => void }> = ({
+  onClickGoogleLogin,
+}) => {
   return (
-    <div
-      onClick={async () => {
-        try {
-          const res = await signIn("google");
-          console.log(res);
-        } catch (e) {
-          console.error(e);
-        }
-      }}
+    <button
+      onClick={onClickGoogleLogin}
       className="flex items-center bg-white dark:bg-gray-900 border border-gray-300 rounded-lg shadow-md px-8 py-2 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 w-64"
     >
       <svg
@@ -77,7 +86,7 @@ const GoogleLoginButton = () => {
         </g>
       </svg>
       <span>Google で登録/ログイン</span>
-    </div>
+    </button>
   );
 };
 
