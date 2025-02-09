@@ -73,7 +73,7 @@ export const Header = () => {
               <nav
                 className={
                   openMenu
-                    ? "z-11 text-left fixed bg-slate-50 right-0 top-0 w-8/12 h-screen flex flex-col justify-start pt-8 px-3 ease-linear duration-300"
+                    ? "z-50 text-left fixed bg-slate-50 right-0 top-0 w-8/12 h-screen flex flex-col justify-start pt-8 px-3 ease-linear duration-300"
                     : "fixed right-[-100%] ease-linear duration-600"
                 }
                 onClick={(e) => {

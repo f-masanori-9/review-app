@@ -42,17 +42,16 @@ const OneNote: FC<{
   const [isFocusing, setIsForcusing] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
   return (
-    <div className="relative">
+    <div className="relative z-0">
       <TextAreaWithDynamicRows
         className={`w-full ${
           isFocusing ? "" : "max-h-[72px]"
-        } p-2 border-gray border-[1px] bg-lightPrimary rounded-md{}`}
+        } p-2 border-gray border-[1px] bg-lightPrimary rounded-md z-0`}
         defaultValue={note.content}
         onChange={(v) => {
           updateNoteDebounced(note.id, v);
         }}
         onFocus={() => setIsForcusing(true)}
-        // onBlur={() => setIsForcusing(false)}
       />
       {isFocusing && (
         <>

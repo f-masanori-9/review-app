@@ -48,14 +48,6 @@ export default function Page() {
   );
 }
 
-const AddButton: FC<{ onClick: () => void }> = ({ onClick }) => {
-  return (
-    <button className="bg-primary text-white rounded-md p-2" onClick={onClick}>
-      Add
-    </button>
-  );
-};
-
 type Note = {
   id: string;
   content: string;

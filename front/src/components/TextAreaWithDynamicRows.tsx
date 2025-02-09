@@ -13,7 +13,8 @@ const calculateRows = (textarea: HTMLTextAreaElement | null): number => {
     heightToNumber(style.paddingTop) + heightToNumber(style.paddingBottom);
   const textareaHeight = textarea.scrollHeight;
 
-  return Math.floor((textareaHeight - paddingY) / lineHeight);
+  // NOTE: -1 は、復習や削除ボタンの分
+  return Math.floor((textareaHeight - paddingY - 1) / lineHeight);
 };
 
 export const TextAreaWithDynamicRows: FC<{
