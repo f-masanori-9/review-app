@@ -7,6 +7,8 @@ import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 import { TextAreaWithDynamicRows } from "@/components/TextAreaWithDynamicRows";
 import { useAddReview } from "@/hooks/useAddReview";
 import { useReward } from "react-rewards";
+import { MdOutlinePreview } from "react-icons/md";
+
 export default function Page() {
   const { data: notes = [], isLoading } = useNotes();
 
@@ -52,22 +54,23 @@ const OneNote: FC<{
       />
       {isFocusing && (
         <>
-          {!isReviewed && (
-            <div className="absolute left-2 bottom-2 z-10">
+          <div className="absolute left-2 bottom-2 ">
+            <span id="rewardId" />
+            {!isReviewed && (
               <button
                 onClick={(e) => {
-                  reward();
                   e.stopPropagation();
-                  setIsReviewed(true);
                   addReview(note.id);
+                  setIsReviewed(true);
+                  reward();
                 }}
-                disabled={isReviewed}
+                className="flex items-center"
               >
-                <span id="rewardId" />
+                <MdOutlinePreview size={24} color={"#0F1A45"} />
                 復習
               </button>
-            </div>
-          )}
+            )}
+          </div>
           <div className="absolute right-2 bottom-2">
             <button
               onClick={() => {
