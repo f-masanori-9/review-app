@@ -52,20 +52,22 @@ const OneNote: FC<{
       />
       {isFocusing && (
         <>
-          <div className="absolute left-2 bottom-2 z-10">
-            <button
-              onClick={(e) => {
-                reward();
-                e.stopPropagation();
-                setIsReviewed(true);
-                addReview(note.id);
-              }}
-              disabled={isReviewed}
-            >
-              <span id="rewardId" />
-              復習
-            </button>
-          </div>
+          {!isReviewed && (
+            <div className="absolute left-2 bottom-2 z-10">
+              <button
+                onClick={(e) => {
+                  reward();
+                  e.stopPropagation();
+                  setIsReviewed(true);
+                  addReview(note.id);
+                }}
+                disabled={isReviewed}
+              >
+                <span id="rewardId" />
+                復習
+              </button>
+            </div>
+          )}
           <div className="absolute right-2 bottom-2">
             <button
               onClick={() => {
