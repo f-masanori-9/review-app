@@ -16,6 +16,7 @@ import { postNotesHandler } from './handlers/postNotesRoute';
 import { getNotesHandler } from './handlers/getNoteRoutes';
 import { usersTable } from '../../drizzle/schema';
 import { postReviewLogHandler } from './handlers/postReviewLog';
+import { deleteNoteRoute } from './handlers/deleteNoteRoute';
 
 const app = new Hono<Environment>();
 
@@ -96,6 +97,7 @@ const route = app
 	.get('/api/notes', ...getNotesHandler)
 	.post('/api/notes', ...postNotesHandler)
 	.patch('/api/note/:noteId', ...patchNotesHandler)
-	.post('/api/review-logs', ...postReviewLogHandler);
+	.post('/api/review-logs', ...postReviewLogHandler)
+	.delete('/api/note', ...deleteNoteRoute);
 
 export { app, route };

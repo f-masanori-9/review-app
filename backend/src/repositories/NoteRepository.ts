@@ -48,4 +48,11 @@ export class NoteRepository {
 			.returning()
 			.get();
 	}
+
+	async delete({ userId, noteId }: { userId: string; noteId: string }): Promise<void> {
+		await this.d1Drizzle
+			.delete(notesTable)
+			.where(and(eq(notesTable.id, noteId), eq(notesTable.userId, userId)))
+			.get();
+	}
 }

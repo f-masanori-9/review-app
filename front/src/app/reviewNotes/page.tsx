@@ -8,7 +8,8 @@ import { TextAreaWithDynamicRows } from "@/components/TextAreaWithDynamicRows";
 import { useAddReview } from "@/hooks/useAddReview";
 import { useReward } from "react-rewards";
 import { MdOutlinePreview } from "react-icons/md";
-
+import { FaTrash } from "react-icons/fa";
+import { useDeleteReview } from "@/hooks/useDeleteReview";
 export default function Page() {
   const { data: notes = [], isLoading } = useNotes();
 
@@ -36,6 +37,7 @@ const OneNote: FC<{
 }> = ({ note }) => {
   const { updateNoteDebounced } = useUpdateNoteDebounced();
   const { addReview } = useAddReview();
+  const { deleteReview } = useDeleteReview();
   const { reward, isAnimating } = useReward("rewardId", "confetti");
   const [isFocusing, setIsForcusing] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
@@ -72,13 +74,13 @@ const OneNote: FC<{
             )}
           </div>
           <div className="absolute right-2 bottom-2">
-            <button
+            <FaTrash
               onClick={() => {
-                alert("[wip]削除しますか？");
+                if (confirm("[wip]削除しますか？")) {
+                  deleteReview(note.id);
+                }
               }}
-            >
-              削除
-            </button>
+            />
           </div>
         </>
       )}
