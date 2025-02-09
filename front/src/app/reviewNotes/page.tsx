@@ -55,7 +55,6 @@ const OneNote: FC<{
           <div className="absolute left-2 bottom-2 z-10">
             <button
               onClick={(e) => {
-                alert("復習しますか？");
                 reward();
                 e.stopPropagation();
                 setIsReviewed(true);
@@ -70,7 +69,7 @@ const OneNote: FC<{
           <div className="absolute right-2 bottom-2">
             <button
               onClick={() => {
-                alert("削除しますか？");
+                alert("[wip]削除しますか？");
               }}
             >
               削除
