@@ -6,7 +6,7 @@ import { FC, useState } from "react";
 import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 import { TextAreaWithDynamicRows } from "@/components/TextAreaWithDynamicRows";
 import { useAddReview } from "@/hooks/useAddReview";
-
+import { useReward } from "react-rewards";
 export default function Page() {
   const { data: notes = [], isLoading } = useNotes();
 
@@ -34,8 +34,9 @@ const OneNote: FC<{
 }> = ({ note }) => {
   const { updateNoteDebounced } = useUpdateNoteDebounced();
   const { addReview } = useAddReview();
-
+  const { reward, isAnimating } = useReward("rewardId", "confetti");
   const [isFocusing, setIsForcusing] = useState(false);
+  const [isReviewed, setIsReviewed] = useState(false);
   return (
     <div className="relative">
       <TextAreaWithDynamicRows
@@ -55,11 +56,14 @@ const OneNote: FC<{
             <button
               onClick={(e) => {
                 alert("復習しますか？");
+                reward();
                 e.stopPropagation();
-
+                setIsReviewed(true);
                 addReview(note.id);
               }}
+              disabled={isReviewed}
             >
+              <span id="rewardId" />
               復習
             </button>
           </div>

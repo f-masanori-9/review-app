@@ -22,6 +22,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-iframe": "^1.8.5",
+    "react-rewards": "^2.1.0",
     "swr": "^2.3.0",
     "zod": "^3.24.1"
   },
