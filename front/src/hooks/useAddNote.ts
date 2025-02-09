@@ -1,9 +1,9 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { PostNotesRoute } from "../../../backend/src/presentator/routeTypes";
+import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
 
-const postNoteApiClient = generateApiClient<PostNotesRoute>();
+const postNoteApiClient = generateApiClient<EndPointType>();
 
 export const useAddNote = () => {
   const addNote = useCallback(async () => {

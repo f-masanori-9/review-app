@@ -1,4 +1,4 @@
-import { notes } from '../../../drizzle/schema';
+import { notesTable } from '../../../drizzle/schema';
 import { factory } from '../factory';
 import { eq, and } from 'drizzle-orm';
 
@@ -9,8 +9,8 @@ export const getNoteHandler = factory.createHandlers(async (c) => {
 	const note = (
 		await d1Drizzle
 			.select()
-			.from(notes)
-			.where(and(eq(notes.id, noteId), eq(notes.userId, userId || '')))
+			.from(notesTable)
+			.where(and(eq(notesTable.id, noteId || ''), eq(notesTable.userId, userId || '')))
 	)[0];
 
 	return c.json(note);

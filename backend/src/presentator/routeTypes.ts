@@ -1,6 +1,3 @@
-import { getNotesRoute, postNotesRoute, route } from '.';
-
-export type GetNotesRoute = typeof getNotesRoute;
-export type PostNotesRoute = typeof postNotesRoute;
+import { route } from '.';
 
 export type EndPointType = typeof route;

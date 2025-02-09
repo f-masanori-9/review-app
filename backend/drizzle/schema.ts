@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
-export const users = sqliteTable('user', {
+export const usersTable = sqliteTable('user', {
 	id: text('id').primaryKey().unique(),
 	name: text('name'),
 	createdAt: integer({ mode: 'timestamp' })
@@ -12,11 +12,11 @@ export const users = sqliteTable('user', {
 		.default(sql`(strftime('%s', 'now'))`),
 });
 
-export const notes = sqliteTable('notes', {
+export const notesTable = sqliteTable('notes', {
 	id: text('id').primaryKey().unique(),
 	userId: text('userId')
 		.notNull()
-		.references(() => users.id, { onDelete: 'cascade' }),
+		.references(() => usersTable.id, { onDelete: 'cascade' }),
 	content: text('content').default('').notNull(), // 内容
 	createdAt: integer({ mode: 'timestamp' })
 		.notNull()
@@ -25,3 +25,27 @@ export const notes = sqliteTable('notes', {
 		.notNull()
 		.default(sql`(strftime('%s', 'now'))`),
 });
+
+export const reviewLogsTable = sqliteTable('reviewLogs', {
+	id: text('id').primaryKey().unique(),
+	userId: text('userId')
+		.notNull()
+		.references(() => usersTable.id, { onDelete: 'cascade' }),
+	noteId: text('noteId')
+		.notNull()
+		.references(() => notesTable.id, { onDelete: 'cascade' }),
+	createdAt: integer({ mode: 'timestamp' })
+		.notNull()
+		.default(sql`(strftime('%s', 'now'))`),
+});
+
+export const notesRelations = relations(notesTable, ({ many }) => ({
+	reviewLogs: many(reviewLogsTable),
+}));
+
+export const reviewLogsRelations = relations(reviewLogsTable, ({ one }) => ({
+	note: one(notesTable, {
+		fields: [reviewLogsTable.noteId],
+		references: [notesTable.id],
+	}),
+}));

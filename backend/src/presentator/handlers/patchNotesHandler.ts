@@ -11,13 +11,14 @@ const patchNotesSchema = z.object({
 
 export const patchNotesHandler = factory.createHandlers(zValidator('json', patchNotesSchema), async (c) => {
 	const userId = c.get('userId');
+	const body = c.req.valid('json');
 
 	const usecase = new UpdateNoteUseCase(new NoteRepository(c.get('d1Drizzle')));
-	const noteId = c.req.param('noteId');
 	const result = await usecase.execute({
 		userId: userId || '',
-		noteId,
+		noteId: body.noteId,
 		content: c.req.valid('json').content,
 	});
+
 	return c.json(result);
 });

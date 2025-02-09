@@ -1,7 +1,7 @@
 import { DrizzleD1Database } from 'drizzle-orm/d1';
 import { Note } from '../models/Note';
 import { eq, and } from 'drizzle-orm';
-import { notes as notesTable } from '../../drizzle/schema';
+import { notesTable, reviewLogsTable } from '../../drizzle/schema';
 
 export class NoteRepository {
 	constructor(readonly d1Drizzle: DrizzleD1Database<Record<string, never>>) {}
@@ -14,6 +14,16 @@ export class NoteRepository {
 			.get();
 
 		return note ? new Note(note) : null;
+	}
+
+	async findByUserId({ userId }: { userId: string }) {
+		const notesAndReviewRecord = await this.d1Drizzle
+			.select()
+			.from(notesTable)
+			.leftJoin(reviewLogsTable, eq(reviewLogsTable.noteId, notesTable.id))
+			.where(eq(notesTable.userId, userId));
+
+		return notesAndReviewRecord;
 	}
 
 	async create(note: Note): Promise<void> {

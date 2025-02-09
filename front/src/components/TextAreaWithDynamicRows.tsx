@@ -34,18 +34,28 @@ export const TextAreaWithDynamicRows: FC<{
     setRows(calculateRows(textareaRef.current));
   };
 
+  const [isFocusing, setIsForcusing] = useState(false);
+
   return (
     <textarea
       ref={textareaRef}
-      rows={rows}
+      rows={rows + 1}
       onInput={handleInput}
       className={className}
       defaultValue={defaultValue}
       onChange={(e) => {
         onChange(e.target.value);
       }}
-      onFocus={onFocus}
-      onBlur={onBlur}
+      onFocus={() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        onFocus && onFocus();
+        setIsForcusing(true);
+      }}
+      onBlur={() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        onBlur && onBlur();
+        setIsForcusing(false);
+      }}
     />
   );
 };
