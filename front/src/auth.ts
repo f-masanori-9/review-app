@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, { Account, User } from "next-auth";
+import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { prismaClient } from "./server/prismaClient";
 
@@ -12,23 +12,20 @@ export const authConfig = NextAuth({
   ],
   adapter: PrismaAdapter(prismaClient),
   secret: process.env.SECRET,
-  callbacks: {
-    signIn: async (params: { user: User; account: Account | null }) => {
-      console.log(params.user);
+  events: {
+    signIn: async ({ user }) => {
       await fetch(`${process.env.INTERNAL_ENDPOINT}/api/auth/signup/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-User-Id": params.user.id || "",
+          "X-User-Id": user.id || "",
           "X-api-key": process.env.API_KEY || "",
         },
         body: JSON.stringify({
-          userId: params.user.id,
-          name: params.user.name,
+          userId: user.id,
+          name: user.name,
         }),
       });
-
-      return true;
     },
   },
 });
