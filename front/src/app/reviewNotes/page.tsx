@@ -130,7 +130,13 @@ const DropDownMenu: FC<{
         {menuButton}
       </div>
       {isOpen && (
-        <ClickAwayListener onClickAway={onCloseMenu}>
+        <ClickAwayListener
+          onClickAway={(e) => {
+            onCloseMenu();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+          }}
+        >
           <div
             className="absolute right-0 z-10 mt-2 w-56 p-1 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden"
             role="menu"
