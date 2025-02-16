@@ -42,7 +42,7 @@ export const Header = () => {
         ]
       : [
           {
-            label: "ノート一覧",
+            label: "ノート管理",
             onClick: () => {
               router.push("/notes");
             },
