@@ -1,6 +1,5 @@
 "use client";
 
-import ClickAwayListener from "react-click-away-listener";
 import { FC, useState } from "react";
 import { useSignOut } from "@/hooks/useSignOut";
 import { useRouter } from "next/navigation";
@@ -62,9 +61,10 @@ export const Header = () => {
   return (
     <div className="App">
       <div className="container mx-auto px-3">
-        <header className="flex justify-between py-3">
+        <header className="flex justify-between py-1">
+          {/* 中央 */}
           <h1>F</h1>
-          <ClickAwayListener
+          {/* <ClickAwayListener
             onClickAway={openMenu ? handleClickAway : () => {}}
           >
             <div>
@@ -94,7 +94,7 @@ export const Header = () => {
                 ))}
               </nav>
             </div>
-          </ClickAwayListener>
+          </ClickAwayListener> */}
         </header>
       </div>
     </div>
