@@ -1,6 +1,15 @@
 import type { Config } from "tailwindcss";
+import resolveConfig from "tailwindcss/resolveConfig";
 
-export default {
+const colors = {
+  primary: "#06b6d4",
+  lightPrimary: "#ebf8ff",
+  secondary: "#ecc94b",
+  primaryGray: "#718096",
+  lightGray: "#f7fafc",
+} as const;
+
+const config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,13 +20,20 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "#06b6d4",
-        lightPrimary: "#ebf8ff",
-        secondary: "#ecc94b",
-        primaryGray: "#718096",
-        lightGray: "#f7fafc",
+        ...colors,
       },
     },
   },
+  variants: {
+    extend: {
+      // ...
+      backgroundOpacity: ["active"],
+    },
+  },
+  colors: colors,
   plugins: [],
 } satisfies Config;
+
+export default config;
+
+export const resolvedConfig = resolveConfig(config);

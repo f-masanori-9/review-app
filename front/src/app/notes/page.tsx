@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 import { useNotes } from "@/hooks/useNotes";
 import { useAddNote } from "@/hooks/useAddNote";
 import { Loading } from "@/components/Loading";
-import { CiSquarePlus } from "react-icons/ci";
+import { AddNoteButton } from "@/components/Buttons/AddNote";
 export default function Page() {
   const router = useRouter();
 
@@ -37,12 +37,7 @@ export default function Page() {
         }}
       />
       <div className="fixed z-50 bottom-10  cursor-pointer">
-        <CiSquarePlus
-          onClick={onClickAddNote}
-          className="border-primary"
-          color="#06b6d4"
-          size={52}
-        />
+        <AddNoteButton onClick={onClickAddNote} />
       </div>
     </div>
   );
