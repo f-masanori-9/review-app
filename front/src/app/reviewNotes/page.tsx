@@ -95,11 +95,7 @@ const OneNote: FC<{
         />
 
         <DropDownMenu
-          menuButtonChildren={
-            <button>
-              <BsThreeDotsVertical />
-            </button>
-          }
+          menuButtonChildren={<BsThreeDotsVertical />}
           items={[
             {
               key: "delete",
