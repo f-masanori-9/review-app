@@ -19,7 +19,7 @@ export const Footer: FC = () => {
   };
 
   return (
-    <div className="fixed z-100 bottom-0 w-full p-2 bg-white/90 flex justify-between">
+    <div className="fixed z-100 bottom-0 w-full p-2 mb-1 bg-white/90 flex justify-between">
       <div
         className="flex justify-center items-center flex-1"
         onClick={onClickToReviewNotes}
