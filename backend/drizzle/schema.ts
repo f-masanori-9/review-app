@@ -18,6 +18,8 @@ export const notesTable = sqliteTable('notes', {
 		.notNull()
 		.references(() => usersTable.id, { onDelete: 'cascade' }),
 	content: text('content').default('').notNull(), // 内容
+	rootNoteId: text('rootNoteId'),
+	parentNoteId: text('parentNoteId'),
 	createdAt: integer({ mode: 'timestamp' })
 		.notNull()
 		.default(sql`(strftime('%s', 'now'))`),

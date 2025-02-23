@@ -13,7 +13,13 @@ export class NoteRepository {
 			.where(and(eq(notesTable.id, noteId), eq(notesTable.userId, userId)))
 			.get();
 
-		return note ? new Note(note) : null;
+		return note
+			? new Note({
+					...note,
+					rootNoteId: note.rootNoteId ? note.rootNoteId : undefined,
+					parentNoteId: note.parentNoteId ? note.parentNoteId : undefined,
+			  })
+			: null;
 	}
 
 	async findByUserId({ userId }: { userId: string }) {

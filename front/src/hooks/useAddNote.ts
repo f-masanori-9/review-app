@@ -6,22 +6,26 @@ import { mutateNotes } from "./useNotes";
 const postNoteApiClient = generateApiClient<EndPointType>();
 
 export const useAddNote = () => {
-  const addNote = useCallback(async () => {
-    try {
-      const response = await postNoteApiClient.api.notes.$post({
-        json: {
-          title: "title",
-          content: "content",
-        },
-      });
-      mutateNotes();
+  const addNote = useCallback(
+    async (params?: { parentNoteId?: string; rootNoteId?: string }) => {
+      try {
+        const response = await postNoteApiClient.api.notes.$post({
+          json: {
+            title: "",
+            content: "",
+            ...params,
+          },
+        });
+        mutateNotes();
 
-      const note = await response.json();
-      return note;
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+        const note = await response.json();
+        return note;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    []
+  );
 
   return { addNote };
 };

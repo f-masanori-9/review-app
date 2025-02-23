@@ -14,7 +14,10 @@ export const DropDownMenu: FC<{
   return (
     <Menu>
       <MenuButton>{menuButtonChildren}</MenuButton>
-      <MenuItems anchor="bottom">
+      <MenuItems
+        anchor="bottom"
+        className="bg-white p-1 rounded-md border-[1px]"
+      >
         {items.map(({ key, children, onClick }) => {
           return (
             <MenuItem key={key}>

@@ -9,7 +9,7 @@ import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 
 export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
   const { data, isLoading } = useNote(noteId);
-  const existingNote = data;
+  const existingNote = data?.note;
 
   if (isLoading) {
     return <Loading />;

@@ -4,22 +4,23 @@ import { ReviewLogsRepository } from '../repositories/ReviewLogsRepository';
 import { ReviewLog } from '../models/ReviewLog';
 
 export class CreateNoteUseCase {
-	constructor(private noteRepository: NoteRepository, private reviewLogsRepository: ReviewLogsRepository) {}
+	constructor(private noteRepository: NoteRepository) {}
 
-	async execute({ userId, title, content }: { userId: string; title: string; content: string }) {
+	async execute(params: { userId: string; content: string; rootNoteId?: string; parentNoteId?: string }) {
 		const note = Note.createNew({
-			userId,
-			title,
-			content,
+			userId: params.userId,
+			content: params.content,
+			rootNoteId: params.rootNoteId,
+			parentNoteId: params.parentNoteId,
 		});
 
 		const reviewLog = ReviewLog.createNew({
-			userId,
+			userId: params.userId,
 			noteId: note.id,
 		});
 
 		await this.noteRepository.create(note);
-		await this.reviewLogsRepository.create(reviewLog);
+		// await this.reviewLogsRepository.create(reviewLog);
 
 		return note;
 	}

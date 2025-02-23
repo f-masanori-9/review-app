@@ -6,6 +6,7 @@ import { useNotes } from "@/hooks/useNotes";
 import { useAddNote } from "@/hooks/useAddNote";
 import { Loading } from "@/components/Loading";
 import { AddNoteButton } from "@/components/Buttons/AddNote";
+
 export default function Page() {
   const router = useRouter();
 

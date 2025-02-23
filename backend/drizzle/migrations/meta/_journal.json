@@ -15,6 +15,13 @@
       "when": 1739107273536,
       "tag": "0001_superb_deathbird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1740478398349,
+      "tag": "0002_ambitious_mysterio",
+      "breakpoints": true
     }
   ]
 }
