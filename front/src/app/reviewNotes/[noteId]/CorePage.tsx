@@ -35,10 +35,10 @@ const PageCore: FC<{
   };
 
   return (
-    <div>
+    <div className="p-1 w-full overflow-x-hidden v">
       <IoIosArrowBack onClick={toBack} title="Back" size={24} color="#" />
       <textarea
-        className="w-full h-96 p-3 m-1 border-primary"
+        className="w-full h-[1000px] p-3 m-1 border-none focus:ring-0 focus:outline-none"
         defaultValue={note.content || ""}
         onChange={(e) => {
           updateNoteDebounced(note.id, e.target.value);

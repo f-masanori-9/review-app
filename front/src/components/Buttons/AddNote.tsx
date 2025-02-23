@@ -8,9 +8,10 @@ export const AddNoteButton: FC<{ onClick: () => void }> = ({ onClick }) => {
     <div>
       <CiSquarePlus
         onClick={onClick}
-        className="border-primary bg-white"
+        className="border-primary bg-white rounded-md"
         color="#06b6d4"
-        size={52}
+        size={44}
+        viewBox="3 3 18 18"
       />
     </div>
   );

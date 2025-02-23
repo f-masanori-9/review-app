@@ -30,7 +30,7 @@ export default function Page() {
           </div>
         );
       })}
-      <div className="fixed z-50 bottom-10  cursor-pointer">
+      <div className="fixed z-50 bottom-14 left-2  cursor-pointer">
         <AddNoteButton onClick={() => {}} />
       </div>
     </div>
@@ -54,7 +54,6 @@ const OneNote: FC<{
   const { mutate, isLoading: isLoadingMutate } = useMutateNotes();
 
   const { reward } = useReward("rewardId", "confetti");
-  const [isFocusing, setIsForcusing] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
 
   const onClickNote = useCallback(() => {
@@ -62,20 +61,11 @@ const OneNote: FC<{
   }, [note.id, router]);
   const { deleteReview } = useDeleteReview();
 
-  console.log(`bg-opacity-${getReviewOpacity(reviewCount)}`);
   const opacity = getReviewOpacity(reviewCount);
-  const bgOpacity = `bg-opacity-${opacity}`;
-  const aaaaa = (opacity: "30" | "40") => `bg-blue-300/[${opacity}]`;
 
   return (
     <div>
-      <div
-        // style={{ opacity: opacity / 100 }}
-        // className={`bg-blue-300/100 `}
-        // className={colorr[0]}
-        className={bgColorClass[opacity / 5]}
-        onClick={onClickNote}
-      >
+      <div className={bgColorClass[opacity / 5]} onClick={onClickNote}>
         <span className="text-xs text-gray-500">{note.createdAt}</span>
         <br />
         <span className="whitespace-pre-wrap font-black">{note.content}</span>

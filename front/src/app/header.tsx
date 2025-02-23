@@ -64,7 +64,6 @@ export const Header = () => {
       <div className="container mx-auto px-3">
         <header className="flex justify-between py-3">
           <h1>F</h1>
-          {/* nav */}
           <ClickAwayListener
             onClickAway={openMenu ? handleClickAway : () => {}}
           >

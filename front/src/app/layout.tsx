@@ -4,6 +4,7 @@ import "./globals.css";
 import { HonoSessionProvider } from "@/providers/HonoSessionProvider";
 import { AuthGuard } from "./AuthGuard";
 import { Header } from "./header";
+import { Footer } from "./footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <AuthGuard>
             <Header />
             {children}
+            <Footer />
           </AuthGuard>
         </HonoSessionProvider>
       </body>
