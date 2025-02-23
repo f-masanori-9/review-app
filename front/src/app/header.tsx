@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useSignOut } from "@/hooks/useSignOut";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -45,40 +45,5 @@ export const Header = () => {
         </header>
       </div>
     </div>
-  );
-};
-
-const MenuButton: FC<{
-  handleMenuOpen: () => void;
-  openMenu: boolean;
-}> = ({ handleMenuOpen, openMenu }) => {
-  return (
-    <button
-      onClick={handleMenuOpen}
-      type="button"
-      className="z-10 space-y-2 cursor-pointer w-8 h-10"
-    >
-      <div
-        className={
-          openMenu
-            ? "w-8 h-0.5 bg-primary translate-y-2.5 rotate-45 transition duration-500 ease-in-out"
-            : "w-8 h-0.5 bg-primary transition duration-500 ease-in-out"
-        }
-      />
-      <div
-        className={
-          openMenu
-            ? "opacity-0 bg-primary transition duration-500 ease-in-out"
-            : "w-8 h-0.5 bg-primary transition duration-500 ease-in-out"
-        }
-      />
-      <div
-        className={
-          openMenu
-            ? "w-8 h-0.5 bg-primary -rotate-45 transition duration-500 ease-in-out"
-            : "w-8 h-0.5 bg-primary transition duration-500 ease-in-out"
-        }
-      />
-    </button>
   );
 };

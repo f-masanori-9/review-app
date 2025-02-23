@@ -24,19 +24,19 @@ export const Footer: FC = () => {
         className="flex justify-center items-center flex-1"
         onClick={onClickToReviewNotes}
       >
-        <CgNotes size={30} />
+        <CgNotes color="black" size={30} />
       </div>
       <div
         className="flex justify-center items-center flex-1"
         onClick={onClickToAccount}
       >
-        <MdOutlineAccountCircle size={30} />
+        <MdOutlineAccountCircle color="black" size={30} />
       </div>
       <div
         className="flex justify-center items-center flex-1"
         onClick={onClickToSettings}
       >
-        <IoSettingsOutline size={30} />
+        <IoSettingsOutline color="black" size={30} />
       </div>
     </div>
   );
