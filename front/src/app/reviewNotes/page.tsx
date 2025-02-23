@@ -64,7 +64,7 @@ const OneNote: FC<{
   const opacity = getReviewOpacity(reviewCount);
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <div className={bgColorClass[opacity / 5]} onClick={onClickNote}>
         <span className="text-xs text-gray-500">{note.createdAt}</span>
         <br />
