@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white text-black`}
       >
         <HonoSessionProvider>
           <AuthGuard>
