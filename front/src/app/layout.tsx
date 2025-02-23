@@ -31,7 +31,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white text-black`}
+        // NOTE: padding-top 8 はヘッダーの高さを考慮
+        // NOTE: ダークモードに設定されているスマホのために text-black と bg-white を指定
+        // NOTE: スマホで不要に横スクロールしないように overflow-x-hidden を指定
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white text-black pt-8`}
       >
         <HonoSessionProvider>
           <AuthGuard>
