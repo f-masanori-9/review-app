@@ -10,8 +10,8 @@ export const useAddNote = () => {
     try {
       const response = await postNoteApiClient.api.notes.$post({
         json: {
-          title: "title",
-          content: "content",
+          title: "",
+          content: "",
         },
       });
       mutateNotes();

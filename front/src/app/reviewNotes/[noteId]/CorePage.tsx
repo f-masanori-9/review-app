@@ -43,6 +43,7 @@ const PageCore: FC<{
         onChange={(e) => {
           updateNoteDebounced(note.id, e.target.value);
         }}
+        placeholder="メモを入力しましょう"
       />
     </div>
   );

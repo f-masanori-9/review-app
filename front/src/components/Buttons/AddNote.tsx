@@ -3,7 +3,9 @@
 import { FC } from "react";
 import { CiSquarePlus } from "react-icons/ci";
 
-export const AddNoteButton: FC<{ onClick: () => void }> = ({ onClick }) => {
+export const AddNoteButton: FC<{
+  onClick: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+}> = ({ onClick }) => {
   return (
     <div>
       <CiSquarePlus

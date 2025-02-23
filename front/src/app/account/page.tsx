@@ -6,8 +6,8 @@ export default function Account() {
   const { signOut } = useSignOut();
 
   return (
-    <div>
-      <div>[wip]アカウントページ</div>
+    <div className="p-4 w-full">
+      <h1>アカウント</h1>
       <button onClick={() => signOut()}>ログアウト</button>
     </div>
   );

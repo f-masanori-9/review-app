@@ -13,15 +13,33 @@ import { FaTrash } from "react-icons/fa";
 import { DropDownMenu } from "@/components/DropDownMenu";
 import { AddNoteButton } from "@/components/Buttons/AddNote";
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
+import { useAddNote } from "@/hooks/useAddNote";
+import { differenceInDays } from "date-fns";
 export default function Page() {
   const { data: notesWithReviewLogs = [], isLoading } = useNotes();
-
-  if (isLoading) {
+  const router = useRouter();
+  const { addNote } = useAddNote();
+  const [isLoadingNotes, setIsLoadingNote] = useState(false);
+  const onClickAddNote = async (
+    e: React.MouseEvent<SVGElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setIsLoadingNote(true);
+    try {
+      const addedNote = await addNote();
+      if (addedNote) {
+        router.push(`/reviewNotes/${addedNote.id}`);
+      }
+    } finally {
+      setIsLoadingNote(false);
+    }
+  };
+  if (isLoading || isLoadingNotes) {
     return <Loading />;
   }
 
   return (
-    <div className="p-1">
+    <div className="p-1 mb-28">
       {notesWithReviewLogs.map(({ reviewLogs, ...note }) => {
         const reviewCount = reviewLogs.length;
         return (
@@ -31,7 +49,7 @@ export default function Page() {
         );
       })}
       <div className="fixed z-50 bottom-14 left-2  cursor-pointer">
-        <AddNoteButton onClick={() => {}} />
+        <AddNoteButton onClick={onClickAddNote} />
       </div>
     </div>
   );
@@ -66,7 +84,10 @@ const OneNote: FC<{
   return (
     <div className="w-full overflow-x-hidden">
       <div className={bgColorClass[opacity / 5]} onClick={onClickNote}>
-        <span className="text-xs text-gray-500">{note.createdAt}</span>
+        <span className="text-xs text-gray-500">{`${differenceInDays(
+          new Date(),
+          note.createdAt
+        )}日前`}</span>
         <br />
         <span className="whitespace-pre-wrap font-black">{note.content}</span>
       </div>
