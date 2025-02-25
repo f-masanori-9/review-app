@@ -13,5 +13,10 @@ export const getNoteHandler = factory.createHandlers(async (c) => {
 			.where(and(eq(notesTable.id, noteId || ''), eq(notesTable.userId, userId || '')))
 	)[0];
 
-	return c.json(note);
+	const subNotes = await d1Drizzle
+		.select()
+		.from(notesTable)
+		.where(and(eq(notesTable.rootNoteId, noteId || ''), eq(notesTable.userId, userId || '')));
+
+	return c.json({ note, subNotes });
 });

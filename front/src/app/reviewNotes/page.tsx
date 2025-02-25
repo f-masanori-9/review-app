@@ -83,7 +83,7 @@ const OneNote: FC<{
 
   return (
     <div className="w-full overflow-x-hidden">
-      <div className={bgColorClass[opacity / 5]} onClick={onClickNote}>
+      <div className={`${bgColorClass[opacity / 5]} p-2`} onClick={onClickNote}>
         <span className="text-xs text-gray-500">{`${differenceInDays(
           new Date(),
           note.createdAt
