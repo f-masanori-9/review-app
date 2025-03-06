@@ -15,6 +15,7 @@ import { AddNoteButton } from "@/components/Buttons/AddNote";
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { useAddNote } from "@/hooks/useAddNote";
 import { differenceInDays } from "date-fns";
+import { CgNotes } from "react-icons/cg";
 export default function Page() {
   const { data: notesWithReviewLogs = [], isLoading } = useNotes();
   const router = useRouter();
@@ -62,6 +63,12 @@ const OneNote: FC<{
     createdAt: string;
     updatedAt: string;
     content: string;
+    subNotes: {
+      id: string;
+      content: string;
+      createdAt: string;
+      updatedAt: string;
+    }[];
   };
   reviewCount: number;
 }> = ({ note, reviewCount }) => {
@@ -92,19 +99,32 @@ const OneNote: FC<{
         <span className="whitespace-pre-wrap font-black">{note.content}</span>
       </div>
       <div className="flex justify-between p-2">
-        <ReviewButton
-          onClick={async (e) => {
-            e.stopPropagation();
-            await addReview(note.id);
-            setIsReviewed(true);
-            reward();
-            mutate();
-          }}
-          reviewCount={reviewCount}
-          isReviewed={isReviewed}
-          isLoading={isLoadingMutate}
-        />
-
+        <div
+          className="flex items-center gap-2 text-gray-500"
+          onClick={onClickNote}
+        >
+          <ReviewButton
+            onClick={async (e) => {
+              e.stopPropagation();
+              await addReview(note.id);
+              setIsReviewed(true);
+              reward();
+              mutate();
+            }}
+            reviewCount={reviewCount}
+            isReviewed={isReviewed}
+            isLoading={isLoadingMutate}
+          />
+          {note.subNotes.length > 0 && (
+            <button
+              onClick={onClickNote}
+              className="flex items-center gap-1 text-gray-500"
+            >
+              <CgNotes size={18} />
+              <span>{note.subNotes.length}</span>
+            </button>
+          )}
+        </div>
         <DropDownMenu
           menuButtonChildren={<BsThreeDotsVertical />}
           items={[
