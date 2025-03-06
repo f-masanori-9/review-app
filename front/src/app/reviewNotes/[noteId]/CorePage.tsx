@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutateNote, useNote } from "@/hooks/useNote";
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/Loading";
@@ -49,6 +49,11 @@ const PageCore: FC<{
   const toBack = () => {
     router.push("/reviewNotes");
   };
+  useEffect(() => {
+    return () => {
+      updateNoteDebounced.flush();
+    };
+  }, [updateNoteDebounced]);
 
   return (
     <div className="p-1 w-full overflow-x-hidden">
