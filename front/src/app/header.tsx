@@ -2,14 +2,18 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { MdOutlineAccountCircle } from "react-icons/md";
 
 export const Header = () => {
   const { status } = useSession();
   const pathName = usePathname();
+  const router = useRouter();
 
   const isAccount = pathName.includes("/account");
   const isNotes = pathName.includes("/notes");
-
+  const onClickToAccount = () => {
+    router.push("/account");
+  };
   if (status === "unauthenticated") {
     return <HeaderForNotLogin />;
   }
@@ -23,6 +27,14 @@ export const Header = () => {
           <div className="flex-1 flex justify-center">
             {isAccount && <span className="">アカウント</span>}
             {isNotes && <span className="">ノート管理</span>}
+          </div>
+          <div>
+            <div
+              className="flex justify-center items-center flex-1"
+              onClick={onClickToAccount}
+            >
+              <MdOutlineAccountCircle color="black" size={30} />
+            </div>
           </div>
         </header>
       </div>
