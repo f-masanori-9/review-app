@@ -20,5 +20,5 @@ export const getNotesHandler = factory.createHandlers(async (c) => {
 		return { ...note, reviewLogs };
 	});
 
-	return c.json(notesWithReviewLogs);
+	return c.json(notesWithReviewLogs.sort(() => Math.random() - 0.5));
 });

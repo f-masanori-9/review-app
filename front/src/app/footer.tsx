@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { CgNotes } from "react-icons/cg";
-import { IoSettingsOutline } from "react-icons/io5";
 
 export const Footer: FC = () => {
   const router = useRouter();
@@ -11,9 +10,9 @@ export const Footer: FC = () => {
     router.push("/reviewNotes");
   };
 
-  const onClickToSettings = () => {
-    router.push("/notes");
-  };
+  // const onClickToSettings = () => {
+  //   router.push("/notes");
+  // };
 
   return (
     <div className="fixed z-100 bottom-0 w-full p-2 mb-1 bg-white/90 flex justify-between">
@@ -24,12 +23,12 @@ export const Footer: FC = () => {
         <CgNotes color="black" size={30} />
       </div>
 
-      <div
+      {/* <div
         className="flex justify-center items-center flex-1"
         onClick={onClickToSettings}
       >
         <IoSettingsOutline color="black" size={30} />
-      </div>
+      </div> */}
     </div>
   );
 };
