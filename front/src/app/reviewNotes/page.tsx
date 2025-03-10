@@ -31,7 +31,8 @@ export default function Page() {
       if (addedNote) {
         router.push(`/reviewNotes/${addedNote.id}`);
       }
-    } finally {
+    } catch (e) {
+      // NOTE: 正常系ではそのまま詳細画面に遷移する
       setIsLoadingNote(false);
     }
   };
