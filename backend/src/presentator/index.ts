@@ -13,10 +13,14 @@ import { Environment } from './type';
 import { patchNotesHandler } from './handlers/patchNotesHandler';
 import { getNoteHandler } from './handlers/getNoteRoute';
 import { postNotesHandler } from './handlers/postNotesRoute';
-import { getNotesHandler } from './handlers/getNoteRoutes';
+
 import { usersTable } from '../../drizzle/schema';
 import { postReviewLogHandler } from './handlers/postReviewLog';
 import { deleteNoteRoute } from './handlers/deleteNoteRoute';
+import { postVocabularyNoteHandler } from './handlers/postVocabularyNoteHandler';
+import { getNotesHandler } from './handlers/getNotesHandler';
+import { getVocabularyNoteHandler } from './handlers/getVocabularyNoteHandler';
+import { patchVocabularyNotesHandler } from './handlers/patchVocabularyNotesHandler';
 
 const app = new Hono<Environment>();
 
@@ -94,10 +98,13 @@ export const signupByGoogleRoute = app.post('/api/auth/signup/google', zValidato
 
 const route = app
 	.get('/api/note/:noteId', ...getNoteHandler)
+	.get('/api/vocabulary-notes/:noteId', ...getVocabularyNoteHandler)
 	.get('/api/notes', ...getNotesHandler)
 	.post('/api/notes', ...postNotesHandler)
 	.patch('/api/note/:noteId', ...patchNotesHandler)
+	.patch('/api/vocabulary-notes/:noteId', ...patchVocabularyNotesHandler)
 	.post('/api/review-logs', ...postReviewLogHandler)
+	.post('/api/vocabulary-notes', ...postVocabularyNoteHandler)
 	.delete('/api/note', ...deleteNoteRoute);
 
 export { app, route };

@@ -28,6 +28,21 @@ export const notesTable = sqliteTable('notes', {
 		.default(sql`(strftime('%s', 'now'))`),
 });
 
+export const vocabularyNotesTable = sqliteTable('vocabularyNotes', {
+	id: text('id').primaryKey().unique(),
+	userId: text('userId')
+		.notNull()
+		.references(() => usersTable.id, { onDelete: 'cascade' }),
+	content: text('content').default('').notNull(), // 内容
+	answerText: text('answerText').default('').notNull(), // 答案
+	createdAt: integer({ mode: 'timestamp' })
+		.notNull()
+		.default(sql`(strftime('%s', 'now'))`),
+	updatedAt: integer({ mode: 'timestamp' })
+		.notNull()
+		.default(sql`(strftime('%s', 'now'))`),
+});
+
 export const reviewLogsTable = sqliteTable('reviewLogs', {
 	id: text('id').primaryKey().unique(),
 	userId: text('userId')
@@ -36,6 +51,19 @@ export const reviewLogsTable = sqliteTable('reviewLogs', {
 	noteId: text('noteId')
 		.notNull()
 		.references(() => notesTable.id, { onDelete: 'cascade' }),
+	createdAt: integer({ mode: 'timestamp' })
+		.notNull()
+		.default(sql`(strftime('%s', 'now'))`),
+});
+
+export const vocabularyNoteLogsTable = sqliteTable('vocabularyNoteLogs', {
+	id: text('id').primaryKey().unique(),
+	userId: text('userId')
+		.notNull()
+		.references(() => usersTable.id, { onDelete: 'cascade' }),
+	vocabularyNoteId: text('noteId')
+		.notNull()
+		.references(() => vocabularyNotesTable.id, { onDelete: 'cascade' }),
 	createdAt: integer({ mode: 'timestamp' })
 		.notNull()
 		.default(sql`(strftime('%s', 'now'))`),

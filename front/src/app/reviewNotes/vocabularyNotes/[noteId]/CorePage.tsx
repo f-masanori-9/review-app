@@ -5,17 +5,14 @@ import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/Loading";
-import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
-import { AddSubNoteButton } from "@/components/Buttons/AddSubNote";
 import { useAddNote } from "@/hooks/useAddNote";
 import React from "react";
-import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { useAddReview } from "@/hooks/useAddReview";
+import { useVocabularyNote } from "@/hooks/useVocabularyNote";
+import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
 
 export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
-  const { data, isLoading } = useNote(noteId);
-  const existingNote = data?.note;
-  const subNotes = data?.subNotes || [];
+  const { data: existingNote, isLoading } = useVocabularyNote(noteId);
 
   if (isLoading) {
     return <Loading />;
@@ -23,24 +20,19 @@ export const PageCoreContainer: FC<{ noteId: string }> = ({ noteId }) => {
   if (!existingNote) {
     return <div>Not Found</div>;
   }
-  return <PageCore note={existingNote} subNotes={subNotes} />;
+  return <PageCore note={existingNote} />;
 };
 
 const PageCore: FC<{
   note: {
     id: string;
     content: string;
-    reviewCount: number;
+    answerText: string;
   };
-  subNotes: {
-    id: string;
-    content: string;
-    reviewCount: number;
-  }[];
-}> = ({ note, subNotes }) => {
+}> = ({ note }) => {
   const router = useRouter();
   const { mutateNote } = useMutateNote();
-  const { updateNoteDebounced } = useUpdateNoteDebounced();
+  const { updateVocabularyNoteDebounced } = useUpdateVocabularyNoteDebounced();
   const { addNote, isLoading } = useAddNote();
   const [isReviewed, setIsReviewed] = useState(false);
   const { addReview } = useAddReview();
@@ -51,9 +43,9 @@ const PageCore: FC<{
   };
   useEffect(() => {
     return () => {
-      updateNoteDebounced.flush();
+      updateVocabularyNoteDebounced.flush();
     };
-  }, [updateNoteDebounced]);
+  }, [updateVocabularyNoteDebounced]);
 
   return (
     <div className="p-1 w-full overflow-x-hidden">
@@ -61,10 +53,14 @@ const PageCore: FC<{
       <TextAreaAutoSize
         defaultValue={note.content || ""}
         onChange={(e) => {
-          updateNoteDebounced(note.id, e.target.value);
+          updateVocabularyNoteDebounced(
+            note.id,
+            e.target.value,
+            note.answerText
+          );
         }}
       />
-      <div className="flex justify-between p-2">
+      {/* <div className="flex justify-between p-2">
         <ReviewButton
           onClick={async (e) => {
             e.stopPropagation();
@@ -76,48 +72,16 @@ const PageCore: FC<{
           isReviewed={isReviewed}
           // isLoading={isLoadingMutate}
         />
-      </div>
+      </div> */}
 
       {/* divider */}
       <div className="border-b border-gray-300"></div>
-      <span className="text-sm text-gray-500">{` サブノート ${subNotes.length}`}</span>
-      <div className="border-b border-gray-300"></div>
-
-      {subNotes.map((subNote) => {
-        return (
-          <>
-            <TextAreaAutoSize
-              key={subNote.id}
-              defaultValue={subNote.content || ""}
-              onChange={(e) => {
-                updateNoteDebounced(subNote.id, e.target.value);
-              }}
-            />
-            <div className="flex justify-between p-2">
-              <ReviewButton
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  await addReview(note.id);
-                  setIsReviewed(true);
-                  mutate();
-                }}
-                reviewCount={subNote.reviewCount}
-                isReviewed={isReviewed}
-                // isLoading={isLoadingMutate}
-              />
-            </div>
-          </>
-        );
-      })}
-      <div className="flex justify-center">
-        <AddSubNoteButton
-          isLoading={isLoading}
-          onClick={async () => {
-            await addNote({ rootNoteId: note.id });
-            mutateNote(note.id);
-          }}
-        />
-      </div>
+      <TextAreaAutoSize
+        defaultValue={note.answerText || ""}
+        onChange={(e) => {
+          updateVocabularyNoteDebounced(note.id, note.content, e.target.value);
+        }}
+      />
     </div>
   );
 };

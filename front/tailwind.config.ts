@@ -17,6 +17,9 @@ const config = {
   ],
   theme: {
     extend: {
+      width: {
+        "200vw": "200vw",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

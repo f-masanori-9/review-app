@@ -1,7 +1,6 @@
 "use client";
 
-import { useMutateNotes, useNotes } from "@/hooks/useNotes";
-import { Loading } from "@/components/Loading";
+import { useMutateNotes } from "@/hooks/useNotes";
 import React, { FC, useCallback, useState } from "react";
 import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 import { useAddReview } from "@/hooks/useAddReview";
@@ -11,85 +10,17 @@ import { useRouter } from "next/navigation";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
 import { DropDownMenu } from "@/components/DropDownMenu";
-import { AddNoteButton } from "@/components/Buttons/AddNote";
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
-import { useAddNote } from "@/hooks/useAddNote";
 import { differenceInDays } from "date-fns";
-import { CgNotes } from "react-icons/cg";
-import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
-import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
-import { OneVocabularyNote } from "./OneVocabularyNote";
-export default function Page() {
-  const { data: notesWithReviewLogs = [], isLoading } = useNotes();
-  const router = useRouter();
-  const { addNote } = useAddNote();
-  const { addVocabularyNote } = useAddVocabularyNote();
 
-  const [isLoadingNotes, setIsLoadingNote] = useState(false);
-  const onClickAddNote = async (
-    e: React.MouseEvent<SVGElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-    setIsLoadingNote(true);
-    try {
-      const addedNote = await addNote();
-      if (addedNote) {
-        router.push(`/reviewNotes/${addedNote.id}`);
-      }
-    } catch (e) {
-      // NOTE: 正常系ではそのまま詳細画面に遷移する
-      setIsLoadingNote(false);
-    }
-  };
-  if (isLoading || isLoadingNotes) {
-    return <Loading />;
-  }
-
-  return (
-    <div className="p-1 mb-28">
-      {notesWithReviewLogs.map((n) => {
-        if (n.type === "vocabularyNote") {
-          return (
-            <div key={n.id}>
-              単語帳
-              <OneVocabularyNote
-                note={n}
-                reviewCount={0} //TODO
-              />
-            </div>
-          );
-        }
-        const { reviewLogs, ...note } = n;
-        const reviewCount = reviewLogs.length;
-        return (
-          <div className="border-b border-gray-300" key={note.id}>
-            <OneNote key={note.id} note={note} reviewCount={reviewCount} />
-          </div>
-        );
-      })}
-      <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
-        <AddVocabularyNote onClick={addVocabularyNote} />
-      </div>
-      <div className="fixed z-50 bottom-14 left-2  cursor-pointer">
-        <AddNoteButton onClick={onClickAddNote} />
-      </div>
-    </div>
-  );
-}
-
-const OneNote: FC<{
+export const OneVocabularyNote: FC<{
   note: {
     userId: string;
     id: string;
     createdAt: string;
     updatedAt: string;
     content: string;
-    subNotes: {
-      id: string;
-      content: string;
-      createdAt: string;
-      updatedAt: string;
-    }[];
+    answerText: string;
   };
   reviewCount: number;
 }> = ({ note, reviewCount }) => {
@@ -103,22 +34,38 @@ const OneNote: FC<{
   const [isReviewed, setIsReviewed] = useState(false);
 
   const onClickNote = useCallback(() => {
-    router.push(`/reviewNotes/${note.id}`);
+    router.push(`/reviewNotes/vocabularyNotes/${note.id}`);
   }, [note.id, router]);
   const { deleteReview } = useDeleteReview();
 
   const opacity = getReviewOpacity(reviewCount);
 
   return (
-    <div className="w-full overflow-x-hidden">
-      <div className={`${bgColorClass[opacity / 5]} p-2`} onClick={onClickNote}>
-        <span className="text-xs text-gray-500">{`${differenceInDays(
-          new Date(),
-          note.createdAt
-        )}日前`}</span>
-        <br />
-        <span className="whitespace-pre-wrap font-black">{note.content}</span>
+    <div className="overflow-x-auto">
+      <div className="flex w-200vw  border border-gray-300">
+        {" "}
+        <div
+          className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+          onClick={onClickNote}
+        >
+          <span className="text-xs text-gray-500">{`${differenceInDays(
+            new Date(),
+            note.createdAt
+          )}日前`}</span>
+          <br />
+          <span className="whitespace-pre-wrap font-black">{note.content}</span>
+        </div>
+        <div
+          className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+          onClick={onClickNote}
+        >
+          <br />
+          <span className="whitespace-pre-wrap font-black">
+            {note.answerText}
+          </span>
+        </div>
       </div>
+
       <div className="flex justify-between p-2">
         <div
           className="flex items-center gap-2 text-gray-500"
@@ -136,15 +83,6 @@ const OneNote: FC<{
             isReviewed={isReviewed}
             isLoading={isLoadingMutate}
           />
-          {note.subNotes.length > 0 && (
-            <button
-              onClick={onClickNote}
-              className="flex items-center gap-1 text-gray-500"
-            >
-              <CgNotes size={18} />
-              <span>{note.subNotes.length}</span>
-            </button>
-          )}
         </div>
         <DropDownMenu
           menuButtonChildren={<BsThreeDotsVertical />}

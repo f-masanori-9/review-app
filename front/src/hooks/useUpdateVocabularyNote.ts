@@ -2,19 +2,22 @@ import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
 import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
-import { useMutateNote } from "./useNote";
+import { useMutateVocabularyNote } from "./useVocabularyNote";
 
 const patchNoteApiClient = generateApiClient<EndPointType>();
 
-export const useUpdateNote = () => {
-  const { mutateNote } = useMutateNote();
+export const useUpdateVocabularyNote = () => {
+  const { mutateNote } = useMutateVocabularyNote();
   const updateNote = useCallback(
-    async (noteId: string, content: string) => {
-      const response = await patchNoteApiClient.api.note[":noteId"].$patch({
+    async (noteId: string, content: string, answerText: string) => {
+      const response = await patchNoteApiClient.api["vocabulary-notes"][
+        ":noteId"
+      ].$patch({
         param: { noteId },
         json: {
           noteId: noteId,
           content,
+          answerText,
         },
       });
       mutateNote(noteId);

@@ -1,38 +1,35 @@
-export class Note {
+export class VocabularyNote {
 	readonly id: string;
 	readonly userId: string;
 	readonly content: string;
-	readonly rootNoteId?: string;
-	readonly parentNoteId?: string;
+	readonly answerText: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly type: 'note' = 'note';
+	readonly type: 'vocabularyNote' = 'vocabularyNote';
 
-	constructor(params: Omit<ExcludeMethods<Note>, 'type'>) {
+	constructor(params: ExcludeMethods<VocabularyNote>) {
 		this.id = params.id;
 		this.userId = params.userId;
 		this.content = params.content;
-		this.rootNoteId = params.rootNoteId;
-		this.parentNoteId = params.parentNoteId;
+		this.answerText = params.answerText;
 		this.createdAt = params.createdAt;
 		this.updatedAt = params.updatedAt;
-		this.type = 'note';
 	}
 
-	static createNew(params: Omit<ExcludeMethods<Note>, 'id' | 'createdAt' | 'updatedAt' | 'type'>) {
-		return new Note({
+	static createNew(params: Omit<ExcludeMethods<VocabularyNote>, 'id' | 'createdAt' | 'updatedAt' | 'type'>) {
+		return new VocabularyNote({
 			id: crypto.randomUUID(),
 			userId: params.userId,
 			content: params.content,
-			rootNoteId: params.rootNoteId,
-			parentNoteId: params.parentNoteId,
+			answerText: params.answerText,
 			createdAt: new Date(),
 			updatedAt: new Date(),
+			type: 'vocabularyNote',
 		});
 	}
 
 	update({ content }: { content: string }) {
-		return new Note({
+		return new VocabularyNote({
 			...this,
 			content,
 			updatedAt: new Date(),
@@ -44,8 +41,7 @@ export class Note {
 			id: this.id,
 			userId: this.userId,
 			content: this.content,
-			rootNoteId: this.rootNoteId,
-			parentNoteId: this.parentNoteId,
+			answerText: this.answerText,
 			createdAt: this.createdAt,
 			updatedAt: this.updatedAt,
 		};
