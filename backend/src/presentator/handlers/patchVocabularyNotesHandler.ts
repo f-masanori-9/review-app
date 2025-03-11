@@ -17,18 +17,19 @@ const patchNotesSchema = z.object({
 export const patchVocabularyNotesHandler = factory.createHandlers(zValidator('json', patchNotesSchema), async (c) => {
 	const userId = c.get('userId');
 	const body = c.req.valid('json');
+	const noteId = body.noteId;
 
 	const d1 = c.get('d1Drizzle');
 	const existingNote = await d1
 		.select()
 		.from(vocabularyNotesTable)
-		.where(eq(vocabularyNotesTable.userId, userId || ''))
+		.where(and(eq(vocabularyNotesTable.id, noteId || ''), eq(vocabularyNotesTable.userId, userId || '')))
 		.get();
 
 	if (!existingNote) {
 		throw new HTTPException(401, { cause: new Error('Note not found') });
 	}
-	const updatedNote = {
+	const updatedVocabularyNote = {
 		...existingNote,
 		content: body.content,
 		answerText: body.answerText,
@@ -37,8 +38,8 @@ export const patchVocabularyNotesHandler = factory.createHandlers(zValidator('js
 
 	await d1
 		.update(vocabularyNotesTable)
-		.set(updatedNote)
-		.where(and(eq(vocabularyNotesTable.userId, userId || '')))
+		.set(updatedVocabularyNote)
+		.where(and(eq(vocabularyNotesTable.id, noteId || ''), eq(vocabularyNotesTable.userId, userId || '')))
 		.get();
 
 	return c.json({});

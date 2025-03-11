@@ -12,6 +12,7 @@ import { FaTrash } from "react-icons/fa";
 import { DropDownMenu } from "@/components/DropDownMenu";
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { differenceInDays } from "date-fns";
+import { CiCreditCard2 } from "react-icons/ci";
 
 export const OneVocabularyNote: FC<{
   note: {
@@ -41,68 +42,75 @@ export const OneVocabularyNote: FC<{
   const opacity = getReviewOpacity(reviewCount);
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex w-200vw  border border-gray-300">
-        {" "}
-        <div
-          className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
-          onClick={onClickNote}
-        >
-          <span className="text-xs text-gray-500">{`${differenceInDays(
-            new Date(),
-            note.createdAt
-          )}日前`}</span>
-          <br />
-          <span className="whitespace-pre-wrap font-black">{note.content}</span>
+    <div>
+      <div className="overflow-x-auto">
+        <div className="flex w-200vw  border border-gray-300">
+          {" "}
+          <div
+            className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+            onClick={onClickNote}
+          >
+            <div className="flex items-center gap-2">
+              <CiCreditCard2 size={24} color="" />
+              <span className="text-xs text-gray-500">{`${differenceInDays(
+                new Date(),
+                note.createdAt
+              )}日前`}</span>
+              <br />
+            </div>
+            <span className="whitespace-pre-wrap font-black">
+              {note.content}
+            </span>
+          </div>
+          <div
+            className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+            onClick={onClickNote}
+          >
+            <br />
+            <span className="whitespace-pre-wrap font-black">
+              {note.answerText}
+            </span>
+          </div>
         </div>
-        <div
-          className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
-          onClick={onClickNote}
-        >
-          <br />
-          <span className="whitespace-pre-wrap font-black">
-            {note.answerText}
-          </span>
-        </div>
-      </div>
 
-      <div className="flex justify-between p-2">
-        <div
-          className="flex items-center gap-2 text-gray-500"
-          onClick={onClickNote}
-        >
-          <ReviewButton
-            onClick={async (e) => {
-              e.stopPropagation();
-              await addReview(note.id);
-              setIsReviewed(true);
-              reward();
-              mutate();
-            }}
-            reviewCount={reviewCount}
-            isReviewed={isReviewed}
-            isLoading={isLoadingMutate}
+        <div className="flex justify-between p-2">
+          <div
+            className="flex items-center gap-2 text-gray-500"
+            onClick={onClickNote}
+          >
+            <ReviewButton
+              onClick={async (e) => {
+                e.stopPropagation();
+                await addReview(note.id);
+                setIsReviewed(true);
+                reward();
+                mutate();
+              }}
+              reviewCount={reviewCount}
+              isReviewed={isReviewed}
+              isLoading={isLoadingMutate}
+            />
+          </div>
+          <DropDownMenu
+            menuButtonChildren={<BsThreeDotsVertical />}
+            items={[
+              {
+                key: "delete",
+                children: (
+                  <div className="flex items-center gap-1">
+                    <FaTrash />
+                    <span>削除</span>
+                  </div>
+                ),
+                onClick: () => {
+                  if (confirm("削除しますか？")) {
+                    deleteReview(note.id);
+                  }
+                },
+              },
+            ]}
           />
         </div>
-        <DropDownMenu
-          menuButtonChildren={<BsThreeDotsVertical />}
-          items={[
-            {
-              key: "delete",
-              children: (
-                <div className="flex items-center gap-1">
-                  <FaTrash />
-                  <span>削除</span>
-                </div>
-              ),
-              onClick: () => {
-                if (confirm("削除しますか？")) {
-                  deleteReview(note.id);
-                }
-              },
-            },
-          ]}
-        />
       </div>
     </div>
   );

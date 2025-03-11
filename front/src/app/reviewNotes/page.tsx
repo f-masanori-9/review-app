@@ -27,7 +27,7 @@ export default function Page() {
 
   const [isLoadingNotes, setIsLoadingNote] = useState(false);
   const onClickAddNote = async (
-    e: React.MouseEvent<SVGElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.stopPropagation();
     setIsLoadingNote(true);
@@ -51,7 +51,6 @@ export default function Page() {
         if (n.type === "vocabularyNote") {
           return (
             <div key={n.id}>
-              単語帳
               <OneVocabularyNote
                 note={n}
                 reviewCount={0} //TODO
