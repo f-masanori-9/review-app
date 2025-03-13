@@ -45,9 +45,8 @@ export const OneVocabularyNote: FC<{
     <div>
       <div className="overflow-x-auto">
         <div className="flex w-200vw  border border-gray-300">
-          {" "}
           <div
-            className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+            className={`${bgColorClass[opacity / 5]} p-2 w-1/2`}
             onClick={onClickNote}
           >
             <div className="flex items-center gap-2">
@@ -63,7 +62,7 @@ export const OneVocabularyNote: FC<{
             </span>
           </div>
           <div
-            className={`${bgColorClass[opacity / 5]} p-2 flex-grow`}
+            className={`${bgColorClass[opacity / 5]} p-2 w-1/2`}
             onClick={onClickNote}
           >
             <br />
