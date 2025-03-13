@@ -31,11 +31,5 @@ export const getNotesHandler = factory.createHandlers(async (c) => {
 			.where(eq(vocabularyNotesTable.userId, userId || ''))
 	).map((d) => ({ ...d, type: 'vocabularyNote' } as const));
 
-	const response = [...notesWithReviewLogs, ...vocabularyNotes];
-	const today = new Date();
-	const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate() + today.getHours();
-	// return c.json(shuffleWithSeed([...notesWithReviewLogs, ...vocabularyNotes], seed));
-	const notes = [...notesWithReviewLogs, ...vocabularyNotes].shuffle(seed);
-	// return c.json(notes);
 	return c.json([...notesWithReviewLogs, ...vocabularyNotes]);
 });
