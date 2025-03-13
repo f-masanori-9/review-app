@@ -59,6 +59,7 @@ const PageCore: FC<{
             note.answerText
           );
         }}
+        placeholder={"問題を入力しよう"}
       />
       {/* <div className="flex justify-between p-2">
         <ReviewButton
@@ -81,6 +82,7 @@ const PageCore: FC<{
         onChange={(e) => {
           updateVocabularyNoteDebounced(note.id, note.content, e.target.value);
         }}
+        placeholder={"回答を入力しよう"}
       />
     </div>
   );
@@ -89,7 +91,8 @@ const PageCore: FC<{
 const TextAreaAutoSize: FC<{
   defaultValue: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
-}> = ({ defaultValue, onChange }) => {
+  placeholder?: string;
+}> = ({ defaultValue, onChange, placeholder }) => {
   const [value, setValue] = useState(defaultValue);
   const ref = React.useRef<HTMLTextAreaElement>(null);
   React.useEffect(() => {
@@ -102,13 +105,13 @@ const TextAreaAutoSize: FC<{
   return (
     <textarea
       ref={ref}
-      className="w-full h-auto p-3 m-1 border-none focus:ring-0 focus:outline-none"
+      className="w-full h-auto p-3 m-1 border-none focus:ring-0 focus:outline-none min-h-32"
       value={value}
       onChange={(e) => {
         setValue(e.target.value);
         onChange(e);
       }}
-      placeholder="メモを入力しましょう"
+      placeholder={placeholder}
     />
   );
 };

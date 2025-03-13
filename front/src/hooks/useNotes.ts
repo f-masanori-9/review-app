@@ -9,7 +9,8 @@ export const swrKey = "notes";
 export const useNotes = () => {
   return useSWR(swrKey, async () => {
     const response = await client.api.notes.$get();
-    return response.json();
+    const values = await response.json();
+    return values;
   });
 };
 

@@ -19,6 +19,7 @@ import { CgNotes } from "react-icons/cg";
 import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { OneVocabularyNote } from "./OneVocabularyNote";
+import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
 export default function Page() {
   const { data: notesWithReviewLogs = [], isLoading } = useNotes();
   const router = useRouter();
@@ -47,25 +48,27 @@ export default function Page() {
 
   return (
     <div className="p-1 mb-28">
-      {notesWithReviewLogs.map((n) => {
-        if (n.type === "vocabularyNote") {
+      {shuffleArray(notesWithReviewLogs, generateSeedFromDatetime()).map(
+        (n) => {
+          if (n.type === "vocabularyNote") {
+            return (
+              <div key={n.id}>
+                <OneVocabularyNote
+                  note={n}
+                  reviewCount={0} //TODO
+                />
+              </div>
+            );
+          }
+          const { reviewLogs, ...note } = n;
+          const reviewCount = reviewLogs.length;
           return (
-            <div key={n.id}>
-              <OneVocabularyNote
-                note={n}
-                reviewCount={0} //TODO
-              />
+            <div className="border-b border-gray-300" key={note.id}>
+              <OneNote key={note.id} note={note} reviewCount={reviewCount} />
             </div>
           );
         }
-        const { reviewLogs, ...note } = n;
-        const reviewCount = reviewLogs.length;
-        return (
-          <div className="border-b border-gray-300" key={note.id}>
-            <OneNote key={note.id} note={note} reviewCount={reviewCount} />
-          </div>
-        );
-      })}
+      )}
       <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
         <AddVocabularyNote onClick={addVocabularyNote} />
       </div>
