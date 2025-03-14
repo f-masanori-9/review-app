@@ -24,12 +24,5 @@ export const getNotesHandler = factory.createHandlers(async (c) => {
 		return { ...note, reviewLogs, subNotes: subNotes_, type: 'note' } as const;
 	});
 
-	const vocabularyNotes = (
-		await d1Drizzle
-			.select()
-			.from(vocabularyNotesTable)
-			.where(eq(vocabularyNotesTable.userId, userId || ''))
-	).map((d) => ({ ...d, type: 'vocabularyNote' } as const));
-
-	return c.json([...notesWithReviewLogs, ...vocabularyNotes]);
+	return c.json([...notesWithReviewLogs]);
 });

@@ -18,7 +18,6 @@ import { differenceInDays } from "date-fns";
 import { CgNotes } from "react-icons/cg";
 import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
-import { OneVocabularyNote } from "./OneVocabularyNote";
 import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
 export default function Page() {
   const { data: notesWithReviewLogs = [], isLoading } = useNotes();
@@ -50,16 +49,6 @@ export default function Page() {
     <div className="p-1 mb-28">
       {shuffleArray(notesWithReviewLogs, generateSeedFromDatetime()).map(
         (n) => {
-          if (n.type === "vocabularyNote") {
-            return (
-              <div key={n.id}>
-                <OneVocabularyNote
-                  note={n}
-                  reviewCount={0} //TODO
-                />
-              </div>
-            );
-          }
           const { reviewLogs, ...note } = n;
           const reviewCount = reviewLogs.length;
           return (

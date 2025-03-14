@@ -5,22 +5,22 @@ import { useCallback, useState } from "react";
 
 const client = generateApiClient<EndPointType>();
 
-export const swrKey = "notes";
+export const swrKey = "vocabulary-notes";
 export const useVocabularyNotes = () => {
   return useSWR(swrKey, async () => {
-    const response = await client.api.notes.$get();
+    const response = await client.api["vocabulary-notes"].$get();
     return response.json();
   });
 };
 
-export const mutateNotes = () => mutate(swrKey);
+export const mutateVocabularyNotes = () => mutate(swrKey);
 
-export const useMutateNotes = () => {
+export const useMutateVocabularyNotes = () => {
   const [isLoading, setIsLoading] = useState(false);
   const mutate = useCallback(async () => {
     try {
       setIsLoading(true);
-      await mutateNotes();
+      await mutateVocabularyNotes();
     } finally {
       setIsLoading(false);
     }

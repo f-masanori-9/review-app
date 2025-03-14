@@ -10,6 +10,10 @@ export const Footer: FC = () => {
     router.push("/reviewNotes");
   };
 
+  const onClickToVocabularyNotes = () => {
+    router.push("/vocabularyNotes");
+  };
+
   // const onClickToSettings = () => {
   //   router.push("/notes");
   // };
@@ -23,12 +27,12 @@ export const Footer: FC = () => {
         <CgNotes color="black" size={30} />
       </div>
 
-      {/* <div
+      <div
         className="flex justify-center items-center flex-1"
-        onClick={onClickToSettings}
+        onClick={onClickToVocabularyNotes}
       >
-        <IoSettingsOutline color="black" size={30} />
-      </div> */}
+        words
+      </div>
     </div>
   );
 };

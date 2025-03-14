@@ -56,12 +56,12 @@ export const reviewLogsTable = sqliteTable('reviewLogs', {
 		.default(sql`(strftime('%s', 'now'))`),
 });
 
-export const vocabularyNoteLogsTable = sqliteTable('vocabularyNoteLogs', {
+export const vocabularyNoteReviewLogsTable = sqliteTable('vocabularyNoteReviewLogs', {
 	id: text('id').primaryKey().unique(),
 	userId: text('userId')
 		.notNull()
 		.references(() => usersTable.id, { onDelete: 'cascade' }),
-	vocabularyNoteId: text('noteId')
+	vocabularyNoteId: text('vocabularyNoteId')
 		.notNull()
 		.references(() => vocabularyNotesTable.id, { onDelete: 'cascade' }),
 	createdAt: integer({ mode: 'timestamp' })
