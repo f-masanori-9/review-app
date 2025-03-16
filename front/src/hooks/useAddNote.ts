@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback, useState } from "react";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
 
-const postNoteApiClient = generateApiClient<EndPointType>();
+const postNoteApiClient = generateApiClient();
 
 export const useAddNote = () => {
   const [isLoading, setIsLoading] = useState(false);

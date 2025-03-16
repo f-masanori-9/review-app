@@ -1,4 +1,4 @@
-import { notesTable, reviewLogsTable } from '../../../drizzle/schema';
+import { notesTable, reviewLogsTable } from '../../drizzle/schema';
 
 import { eq, and, sql, inArray } from 'drizzle-orm';
 import { createHandlers } from '../utils/factory';

@@ -1,9 +1,7 @@
-import { Hono } from "hono";
-import { hc } from "hono/client";
+import { honoClient } from "@backend/index";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const generateApiClient = <T extends Hono<any, any, any>>() => {
-  return hc<T>(`${process.env.NEXT_PUBLIC_ENDPOINT}`, {
+export const generateApiClient = () => {
+  return honoClient(`${process.env.NEXT_PUBLIC_ENDPOINT}`, {
     fetch: (input: RequestInfo | URL, requestInit?: RequestInit) => {
       return fetch(input, {
         ...requestInit,

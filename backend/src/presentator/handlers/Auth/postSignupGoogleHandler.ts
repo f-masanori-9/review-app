@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
-import { createHandlers } from '@/presentator/utils/factory';
-import { usersTable } from 'drizzle/schema';
+import { createHandlers } from '../../../presentator/utils/factory';
+import { usersTable } from '@/drizzle/schema';
 import { eq } from 'drizzle-orm';
 
 const bodySchema = z.object({

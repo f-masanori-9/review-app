@@ -2,7 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 
 import { z } from 'zod';
 import { VocabularyNote } from '../../models/VocabularyNote';
-import { vocabularyNotesTable } from '../../../drizzle/schema';
+import { vocabularyNotesTable } from '../../drizzle/schema';
 import { createHandlers } from '../utils/factory';
 
 const postVocabularyNoteHandlerSchema = z.object({

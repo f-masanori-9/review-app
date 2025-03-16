@@ -20,23 +20,34 @@ app.all("*", async (c) => {
   // const reqHeaders = new Headers(c.req.raw.headers);
   // reqHeaders.append("X-User-Id", userId);
   // reqHeaders.append("X-api-key", process.env.API_KEY || "");
-  const response = await fetch(
-    `${process.env.INTERNAL_ENDPOINT}${c.req.path}?test=nocache`,
-    {
-      method: c.req.method,
-      headers: {
-        "Content-Type": "application/json",
-        "X-User-Id": userId,
-        "X-api-key": process.env.API_KEY || "",
-      },
-      body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
-      cache: "no-store",
-    }
-  );
+  try {
+    const response = await fetch(
+      `${process.env.INTERNAL_ENDPOINT}${c.req.path}?test=nocache`,
+      {
+        method: c.req.method,
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Id": userId,
+          "X-api-key": process.env.API_KEY || "",
+        },
+        body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
+        cache: "no-store",
+      }
+    );
 
-  return c.newResponse(response.body, response.status as StatusCode, {
-    "Content-Type": response.headers.get("Content-Type") || "",
-  });
+    return c.newResponse(response.body, response.status as StatusCode, {
+      "Content-Type": response.headers.get("Content-Type") || "",
+    });
+  } catch (e) {
+    console.error(e);
+    return c.newResponse(
+      JSON.stringify({ message: "Internal Server Error" }),
+      500,
+      {
+        "Content-Type": "application/json",
+      }
+    );
+  }
 });
 
 export const GET = handle(app);

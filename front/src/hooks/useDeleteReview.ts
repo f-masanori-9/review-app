@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { mutateNotes } from "./useNotes";
 
-const internalApi = generateApiClient<EndPointType>();
+const internalApi = generateApiClient();
 
 export const useDeleteReview = () => {
   const deleteReview = useCallback(async (noteId: string) => {

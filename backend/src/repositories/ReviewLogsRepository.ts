@@ -1,6 +1,6 @@
 import { eq, and } from 'drizzle-orm';
 import { ReviewLog } from '../models/ReviewLog';
-import { reviewLogsTable } from '../../drizzle/schema';
+import { reviewLogsTable } from '../drizzle/schema';
 import { DrizzleClient } from '@/types';
 
 export class ReviewLogsRepository {

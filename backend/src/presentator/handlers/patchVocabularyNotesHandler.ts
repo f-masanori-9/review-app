@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 
 import { z } from 'zod';
-import { vocabularyNotesTable } from '../../../drizzle/schema';
+import { vocabularyNotesTable } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 import { HTTPException } from 'hono/http-exception';
 import { createHandlers } from '../utils/factory';

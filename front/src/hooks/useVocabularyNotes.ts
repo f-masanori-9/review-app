@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import useSWR, { mutate } from "swr";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { useCallback, useState } from "react";
 
-const client = generateApiClient<EndPointType>();
+const client = generateApiClient();
 
 export const swrKey = "vocabulary-notes";
 export const useVocabularyNotes = () => {

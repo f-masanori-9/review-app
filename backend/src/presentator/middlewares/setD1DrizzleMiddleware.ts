@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { tables } from 'drizzle/schema';
+import { tables } from '@/drizzle/schema';
 
 import { createMiddleware } from 'hono/factory';
 

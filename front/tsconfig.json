@@ -19,16 +19,14 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@backend/*": ["../backend/dist/*"]
     }
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
     ".next/types/**/*.ts",
-    "../backend/src/presentator/routeTypes.ts",
-    "../backend/node_modules/@cloudflare/**/*.d.ts", // cloudflare workers types
     "../global.type.ts"
   ],
   "exclude": ["node_modules"]

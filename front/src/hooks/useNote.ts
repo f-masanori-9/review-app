@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import useSWR, { mutate } from "swr";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { useCallback } from "react";
 
-const client = generateApiClient<EndPointType>();
+const client = generateApiClient();
 
 export const generateKey = (noteId: string) => ({
   noteId,

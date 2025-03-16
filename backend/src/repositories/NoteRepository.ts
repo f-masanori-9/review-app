@@ -1,6 +1,6 @@
 import { Note } from '../models/Note';
 import { eq, and } from 'drizzle-orm';
-import { notesTable, reviewLogsTable } from '../../drizzle/schema';
+import { notesTable, reviewLogsTable } from '../drizzle/schema';
 import { DrizzleClient } from '@/types';
 
 export class NoteRepository {

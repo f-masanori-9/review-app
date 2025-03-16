@@ -1,4 +1,4 @@
-import { vocabularyNotesTable } from '../../../drizzle/schema';
+import { vocabularyNotesTable } from '../../drizzle/schema';
 import { VocabularyNoteReviewLog } from '../../models/VocabularyNoteReviewLog';
 import { VocabularyNoteReviewLogRepository } from '../../repositories/VocabularyNoteReviewLogRepository';
 

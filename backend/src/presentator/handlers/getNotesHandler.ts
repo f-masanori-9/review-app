@@ -1,5 +1,5 @@
 import { uniqBy } from 'lodash';
-import { notesTable, reviewLogsTable } from '../../../drizzle/schema';
+import { notesTable, reviewLogsTable } from '../../drizzle/schema';
 
 import { eq } from 'drizzle-orm';
 import { createHandlers } from '../utils/factory';

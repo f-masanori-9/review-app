@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { useVocabularyNotes } from "./useVocabularyNotes";
 
-const internalApi = generateApiClient<EndPointType>();
+const internalApi = generateApiClient();
 
 export const useAddVocabularyNoteReview = () => {
   const { mutate } = useVocabularyNotes();

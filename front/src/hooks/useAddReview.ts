@@ -1,9 +1,8 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { EndPointType } from "../../../backend/src/presentator/routeTypes";
 import { useMutateNote } from "./useNote";
 
-const internalApi = generateApiClient<EndPointType>();
+const internalApi = generateApiClient();
 
 export const useAddReview = () => {
   const { mutateNote } = useMutateNote();

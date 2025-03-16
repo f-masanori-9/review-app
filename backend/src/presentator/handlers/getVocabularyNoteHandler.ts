@@ -1,4 +1,4 @@
-import { vocabularyNotesTable } from '../../../drizzle/schema';
+import { vocabularyNotesTable } from '../../drizzle/schema';
 
 import { eq, and } from 'drizzle-orm';
 import { createHandlers } from '../utils/factory';

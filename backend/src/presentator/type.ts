@@ -1,5 +1,5 @@
 import { DrizzleD1Database } from 'drizzle-orm/d1';
-import { tables } from 'drizzle/schema';
+import { tables } from '@/drizzle/schema';
 
 type Bindings = {
 	DB: D1Database;

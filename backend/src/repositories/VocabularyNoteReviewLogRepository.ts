@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { vocabularyNoteReviewLogsTable } from '../../drizzle/schema';
+import { vocabularyNoteReviewLogsTable } from '../drizzle/schema';
 import { VocabularyNoteReviewLog } from '../models/VocabularyNoteReviewLog';
 import { DrizzleClient } from '@/types';
 
