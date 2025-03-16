@@ -1,4 +1,4 @@
-import { honoClient } from "@backend/index";
+import { honoClient } from "backend/index";
 
 export const generateApiClient = () => {
   return honoClient(`${process.env.NEXT_PUBLIC_ENDPOINT}`, {
