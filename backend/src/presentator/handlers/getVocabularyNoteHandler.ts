@@ -1,8 +1,9 @@
-import { notesTable, reviewLogsTable, vocabularyNotesTable } from '../../../drizzle/schema';
-import { factory } from '../factory';
-import { eq, and, sql, inArray } from 'drizzle-orm';
+import { vocabularyNotesTable } from '../../../drizzle/schema';
 
-export const getVocabularyNoteHandler = factory.createHandlers(async (c) => {
+import { eq, and } from 'drizzle-orm';
+import { createHandlers } from '../utils/factory';
+
+export const getVocabularyNoteHandler = createHandlers(async (c) => {
 	const userId = c.get('userId');
 	const noteId = c.req.param('noteId');
 	const d1Drizzle = c.get('d1Drizzle');

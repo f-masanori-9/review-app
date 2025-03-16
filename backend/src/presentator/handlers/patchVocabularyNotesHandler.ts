@@ -1,12 +1,10 @@
 import { zValidator } from '@hono/zod-validator';
-import { factory } from '../factory';
-import { UpdateNoteUseCase } from '../../usecases/UpdateNoteUseCase';
-import { NoteRepository } from '../../repositories/NoteRepository';
+
 import { z } from 'zod';
 import { vocabularyNotesTable } from '../../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 import { HTTPException } from 'hono/http-exception';
-import { update } from 'lodash';
+import { createHandlers } from '../utils/factory';
 
 const patchNotesSchema = z.object({
 	noteId: z.string(),
@@ -14,7 +12,7 @@ const patchNotesSchema = z.object({
 	answerText: z.string(),
 });
 
-export const patchVocabularyNotesHandler = factory.createHandlers(zValidator('json', patchNotesSchema), async (c) => {
+export const patchVocabularyNotesHandler = createHandlers(zValidator('json', patchNotesSchema), async (c) => {
 	const userId = c.get('userId');
 	const body = c.req.valid('json');
 	const noteId = body.noteId;

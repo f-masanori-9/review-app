@@ -79,3 +79,11 @@ export const reviewLogsRelations = relations(reviewLogsTable, ({ one }) => ({
 		references: [notesTable.id],
 	}),
 }));
+
+export const tables = {
+	usersTable,
+	notesTable,
+	vocabularyNotesTable,
+	reviewLogsTable,
+	vocabularyNoteReviewLogsTable,
+};

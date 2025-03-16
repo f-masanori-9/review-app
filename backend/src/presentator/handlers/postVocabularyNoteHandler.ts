@@ -1,9 +1,9 @@
 import { zValidator } from '@hono/zod-validator';
-import { factory } from '../factory';
-import { NoteRepository } from '../../repositories/NoteRepository';
+
 import { z } from 'zod';
 import { VocabularyNote } from '../../models/VocabularyNote';
 import { vocabularyNotesTable } from '../../../drizzle/schema';
+import { createHandlers } from '../utils/factory';
 
 const postVocabularyNoteHandlerSchema = z.object({
 	title: z.string(),
@@ -11,7 +11,7 @@ const postVocabularyNoteHandlerSchema = z.object({
 	answerText: z.string(),
 });
 
-export const postVocabularyNoteHandler = factory.createHandlers(zValidator('json', postVocabularyNoteHandlerSchema), async (c) => {
+export const postVocabularyNoteHandler = createHandlers(zValidator('json', postVocabularyNoteHandlerSchema), async (c) => {
 	const userId = c.get('userId');
 
 	const d1Drizzle = c.get('d1Drizzle');

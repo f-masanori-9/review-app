@@ -40,7 +40,11 @@
 		"skipLibCheck": true,
 		"jsxImportSource": "hono/jsx",
 
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		}
 	},
 	"exclude": ["test"],
 	"include": ["worker-configuration.d.ts", "src/**/*.ts", "drizzle/**/*.ts", "../global.type.ts"]

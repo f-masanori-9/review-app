@@ -1,8 +1,9 @@
 import { zValidator } from '@hono/zod-validator';
-import { factory } from '../factory';
+
 import { NoteRepository } from '../../repositories/NoteRepository';
 import { z } from 'zod';
 import { CreateNoteUseCase } from '../../usecases/CreateNoteUseCase';
+import { createHandlers } from '../utils/factory';
 
 const postNotesSchema = z.object({
 	title: z.string(),
@@ -11,7 +12,7 @@ const postNotesSchema = z.object({
 	parentNoteId: z.string().optional(),
 });
 
-export const postNotesHandler = factory.createHandlers(zValidator('json', postNotesSchema), async (c) => {
+export const postNotesHandler = createHandlers(zValidator('json', postNotesSchema), async (c) => {
 	const userId = c.get('userId');
 
 	const d1Drizzle = c.get('d1Drizzle');

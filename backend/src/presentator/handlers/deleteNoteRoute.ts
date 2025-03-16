@@ -1,15 +1,14 @@
 import { zValidator } from '@hono/zod-validator';
-import { notesTable } from '../../../drizzle/schema';
-import { factory } from '../factory';
-import { eq, and } from 'drizzle-orm';
+
 import { z } from 'zod';
 import { NoteRepository } from '../../repositories/NoteRepository';
+import { createHandlers } from '../utils/factory';
 
 const deleteNotesSchema = z.object({
 	noteId: z.string(),
 });
 
-export const deleteNoteRoute = factory.createHandlers(zValidator('json', deleteNotesSchema), async (c) => {
+export const deleteNoteRoute = createHandlers(zValidator('json', deleteNotesSchema), async (c) => {
 	const userId = c.get('userId');
 	const body = c.req.valid('json');
 

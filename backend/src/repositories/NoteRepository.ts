@@ -1,10 +1,10 @@
-import { DrizzleD1Database } from 'drizzle-orm/d1';
 import { Note } from '../models/Note';
 import { eq, and } from 'drizzle-orm';
 import { notesTable, reviewLogsTable } from '../../drizzle/schema';
+import { DrizzleClient } from '@/types';
 
 export class NoteRepository {
-	constructor(readonly d1Drizzle: DrizzleD1Database<Record<string, never>>) {}
+	constructor(readonly d1Drizzle: DrizzleClient) {}
 
 	async findById({ userId, noteId }: { userId: string; noteId: string }): Promise<Note | null> {
 		const note = await this.d1Drizzle

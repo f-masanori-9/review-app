@@ -1,9 +1,10 @@
 import { uniqBy } from 'lodash';
-import { notesTable, reviewLogsTable, vocabularyNotesTable } from '../../../drizzle/schema';
-import { factory } from '../factory';
-import { eq } from 'drizzle-orm';
+import { notesTable, reviewLogsTable } from '../../../drizzle/schema';
 
-export const getNotesHandler = factory.createHandlers(async (c) => {
+import { eq } from 'drizzle-orm';
+import { createHandlers } from '../utils/factory';
+
+export const getNotesHandler = createHandlers(async (c) => {
 	const userId = c.get('userId');
 	const d1Drizzle = c.get('d1Drizzle');
 

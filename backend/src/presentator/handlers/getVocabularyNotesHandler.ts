@@ -1,10 +1,11 @@
-import { notesTable, reviewLogsTable, vocabularyNotesTable } from '../../../drizzle/schema';
+import { vocabularyNotesTable } from '../../../drizzle/schema';
 import { VocabularyNoteReviewLog } from '../../models/VocabularyNoteReviewLog';
 import { VocabularyNoteReviewLogRepository } from '../../repositories/VocabularyNoteReviewLogRepository';
-import { factory } from '../factory';
-import { eq, and, sql, inArray } from 'drizzle-orm';
 
-export const getVocabularyNotesHandler = factory.createHandlers(async (c) => {
+import { eq } from 'drizzle-orm';
+import { createHandlers } from '../utils/factory';
+
+export const getVocabularyNotesHandler = createHandlers(async (c) => {
 	const userId = c.get('userId');
 	const d1Drizzle = c.get('d1Drizzle');
 
@@ -18,7 +19,6 @@ export const getVocabularyNotesHandler = factory.createHandlers(async (c) => {
 		} else {
 			acc[d.vocabularyNoteId] = [d];
 		}
-		// acc[d.vocabularyNoteId] && acc[d.vocabularyNoteId].push(d);
 		return acc;
 	}, {});
 	const vocabularyNote = (

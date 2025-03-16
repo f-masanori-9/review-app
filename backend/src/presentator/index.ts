@@ -1,20 +1,13 @@
 import { Hono } from 'hono';
-import { z } from 'zod';
-import { zValidator } from '@hono/zod-validator';
 import 'dotenv/config';
 import { cors } from 'hono/cors';
-import { drizzle } from 'drizzle-orm/d1';
 
-import { eq, and } from 'drizzle-orm';
-import { Note } from '../models/Note';
 import { HTTPException } from 'hono/http-exception';
-import { createFactory, createMiddleware } from 'hono/factory';
 import { Environment } from './type';
 import { patchNotesHandler } from './handlers/patchNotesHandler';
 import { getNoteHandler } from './handlers/getNoteRoute';
 import { postNotesHandler } from './handlers/postNotesRoute';
 
-import { usersTable } from '../../drizzle/schema';
 import { postReviewLogHandler } from './handlers/postReviewLog';
 import { deleteNoteRoute } from './handlers/deleteNoteRoute';
 import { postVocabularyNoteHandler } from './handlers/postVocabularyNoteHandler';
@@ -23,6 +16,10 @@ import { getVocabularyNoteHandler } from './handlers/getVocabularyNoteHandler';
 import { patchVocabularyNotesHandler } from './handlers/patchVocabularyNotesHandler';
 import { getVocabularyNotesHandler } from './handlers/getVocabularyNotesHandler';
 import { postVocabularyNoteReviewLogHandler } from './handlers/VocabularyNote/postVocabularyNoteReviewLogHandler';
+import { setD1DrizzleMiddleware } from './middlewares/setD1DrizzleMiddleware';
+import { verifyApiKey } from './middlewares/verifyApiKeyMddleware';
+import { setUserIdMiddleware } from './middlewares/setUserIdMiddleware';
+import { postSignupGoogleHandler } from './handlers/Auth/postSignupGoogleHandler';
 
 const app = new Hono<Environment>();
 
@@ -40,35 +37,9 @@ app.use(
 	})
 );
 
-const setD1DrizzleMiddleware = createMiddleware(async (c, next) => {
-	const d1Drizzle = drizzle(c.env.DB);
-	c.set('d1Drizzle', d1Drizzle);
-	await next();
-});
-
 app.use(setD1DrizzleMiddleware);
-
-const verifyApiKey = createMiddleware(async (c, next) => {
-	const apiKey = c.req.header('X-api-key');
-	if (apiKey !== c.env.API_KEY) {
-		return c.text('Unauthorized', 401);
-	}
-	await next();
-});
-
 app.use(verifyApiKey);
-
-const setUserIdMiddleware = createMiddleware(async (c, next) => {
-	const userId = c.req.header('X-User-Id');
-	if (!userId) {
-		return c.text('Unauthorized', 401);
-	}
-	c.set('userId', userId);
-	await next();
-});
-
 app.use(setUserIdMiddleware);
-
 app.onError((err, c) => {
 	console.error(err);
 	if (err instanceof HTTPException && err.status === 401) {
@@ -76,26 +47,6 @@ app.onError((err, c) => {
 	}
 
 	return c.text('Other Error', 500);
-});
-
-const signupByGoogleSchema = z.object({
-	userId: z.string(),
-	name: z.string(),
-});
-
-export const signupByGoogleRoute = app.post('/api/auth/signup/google', zValidator('json', signupByGoogleSchema), async (c) => {
-	const d1Drizzle = c.get('d1Drizzle');
-	const body = c.req.valid('json');
-
-	const existingUser = await d1Drizzle.select().from(usersTable).where(eq(usersTable.id, body.userId)).get();
-	if (existingUser) {
-		return c.json({ existingUser });
-	}
-	const res = await d1Drizzle
-		.insert(usersTable)
-		.values([{ id: body.userId, name: body.name }])
-		.get();
-	return c.json({ res });
 });
 
 const route = app
@@ -109,6 +60,7 @@ const route = app
 	.post('/api/review-logs', ...postReviewLogHandler)
 	.post('/api/vocabulary-notes', ...postVocabularyNoteHandler)
 	.post('/api/vocabulary-notes/review-log', ...postVocabularyNoteReviewLogHandler)
+	.post('/api/auth/signup/google', ...postSignupGoogleHandler)
 	.delete('/api/note', ...deleteNoteRoute);
 
 export { app, route };

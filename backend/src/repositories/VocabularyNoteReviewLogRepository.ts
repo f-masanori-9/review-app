@@ -1,10 +1,10 @@
-import { DrizzleD1Database } from 'drizzle-orm/d1';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { vocabularyNoteReviewLogsTable } from '../../drizzle/schema';
 import { VocabularyNoteReviewLog } from '../models/VocabularyNoteReviewLog';
+import { DrizzleClient } from '@/types';
 
 export class VocabularyNoteReviewLogRepository {
-	constructor(readonly d1Drizzle: DrizzleD1Database<Record<string, never>>) {}
+	constructor(readonly d1Drizzle: DrizzleClient) {}
 
 	async findByUserId({ userId }: { userId: string }): Promise<VocabularyNoteReviewLog[]> {
 		const reviewLogs = await this.d1Drizzle

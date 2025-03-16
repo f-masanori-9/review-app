@@ -1,6 +1,5 @@
 import { NoteRepository } from '../repositories/NoteRepository';
 import { Note } from '../models/Note';
-import { ReviewLogsRepository } from '../repositories/ReviewLogsRepository';
 import { ReviewLog } from '../models/ReviewLog';
 
 export class CreateNoteUseCase {

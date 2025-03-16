@@ -1,15 +1,16 @@
 import { zValidator } from '@hono/zod-validator';
-import { factory } from '../factory';
+
 import { UpdateNoteUseCase } from '../../usecases/UpdateNoteUseCase';
 import { NoteRepository } from '../../repositories/NoteRepository';
 import { z } from 'zod';
+import { createHandlers } from '../utils/factory';
 
 const patchNotesSchema = z.object({
 	noteId: z.string(),
 	content: z.string(),
 });
 
-export const patchNotesHandler = factory.createHandlers(zValidator('json', patchNotesSchema), async (c) => {
+export const patchNotesHandler = createHandlers(zValidator('json', patchNotesSchema), async (c) => {
 	const userId = c.get('userId');
 	const body = c.req.valid('json');
 

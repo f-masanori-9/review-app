@@ -2,13 +2,13 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { VocabularyNoteReviewLogRepository } from '../../../repositories/VocabularyNoteReviewLogRepository';
 import { VocabularyNoteReviewLog } from '../../../models/VocabularyNoteReviewLog';
-import { factory } from '../../factory';
+import { createHandlers } from '@/presentator/utils/factory';
 
 const postReviewLogSchema = z.object({
 	noteId: z.string(),
 });
 
-export const postVocabularyNoteReviewLogHandler = factory.createHandlers(zValidator('json', postReviewLogSchema), async (c) => {
+export const postVocabularyNoteReviewLogHandler = createHandlers(zValidator('json', postReviewLogSchema), async (c) => {
 	const userId = c.get('userId');
 
 	const repository = new VocabularyNoteReviewLogRepository(c.get('d1Drizzle'));

@@ -1,8 +1,9 @@
 import { notesTable, reviewLogsTable } from '../../../drizzle/schema';
-import { factory } from '../factory';
-import { eq, and, sql, inArray } from 'drizzle-orm';
 
-export const getNoteHandler = factory.createHandlers(async (c) => {
+import { eq, and, sql, inArray } from 'drizzle-orm';
+import { createHandlers } from '../utils/factory';
+
+export const getNoteHandler = createHandlers(async (c) => {
 	const userId = c.get('userId');
 	const noteId = c.req.param('noteId');
 	const d1Drizzle = c.get('d1Drizzle');
