@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 export const DropDownMenu: FC<{
   menuButtonChildren: React.ReactNode;

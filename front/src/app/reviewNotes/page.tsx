@@ -2,7 +2,7 @@
 
 import { useMutateNotes, useNotes } from "@/hooks/useNotes";
 import { Loading } from "@/components/Loading";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useUpdateNoteDebounced } from "@/hooks/useUpdateNoteDebounced";
 import { useAddReview } from "@/hooks/useAddReview";
 import { useReward } from "react-rewards";
@@ -25,6 +25,28 @@ export default function Page() {
   const { addNote } = useAddNote();
   const { addVocabularyNote } = useAddVocabularyNote();
 
+  const container = useRef<HTMLDivElement>(null);
+
+  const touchStartEvent = (e) => {
+    if (e.touches[0].pageX > 16 && e.touches[0].pageX < window.innerWidth - 16)
+      return;
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    if (container.current) {
+      container.current.addEventListener("touchstart", (e) =>
+        touchStartEvent(e)
+      );
+    }
+
+    return () => {
+      if (container.current) {
+        container.current.removeEventListener("touchstart", touchStartEvent);
+      }
+    };
+  }, [container.current]);
+
   const [isLoadingNotes, setIsLoadingNote] = useState(false);
   const onClickAddNote = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -46,7 +68,7 @@ export default function Page() {
   }
 
   return (
-    <div className="p-1 mb-28">
+    <div className="p-1 mb-28" ref={container}>
       {shuffleArray(notesWithReviewLogs, generateSeedFromDatetime()).map(
         (n) => {
           const { reviewLogs, ...note } = n;

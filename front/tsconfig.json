@@ -20,8 +20,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "front/*": ["./src/*"],
       "backend/*": ["../backend/dist/*"]
-    }
+    },
+    "baseUrl": "."
   },
   "include": [
     "next-env.d.ts",
