@@ -17,6 +17,7 @@
   ],
   "orientation": "any",
   "display": "standalone",
+  "scope": "/front/",
   "dir": "auto",
   "lang": "ja",
   "name": "reviMemo",

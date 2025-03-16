@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@backend/*": ["../backend/dist/*"]
+      "backend/*": ["../backend/dist/*"]
     }
   },
   "include": [

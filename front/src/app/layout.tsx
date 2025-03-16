@@ -5,6 +5,7 @@ import { HonoSessionProvider } from "@/providers/HonoSessionProvider";
 import { AuthGuard } from "./AuthGuard";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +20,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "review-notes",
   description: "復習ができるメモアプリです。",
-  viewport:
-    "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 };
 
 export default function RootLayout({
