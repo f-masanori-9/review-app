@@ -2,6 +2,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import unusedImports from "eslint-plugin-unused-imports";
+import typescriptEslintParser from "@typescript-eslint/parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +30,15 @@ const eslintConfig = [
             },
         ]
     }
-}
+},
+  // 設定項目4: TypeScriptパーサーの設定
+  // 例: @typescript-eslint/parserを使用してTypeScriptのパースを行うよう設定する
+  {
+    languageOptions: {
+      parser: typescriptEslintParser,
+    },
+  },
+
 ];
 
 export default eslintConfig;

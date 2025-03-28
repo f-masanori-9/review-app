@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@headlessui/react";
-import { FC } from "react";
+import React, { FC } from "react";
 import { BsPlus } from "react-icons/bs";
 import { Loading } from "../Loading";
 export const AddSubNoteButton: FC<{

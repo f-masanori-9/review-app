@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -8,27 +8,39 @@ import { Loading } from "@/components/Loading";
 export default function Login() {
   const { status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const onClickGoogleLogin = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await signIn("google");
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
   if (status === "loading" || isLoading) {
     return <Loading />;
   }
 
   if (status !== "authenticated") {
     return (
-      <div className="p-4 flex flex-col items-center">
-        <GoogleLoginButton
-          onClickGoogleLogin={async () => {
-            try {
-              setIsLoading(true);
-              const res = await signIn("google");
-              console.log(res);
-            } catch (e) {
-              console.error(e);
-            } finally {
-              setIsLoading(false);
-            }
-          }}
-        />
-      </div>
+      <>
+        <div className="relative h-96 ">
+          {/* オーバーレイ */}
+          {/* <div className="absolute inset-0  bg-primary opacity-20"></div> */}
+          <div className="container mx-auto px-4 py-16">
+            <h2 className="text-3xl text-center">アカウントを登録</h2>
+
+            {/* 登録ボタン */}
+            <div className="flex justify-center mt-8">
+              <div className="p-4 flex flex-col items-center">
+                <GoogleLoginButton onClickGoogleLogin={onClickGoogleLogin} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
     );
   }
 

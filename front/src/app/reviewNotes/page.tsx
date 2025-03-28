@@ -16,7 +16,6 @@ import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { useAddNote } from "@/hooks/useAddNote";
 import { differenceInDays } from "date-fns";
 import { CgNotes } from "react-icons/cg";
-import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
 export default function Page() {
@@ -80,9 +79,6 @@ export default function Page() {
           );
         }
       )}
-      <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
-        <AddVocabularyNote onClick={addVocabularyNote} />
-      </div>
       <div className="fixed z-50 bottom-14 left-2  cursor-pointer">
         <AddNoteButton onClick={onClickAddNote} />
       </div>
