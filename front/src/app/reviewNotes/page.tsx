@@ -26,7 +26,7 @@ export default function Page() {
 
   const container = useRef<HTMLDivElement>(null);
 
-  const touchStartEvent = (e) => {
+  const touchStartEvent = (e: TouchEvent) => {
     if (e.touches[0].pageX > 16 && e.touches[0].pageX < window.innerWidth - 16)
       return;
     e.preventDefault();
