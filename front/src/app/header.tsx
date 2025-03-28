@@ -46,16 +46,20 @@ const HeaderForNotLogin = () => {
   const router = useRouter();
 
   return (
-    <div className="App">
-      <div className="container mx-auto px-3">
-        <header className="flex justify-between py-1 pt-2">
-          <h1>F</h1>
-          <button
-            className="text-primary"
-            onClick={() => router.push("/login")}
-          >
-            登録/ログイン
-          </button>
+    <div className="fixed z-50 top-0 w-full bg-white">
+      <div className="container mx-auto px-3 border-b-2">
+        <header className={`flex py-1 justify-between`}>
+          <div>
+            <h1>F</h1>
+          </div>
+          <div>
+            <button
+              className="text-primary"
+              onClick={() => router.push("/login")}
+            >
+              登録/ログイン
+            </button>
+          </div>
         </header>
       </div>
     </div>

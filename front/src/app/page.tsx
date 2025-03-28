@@ -38,11 +38,7 @@ export default function Home() {
         <div className="absolute inset-0  bg-primary opacity-20"></div>
         <div className="container mx-auto px-4 py-16">
           <h2 className="text-4xl font-bold text-center">今すぐ始めよう</h2>
-          <h4 className="text-center mt-4">
-            ・カード形式で学習内容を記録 ・復習の回数をカウント
-            ・復習のタイミングを自動計算 ・復習のスケジュールをカレンダーで確認
-            ・復習の進捗をグラフで可視化
-          </h4>
+
           {/* 登録ボタン */}
           <div className="flex justify-center mt-8">
             <button
