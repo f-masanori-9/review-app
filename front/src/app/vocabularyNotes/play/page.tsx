@@ -78,7 +78,7 @@ export default function Page() {
           style={{ width: `${100 * vocabularyNotes.length}vw` }}
           className="flex"
         >
-          {vocabularyNotes.map((n) => {
+          {vocabularyNotes.map((n, index) => {
             return (
               <OneVocabularyNoteCard
                 key={n.id}
@@ -88,6 +88,8 @@ export default function Page() {
                 reviewCount={n.reviewLogs.length}
                 isShowBackContent={isShowBackContent}
                 setIsShowBackContent={setIsShowBackContent}
+                allCardsCount={vocabularyNotes.length}
+                cardOrder={index + 1}
               />
             );
           })}
@@ -98,19 +100,6 @@ export default function Page() {
         onClick={scrollToNextCard}
       >
         次へ
-      </div>
-      {/* 戻る */}
-      <div
-        className="fixed z-50 bottom-24 right-2  cursor-pointer"
-        onClick={() => {
-          router.push(`/vocabularyNotes`);
-        }}
-      >
-        戻る
-      </div>
-      {/* 何枚目のカードまで進んだのかを表示 */}
-      <div className="fixed z-50 bottom-14 left-2 text-gray-500">
-        {currentCardIndex} / {vocabularyNotes.length}
       </div>
     </div>
   );
@@ -123,7 +112,16 @@ const OneVocabularyNoteCard: React.FC<{
   reviewCount: number;
   isShowBackContent: boolean;
   setIsShowBackContent: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ vocabularyNoteId, frontContent, backContent, reviewCount }) => {
+  allCardsCount: number;
+  cardOrder: number;
+}> = ({
+  vocabularyNoteId,
+  frontContent,
+  backContent,
+  reviewCount,
+  allCardsCount,
+  cardOrder,
+}) => {
   const { addVocabularyNoteReview } = useAddVocabularyNoteReview();
   const { reward } = useReward("rewardId", "confetti");
   const [isShowBackContent, setIsShowBackContent] = useState(false);
@@ -131,39 +129,40 @@ const OneVocabularyNoteCard: React.FC<{
   return (
     <div
       key={vocabularyNoteId}
-      className="w-screen snap-center h-[calc(100vh-110px)]  p-1"
+      className="w-screen snap-center h-[calc(100vh-110px)] p-4 flex items-center justify-center relative"
     >
-      <div className="">{frontContent}</div>
-      <div className="border-b border-gray-300" />
-      <div className="flex justify-between p-2">
-        <div
-          className="flex items-center gap-2 text-gray-500"
-          // onClick={onClickNote}
-        >
-          <ReviewButton
-            onClick={async (e) => {
-              e.stopPropagation();
-              await addVocabularyNoteReview(vocabularyNoteId);
-              // setIsReviewed(true);
-              reward();
-              // mutate();
-            }}
-            reviewCount={reviewCount}
-            //   isReviewed={isReviewed}
-            //   isLoading={isLoadingMutate}
-          />
+      <div className="w-full max-w-md bg-white shadow-lg rounded-lg border border-gray-200 p-4">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2 text-gray-500">
+            <ReviewButton
+              onClick={async (e) => {
+                e.stopPropagation();
+                await addVocabularyNoteReview(vocabularyNoteId);
+                reward();
+              }}
+              reviewCount={reviewCount}
+            />
+          </div>
+          <div className=" text-gray-500 text-sm">
+            {cardOrder} / {allCardsCount}
+          </div>
         </div>
+        <div className="text-lg font-semibold text-center mb-4">
+          {frontContent}
+        </div>
+        <div className="border-b border-gray-300 mb-4" />
+
+        {isShowBackContent ? (
+          <div className="text-center text-gray-700">{backContent}</div>
+        ) : (
+          <div
+            className="text-center text-gray-500 text-sm cursor-pointer"
+            onClick={() => setIsShowBackContent(true)}
+          >
+            回答を見る
+          </div>
+        )}
       </div>
-      {isShowBackContent ? (
-        <div className="">{backContent}</div>
-      ) : (
-        <div
-          className="text-gray-500 text-sm cursor-pointer"
-          onClick={() => setIsShowBackContent(true)}
-        >
-          回答を見る
-        </div>
-      )}
     </div>
   );
 };
