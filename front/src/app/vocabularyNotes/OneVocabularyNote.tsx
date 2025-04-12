@@ -2,17 +2,16 @@
 
 import React, { FC, useEffect, useState } from "react";
 import { useReward } from "react-rewards";
-import { useDeleteReview } from "@/hooks/useDeleteReview";
+
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
 import { DropDownMenu } from "@/components/DropDownMenu";
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { differenceInDays } from "date-fns";
-import { CiCreditCard2 } from "react-icons/ci";
-import { TextAreaAutoSize } from "@/components/TextAreaAutoSize";
 import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
-import { useMutateVocabularyNotes } from "@/hooks/useVocabularyNotes";
 import { useAddVocabularyNoteReview } from "@/hooks/useAddVocabularyNoteReview";
+import { useDeleteVocabularyNote } from "@/hooks/vocabularyNote/useDeleteVocabularyNote";
+import { useMutateVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 
 export const OneVocabularyNote: FC<{
   note: {
@@ -20,8 +19,8 @@ export const OneVocabularyNote: FC<{
     id: string;
     createdAt: string;
     updatedAt: string;
-    content: string;
-    answerText: string;
+    frontContent: string;
+    backContent: string;
   };
   reviewCount: number;
 }> = ({ note, reviewCount }) => {
@@ -33,7 +32,7 @@ export const OneVocabularyNote: FC<{
   const { reward } = useReward("rewardId", "confetti");
   const [isReviewed, setIsReviewed] = useState(false);
 
-  const { deleteReview } = useDeleteReview();
+  const { deleteVocabularyNote } = useDeleteVocabularyNote();
 
   const opacity = getReviewOpacity(reviewCount);
 
@@ -45,49 +44,39 @@ export const OneVocabularyNote: FC<{
 
   return (
     <div>
-      <div className="overflow-x-auto">
-        <div className="flex w-200vw  border border-gray-300">
-          <div className={`${bgColorClass[opacity / 5]} p-2 w-1/2`}>
-            <div className="flex items-center gap-2">
-              <CiCreditCard2 size={24} color="" />
-              <span className="text-xs text-gray-500">{`${differenceInDays(
-                new Date(),
-                note.createdAt
-              )}日前`}</span>
-              <br />
-            </div>
-            <span className="whitespace-pre-wrap font-black">
-              <TextAreaAutoSize
-                defaultValue={note.content || ""}
-                onChange={(e) => {
-                  updateVocabularyNoteDebounced(
-                    note.id,
-                    e.target.value,
-                    note.answerText
-                  );
-                }}
-                placeholder={"問題を入力しよう"}
-              />
-            </span>
-          </div>
-          <div className={`${bgColorClass[opacity / 5]} p-2 w-1/2`}>
-            <br />
-            <span className="whitespace-pre-wrap font-black">
-              <TextAreaAutoSize
-                defaultValue={note.answerText || ""}
-                onChange={(e) => {
-                  updateVocabularyNoteDebounced(
-                    note.id,
-                    note.content,
-                    e.target.value
-                  );
-                }}
-                placeholder={"回答を入力しよう"}
-              />
-            </span>
-          </div>
+      <div className={`${bgColorClass[opacity / 5]} p-2 `}>
+        <div className="flex items-center">
+          <span className="text-xs text-gray-500">{`${differenceInDays(
+            new Date(),
+            note.createdAt
+          )}日前`}</span>
+          <br />
         </div>
+        <div>
+          <span
+            className=" font-black line-clamp-2"
+            style={{
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {note.frontContent}
+          </span>
+        </div>
+        <div className="border-b border-gray-300" />
+        <span
+          className="font-black line-clamp-2"
+          style={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {note.backContent}
+        </span>
       </div>
+
       <div className="flex justify-between p-2">
         <div className="flex items-center gap-2 text-gray-500">
           <ReviewButton
@@ -116,7 +105,7 @@ export const OneVocabularyNote: FC<{
               ),
               onClick: () => {
                 if (confirm("削除しますか？")) {
-                  deleteReview(note.id);
+                  deleteVocabularyNote(note.id);
                 }
               },
             },

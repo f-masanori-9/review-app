@@ -1,32 +1,31 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { mutateNotes } from "./useNotes";
 import { useMutateVocabularyNote } from "./useVocabularyNote";
+import { useMutateVocabularyNotes } from "./vocabularyNote/useVocabularyNotes";
 
-const patchNoteApiClient = generateApiClient();
+const client = generateApiClient();
 
 export const useUpdateVocabularyNote = () => {
-  const { mutateNote } = useMutateVocabularyNote();
+  const { mutateNoteVN } = useMutateVocabularyNote();
+  const { mutate: mutateVocabularyNotes } = useMutateVocabularyNotes();
   const updateNote = useCallback(
     async (noteId: string, content: string, answerText: string) => {
-      const response = await patchNoteApiClient.api["vocabulary-notes"][
-        ":noteId"
-      ].$patch({
-        param: { noteId },
+      const response = await client.api["vocabulary-notes"][":id"].$patch({
+        param: { id: noteId },
         json: {
-          noteId: noteId,
-          content,
-          answerText,
+          id: noteId,
+          frontContent: content, // TODO:命名
+          backContent: answerText || "", // TODO:命名
         },
       });
-      mutateNote(noteId);
-      mutateNotes();
+      mutateNoteVN(noteId);
+      await mutateVocabularyNotes();
 
       const note = await response.json();
 
       return note;
     },
-    [mutateNote]
+    [mutateNoteVN, mutateVocabularyNotes]
   );
 
   return { updateNote };

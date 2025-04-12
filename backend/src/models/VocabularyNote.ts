@@ -5,7 +5,7 @@ export class VocabularyNote {
 	readonly answerText: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly type: 'vocabularyNote' = 'vocabularyNote';
+	readonly type = 'vocabularyNote' as const;
 
 	constructor(params: ExcludeMethods<VocabularyNote>) {
 		this.id = params.id;
@@ -16,9 +16,9 @@ export class VocabularyNote {
 		this.updatedAt = params.updatedAt;
 	}
 
-	static createNew(params: Omit<ExcludeMethods<VocabularyNote>, 'id' | 'createdAt' | 'updatedAt' | 'type'>) {
+	static createNew(params: Omit<ExcludeMethods<VocabularyNote>, 'createdAt' | 'updatedAt' | 'type'>) {
 		return new VocabularyNote({
-			id: crypto.randomUUID(),
+			id: params.id,
 			userId: params.userId,
 			content: params.content,
 			answerText: params.answerText,

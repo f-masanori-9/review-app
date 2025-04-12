@@ -1,6 +1,6 @@
 import { generateApiClient } from "@/libs/apiClient";
 import { useCallback } from "react";
-import { useVocabularyNotes } from "./useVocabularyNotes";
+import { useVocabularyNotes } from "./vocabularyNote/useVocabularyNotes";
 
 const internalApi = generateApiClient();
 
@@ -10,10 +10,10 @@ export const useAddVocabularyNoteReview = () => {
   const addVocabularyNoteReview = useCallback(
     async (noteId: string) => {
       const response = await internalApi.api["vocabulary-notes"][
-        "review-log"
+        "review-logs"
       ].$post({
         json: {
-          noteId: noteId,
+          vocabularyNoteId: noteId,
         },
       });
       mutate();

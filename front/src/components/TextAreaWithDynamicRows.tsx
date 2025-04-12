@@ -35,8 +35,6 @@ export const TextAreaWithDynamicRows: FC<{
     setRows(calculateRows(textareaRef.current));
   };
 
-  const [isFocusing, setIsForcusing] = useState(false);
-
   return (
     <textarea
       ref={textareaRef}
@@ -50,12 +48,10 @@ export const TextAreaWithDynamicRows: FC<{
       onFocus={() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onFocus && onFocus();
-        setIsForcusing(true);
       }}
       onBlur={() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onBlur && onBlur();
-        setIsForcusing(false);
       }}
     />
   );

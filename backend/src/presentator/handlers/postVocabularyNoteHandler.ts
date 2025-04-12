@@ -6,6 +6,7 @@ import { vocabularyNotesTable } from '../../drizzle/schema';
 import { createHandlers } from '../utils/factory';
 
 const postVocabularyNoteHandlerSchema = z.object({
+	id: z.string().uuid(),
 	title: z.string(),
 	content: z.string(),
 	answerText: z.string(),
@@ -18,6 +19,7 @@ export const postVocabularyNoteHandler = createHandlers(zValidator('json', postV
 	const body = c.req.valid('json');
 
 	const vocabularyNote = VocabularyNote.createNew({
+		id: body.id,
 		userId,
 		content: body.content,
 		answerText: body.answerText,

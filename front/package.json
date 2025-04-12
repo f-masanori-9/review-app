@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev --name"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
     "@cloudflare/workers-types": "^4.20250109.0",
     "@headlessui/react": "^2.2.0",
-    "@prisma/client": "^6.2.1",
+    "@hono/zod-validator": "^0.4.3",
+    "@prisma/client": "^6.6.0",
     "@types/lodash": "^4.17.15",
     "date-fns": "^4.1.0",
     "hono": "^4.6.16",

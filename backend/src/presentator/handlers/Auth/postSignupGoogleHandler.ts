@@ -37,7 +37,12 @@ export const postSignupGoogleHandler = createHandlers(zValidator('json', bodySch
 	);
 	const vocabularyNoteRepository = new VocabularyNoteRepository(d1Drizzle);
 	await vocabularyNoteRepository.create(
-		VocabularyNote.createNew({ userId: body.userId, content: '「薔薇」という漢字の読み方は？', answerText: 'バラ' })
+		VocabularyNote.createNew({
+			id: crypto.randomUUID(),
+			userId: body.userId,
+			content: '「薔薇」という漢字の読み方は？',
+			answerText: 'バラ',
+		})
 	);
 
 	return c.json({ res });

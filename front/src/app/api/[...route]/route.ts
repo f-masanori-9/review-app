@@ -1,45 +1,29 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { authConfig } from "@/auth";
-import { StatusCode } from "hono/utils/http-status";
 
-const app = new Hono().basePath("/api");
+import { HTTPException } from "hono/http-exception";
+import { requestedUserMiddleware } from "./requestedUserMiddleware";
+import { postVocabularyNoteHandler } from "./vocabulary-notes/postVocabularyNoteHandler";
+import { getVocabularyNoteHandler } from "./vocabulary-notes/getVocabularyNoteHandler";
+import { patchVocabularyNoteHandler } from "./vocabulary-notes/patchVocabularyNoteHandler";
+import { deleteVocabularyNoteHandler } from "./vocabulary-notes/deleteVocabularyNoteHandler";
+import { postVocabularyNoteReviewLogHandler } from "./vocabulary-notes/logs/postVocabularyNoteReviewLogHandler";
 
-// NOTE: GET以外のリクエストボディはJSONであることを前提としている（もしJSON以外を使う場合は、その都度設定を変える）
-app.all("*", async (c) => {
-  const session = await authConfig.auth();
-  const userId = session?.user?.id;
-  // TODO: セッションがなかったら
-  if (!userId) {
-    return c.newResponse(JSON.stringify({ message: "Unauthorized" }), 401, {
-      "Content-Type": "application/json",
-    });
-  }
+const app = new Hono()
+  .basePath("/api")
+  .use(requestedUserMiddleware)
+  .post("/vocabulary-notes", ...postVocabularyNoteHandler)
+  .get("/vocabulary-notes", ...getVocabularyNoteHandler)
+  .patch("/vocabulary-notes/:id", ...patchVocabularyNoteHandler)
+  .delete("/vocabulary-notes", ...deleteVocabularyNoteHandler)
+  .post("/vocabulary-notes/review-logs", ...postVocabularyNoteReviewLogHandler)
 
-  const reqMethod = c.req.method;
-  // const reqHeaders = new Headers(c.req.raw.headers);
-  // reqHeaders.append("X-User-Id", userId);
-  // reqHeaders.append("X-api-key", process.env.API_KEY || "");
-  try {
-    const response = await fetch(
-      `${process.env.INTERNAL_ENDPOINT}${c.req.path}?test=nocache`,
-      {
-        method: c.req.method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-Id": userId,
-          "X-api-key": process.env.API_KEY || "",
-        },
-        body: reqMethod === "GET" ? undefined : await c.req.raw.text(),
-        cache: "no-store",
-      }
-    );
-
-    return c.newResponse(response.body, response.status as StatusCode, {
-      "Content-Type": response.headers.get("Content-Type") || "",
-    });
-  } catch (e) {
-    console.error(e);
+  .onError((err, c) => {
+    // TODO: エラーハンドリングを実装
+    if (err instanceof HTTPException) {
+      return err.getResponse();
+    }
+    console.error(err);
     return c.newResponse(
       JSON.stringify({ message: "Internal Server Error" }),
       500,
@@ -47,8 +31,9 @@ app.all("*", async (c) => {
         "Content-Type": "application/json",
       }
     );
-  }
-});
+  });
+
+export type EndPointType = typeof app;
 
 export const GET = handle(app);
 export const POST = handle(app);

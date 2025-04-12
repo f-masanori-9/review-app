@@ -1,7 +1,9 @@
-import { honoClient } from "backend/index";
+import { EndPointType } from "@/app/api/[...route]/route";
+import { hc } from "hono/client";
 
+export const apiClient = hc<EndPointType>;
 export const generateApiClient = () => {
-  return honoClient(`${process.env.NEXT_PUBLIC_ENDPOINT}`, {
+  return apiClient(`${process.env.NEXT_PUBLIC_ENDPOINT}`, {
     fetch: (input: RequestInfo | URL, requestInit?: RequestInit) => {
       return fetch(input, {
         ...requestInit,

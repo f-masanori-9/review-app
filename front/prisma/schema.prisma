@@ -41,13 +41,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                      String                    @id @default(cuid())
+  name                    String?
+  email                   String?                   @unique
+  emailVerified           DateTime?
+  image                   String?
+  accounts                Account[]
+  sessions                Session[]
+  VocabularyNote          VocabularyNote[]
+  VocabularyNoteReviewLog VocabularyNoteReviewLog[]
 }
 
 model VerificationToken {
@@ -56,4 +58,28 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model VocabularyNote {
+  id                       String                    @id @default(cuid())
+  userId                   String
+  user                     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  frontContent             String
+  backContent              String
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @default(now())
+  vocabularyNoteReviewLogs VocabularyNoteReviewLog[]
+
+  @@index([userId])
+}
+
+model VocabularyNoteReviewLog {
+  id               String         @id @default(cuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vocabularyNoteId String
+  vocabularyNote   VocabularyNote @relation(fields: [vocabularyNoteId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+
+  @@index([userId])
 }

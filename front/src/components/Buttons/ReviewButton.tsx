@@ -10,7 +10,7 @@ import { useReward } from "react-rewards";
 export const ReviewButton: FC<{
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   reviewCount: number;
-  isReviewed: boolean;
+  isReviewed?: boolean;
   isLoading?: boolean;
 }> = ({ onClick, isReviewed, reviewCount, isLoading }) => {
   const { reward } = useReward("rewardId", "confetti");

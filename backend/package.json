@@ -12,7 +12,8 @@
 		"wrangler:apply:local": "npx wrangler d1 migrations apply app --local",
 		"wrangler:apply:prod": "npx wrangler d1 migrations apply app --remote",
 		"db:studio:local": "npx cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
-		"build": "tsc && tsc-alias"
+		"build:watch": "tsc -p tsconfig-for-build.json -w && tsc-alias -p tsconfig-for-build.json -w",
+		"build": "tsc -p tsconfig-for-build.json && tsc-alias -p tsconfig-for-build.json"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.5.2",

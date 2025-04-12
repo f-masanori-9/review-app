@@ -2,15 +2,10 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
-import { CgNotes } from "react-icons/cg";
 
 export const Footer: FC = () => {
   const router = useRouter();
   const { status } = useSession();
-
-  const onClickToReviewNotes = () => {
-    router.push("/reviewNotes");
-  };
 
   const onClickToVocabularyNotes = () => {
     router.push("/vocabularyNotes");
@@ -21,12 +16,12 @@ export const Footer: FC = () => {
   }
   return (
     <div className="fixed z-100 bottom-0 w-full p-2 mb-1 bg-white/90 flex justify-between">
-      <div
+      {/* <div
         className="flex justify-center items-center flex-1"
         onClick={onClickToReviewNotes}
       >
         <CgNotes color="black" size={30} />
-      </div>
+      </div> */}
 
       <div
         className="flex justify-center items-center flex-1"

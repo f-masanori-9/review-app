@@ -11,7 +11,7 @@ export const generateKey = (noteId: string) => ({
 
 export const useVocabularyNote = (noteId: string) => {
   return useSWR(generateKey(noteId), async ({ noteId }) => {
-    const response = await client.api["vocabulary-notes"][":noteId"].$get({
+    const response = await client.api["vocabulary-notes"].$get({
       param: { noteId },
     });
 
@@ -20,9 +20,9 @@ export const useVocabularyNote = (noteId: string) => {
 };
 
 export const useMutateVocabularyNote = () => {
-  const mutateNote = useCallback(async (noteId: string) => {
+  const mutateNoteVN = useCallback(async (noteId: string) => {
     await mutate(generateKey(noteId));
   }, []);
 
-  return { mutateNote };
+  return { mutateNoteVN };
 };
