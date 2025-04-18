@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import nextPWA from "next-pwa";
+import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 
 const withPWA = nextPWA({
   dest: "public",
@@ -12,4 +13,4 @@ const nextConfig = withPWA({
   reactStrictMode: true,
 });
 
-export default nextConfig;
+export default withFlowbiteReact(nextConfig);

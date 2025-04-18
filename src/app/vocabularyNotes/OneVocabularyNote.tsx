@@ -23,7 +23,8 @@ export const OneVocabularyNote: FC<{
     backContent: string;
   };
   reviewCount: number;
-}> = ({ note, reviewCount }) => {
+  onClickVN: (args: { vnId: string }) => void;
+}> = ({ note, reviewCount, onClickVN }) => {
   const { updateVocabularyNoteDebounced } = useUpdateVocabularyNoteDebounced();
 
   const { addVocabularyNoteReview } = useAddVocabularyNoteReview();
@@ -44,7 +45,10 @@ export const OneVocabularyNote: FC<{
 
   return (
     <div>
-      <div className={`${bgColorClass[opacity / 5]} p-2 `}>
+      <div
+        className={`${bgColorClass[opacity / 5]} p-2 `}
+        onClick={() => onClickVN({ vnId: note.id })}
+      >
         <div className="flex items-center">
           <span className="text-xs text-gray-500">{`${differenceInDays(
             new Date(),

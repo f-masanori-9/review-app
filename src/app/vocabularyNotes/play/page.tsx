@@ -13,18 +13,12 @@ export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
 
   const wordCardsAreaRef = React.useRef<HTMLDivElement>(null);
-  const [scrollWidth, setScrollWidth] = useState(1);
-  const [scrollLeft, setScrollLeft] = useState(1);
 
-  console.log("scrollWidth", scrollWidth);
-  console.log("scrollLeft", scrollLeft);
   // スクロールの処理をdebounceでラップ
   const handleScroll = useMemo(
     () =>
       debounce(() => {
         if (wordCardsAreaRef.current) {
-          setScrollWidth(wordCardsAreaRef.current.scrollWidth);
-          setScrollLeft(wordCardsAreaRef.current.scrollLeft);
         }
       }, 200),
     []
@@ -36,7 +30,6 @@ export default function Page() {
       element.addEventListener("scroll", handleScroll);
     }
 
-    // クリーンアップ
     return () => {
       if (element) {
         element.removeEventListener("scroll", handleScroll);
@@ -56,11 +49,6 @@ export default function Page() {
     }
   }, []);
   const [isShowBackContent, setIsShowBackContent] = useState(false);
-
-  // 何枚目のカードを表示しているかを計算
-  const currentCardIndex =
-    Math.trunc((scrollLeft / scrollWidth) * vocabularyNotes.length) + 1;
-  console.log("currentCardIndex", currentCardIndex);
 
   if (isLoading) {
     return <Loading />;
@@ -141,7 +129,7 @@ const OneVocabularyNoteCard: React.FC<{
               reviewCount={reviewCount}
             />
           </div>
-          <div className=" text-gray-500 text-sm">
+          <div className="text-gray-500 text-lg">
             {cardOrder} / {allCardsCount}
           </div>
         </div>
@@ -151,7 +139,17 @@ const OneVocabularyNoteCard: React.FC<{
         <div className="border-b border-gray-300 mb-4" />
 
         {isShowBackContent ? (
-          <div className="text-center text-gray-700">{backContent}</div>
+          <div className="text-center text-gray-700 flex flex-col items-center gap-3">
+            {backContent}
+
+            <button
+              onClick={() => setIsShowBackContent(false)}
+              type="button"
+              className="text-gray-600 hover:text-white border-gray-400 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+            >
+              回答を隠す
+            </button>
+          </div>
         ) : (
           <div
             className="text-center text-gray-500 text-sm cursor-pointer"
