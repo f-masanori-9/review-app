@@ -2,7 +2,6 @@
 
 import { Loading } from "@/components/Loading";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { ReviewButton } from "@/components/Buttons/ReviewButton";
 import { useAddVocabularyNoteReview } from "@/hooks/useAddVocabularyNoteReview";
@@ -12,7 +11,6 @@ import { debounce } from "lodash";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
-  const router = useRouter();
 
   const wordCardsAreaRef = React.useRef<HTMLDivElement>(null);
   const [scrollWidth, setScrollWidth] = useState(1);
