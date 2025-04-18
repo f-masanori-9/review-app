@@ -14,8 +14,8 @@ export const useAddVocabularyNote = () => {
       const response = await postNoteApiClient.api["vocabulary-notes"].$post({
         json: {
           id: crypto.randomUUID(),
-          frontContent: "",
-          backContent: "",
+          frontContent: "未入力",
+          backContent: "🥚",
         },
       });
       await mutateVocabularyNotes();

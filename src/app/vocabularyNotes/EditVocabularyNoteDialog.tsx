@@ -110,7 +110,7 @@ const EditVocabularyNoteDialog: FC<{
                     vocabularyNote.backContent
                   );
                 }}
-                placeholder="Front content"
+                placeholder="表面"
               />
               <textarea
                 className="w-full h-40 p-2 border border-gray-300 rounded"
@@ -126,7 +126,7 @@ const EditVocabularyNoteDialog: FC<{
                     e.target.value
                   );
                 }}
-                placeholder="Back content"
+                placeholder="裏面"
               />
             </Description>
           </DialogPanel>

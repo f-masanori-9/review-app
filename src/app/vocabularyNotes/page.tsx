@@ -4,7 +4,6 @@ import { Loading } from "@/components/Loading";
 import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { OneVocabularyNote } from "./OneVocabularyNote";
 import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
@@ -12,14 +11,14 @@ import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
 import { StartPlayVocabularyNote } from "@/components/Buttons/StartPlayVocabularyNote";
 
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
-import { generateApiClient } from "@/libs/apiClient";
 import { EditVocabularyNoteDialogCore } from "./EditVocabularyNoteDialog";
-const client = generateApiClient();
+import { Button } from "@/components/Buttons/Button";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
   const router = useRouter();
-  const { addVocabularyNote } = useAddVocabularyNote();
+  const { addVocabularyNote, isLoading: isLoadingAdding } =
+    useAddVocabularyNote();
   const onClickStartPlayVocabularyNote = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.stopPropagation();
@@ -54,7 +53,12 @@ export default function Page() {
         );
       })}
       <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
-        <AddVocabularyNote onClick={addVocabularyNote} />
+        <Button
+          variant="outlined"
+          onClick={addVocabularyNote}
+          title="単語帳を追加"
+          isLoading={isLoadingAdding}
+        ></Button>
       </div>
       <div className="fixed z-50 bottom-24 right-2  cursor-pointer">
         <StartPlayVocabularyNote onClick={onClickStartPlayVocabularyNote} />
