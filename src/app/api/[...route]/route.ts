@@ -8,12 +8,14 @@ import { getVocabularyNoteHandler } from "./vocabulary-notes/getVocabularyNoteHa
 import { patchVocabularyNoteHandler } from "./vocabulary-notes/patchVocabularyNoteHandler";
 import { deleteVocabularyNoteHandler } from "./vocabulary-notes/deleteVocabularyNoteHandler";
 import { postVocabularyNoteReviewLogHandler } from "./vocabulary-notes/logs/postVocabularyNoteReviewLogHandler";
+import { getOneVocabularyNoteHandler } from "./vocabulary-notes/getOneVocabularyNoteHandler";
 
 const app = new Hono()
   .basePath("/api")
   .use(requestedUserMiddleware)
   .post("/vocabulary-notes", ...postVocabularyNoteHandler)
   .get("/vocabulary-notes", ...getVocabularyNoteHandler)
+  .get("/vocabulary-notes/:id", ...getOneVocabularyNoteHandler)
   .patch("/vocabulary-notes/:id", ...patchVocabularyNoteHandler)
   .delete("/vocabulary-notes", ...deleteVocabularyNoteHandler)
   .post("/vocabulary-notes/review-logs", ...postVocabularyNoteReviewLogHandler)

@@ -19,6 +19,7 @@ import {
 } from "@headlessui/react";
 import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
+import { useOneVocabularyNote } from "@/hooks/vocabularyNote/useOneVocabularyNote";
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
   const router = useRouter();
@@ -66,8 +67,8 @@ export default function Page() {
         <StartPlayVocabularyNote onClick={startPlayVocabularyNote} />
       </div>
       {selectedVN && (
-        <EditVocabularyNoteDialog
-          vocabularyNote={selectedVN}
+        <EditVocabularyNoteDialogCore
+          vocabularyNoteId={selectedVN.id}
           onClose={() => {
             setSelectedVN(null);
           }}
@@ -76,12 +77,33 @@ export default function Page() {
     </div>
   );
 }
+const EditVocabularyNoteDialogCore: FC<{
+  vocabularyNoteId: string;
+
+  onClose: () => void;
+}> = ({ onClose, vocabularyNoteId }) => {
+  const { data, isLoading } = useOneVocabularyNote(vocabularyNoteId);
+  const vocabularyNote = data?.vocabularyNote;
+
+  if (isLoading || !vocabularyNote) {
+    return <Loading />;
+  }
+  return (
+    <EditVocabularyNoteDialog
+      vocabularyNote={vocabularyNote}
+      onClose={onClose}
+    />
+  );
+};
 
 const EditVocabularyNoteDialog: FC<{
   vocabularyNote: {
-    id: string;
-    frontContent: string;
-    backContent: string;
+    readonly id: string;
+    readonly userId: string;
+    readonly frontContent: string;
+    readonly backContent: string;
+    readonly createdAt: string;
+    readonly updatedAt: string;
   };
 
   onClose: () => void;
