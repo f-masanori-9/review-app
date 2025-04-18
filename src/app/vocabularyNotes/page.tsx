@@ -1,7 +1,14 @@
 "use client";
 
 import { Loading } from "@/components/Loading";
-import React, { FC, Fragment, useCallback, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 
 import { AddVocabularyNote } from "@/components/Buttons/AddVocabularyNote";
@@ -19,7 +26,9 @@ import {
 } from "@headlessui/react";
 import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
-import { useOneVocabularyNote } from "@/hooks/vocabularyNote/useOneVocabularyNote";
+import { generateApiClient } from "@/libs/apiClient";
+const client = generateApiClient();
+
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
   const router = useRouter();
@@ -34,8 +43,6 @@ export default function Page() {
 
   const [selectedVN, setSelectedVN] = useState<{
     id: string;
-    frontContent: string;
-    backContent: string;
   } | null>(null);
 
   if (isLoading) {
@@ -51,8 +58,6 @@ export default function Page() {
             onClick={() => {
               setSelectedVN({
                 id: n.id,
-                frontContent: n.frontContent,
-                backContent: n.backContent,
               });
             }}
           >
@@ -79,15 +84,41 @@ export default function Page() {
 }
 const EditVocabularyNoteDialogCore: FC<{
   vocabularyNoteId: string;
-
   onClose: () => void;
 }> = ({ onClose, vocabularyNoteId }) => {
-  const { data, isLoading } = useOneVocabularyNote(vocabularyNoteId);
-  const vocabularyNote = data?.vocabularyNote;
+  const isFirstFetched = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [vocabularyNote, setVocabularyNote] = useState<{
+    readonly id: string;
+    readonly userId: string;
+    readonly frontContent: string;
+    readonly backContent: string;
+    readonly createdAt: string;
+    readonly updatedAt: string;
+  } | null>(null);
 
-  if (isLoading || !vocabularyNote) {
-    return <Loading />;
-  }
+  useEffect(() => {
+    if (isFirstFetched.current) return;
+    setIsLoading(true);
+    isFirstFetched.current = true;
+    client.api["vocabulary-notes"][":id"]
+      .$get({
+        param: { id: vocabularyNoteId },
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        setVocabularyNote(data.vocabularyNote);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [vocabularyNoteId]);
+
+  if (isLoading || !vocabularyNote) return <Loading />;
+
   return (
     <EditVocabularyNoteDialog
       vocabularyNote={vocabularyNote}
@@ -105,7 +136,6 @@ const EditVocabularyNoteDialog: FC<{
     readonly createdAt: string;
     readonly updatedAt: string;
   };
-
   onClose: () => void;
 }> = ({ vocabularyNote, onClose }) => {
   const { updateVocabularyNoteDebounced } = useUpdateVocabularyNoteDebounced();

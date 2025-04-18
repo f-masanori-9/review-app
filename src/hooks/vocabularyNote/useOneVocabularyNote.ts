@@ -1,5 +1,5 @@
 import { generateApiClient } from "@/libs/apiClient";
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate, SWRConfiguration } from "swr";
 import { useCallback } from "react";
 
 const client = generateApiClient();
@@ -9,14 +9,21 @@ export const generateKey = (noteId: string) => ({
   name: "useOneVocabularyNote",
 });
 
-export const useOneVocabularyNote = (noteId: string) => {
-  return useSWR(generateKey(noteId), async ({ noteId }) => {
-    const response = await client.api["vocabulary-notes"][":id"].$get({
-      param: { id: noteId },
-    });
+export const useOneVocabularyNote = (
+  noteId: string,
+  options?: SWRConfiguration
+) => {
+  return useSWR(
+    generateKey(noteId),
+    async ({ noteId }) => {
+      const response = await client.api["vocabulary-notes"][":id"].$get({
+        param: { id: noteId },
+      });
 
-    return response.json();
-  });
+      return response.json();
+    },
+    options
+  );
 };
 
 export const useMutateOneVocabularyNote = () => {
