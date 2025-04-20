@@ -11,8 +11,6 @@ export const AuthGuard = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log("AuthGuard", pathname);
-
     if (pathname === "/") return;
     if (pathname === "/login") return;
 

@@ -6,8 +6,9 @@ type ButtonProps = {
   variant?: "outlined" | "filled";
   size?: "small" | "medium" | "large";
   onClick?: () => void;
-  isLoading?: boolean;
   title: string;
+  isLoading?: boolean;
+  isDisabled?: boolean;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -16,7 +17,9 @@ export const Button: FC<ButtonProps> = ({
   onClick,
   isLoading,
   title,
+  isDisabled,
 }) => {
+  const isFullWidth = size === "large" || size === "medium";
   const baseStyles = "rounded font-medium focus:outline-none ";
   const variantStyles = {
     filled: "border-primary text-primary  ",
@@ -28,8 +31,14 @@ export const Button: FC<ButtonProps> = ({
     medium: "px-4 py-2 text-base",
     large: "px-6 py-3 text-lg",
   };
+  const fullWidthStyles = isFullWidth ? "w-full" : "w-auto";
 
-  const classes = clsx(baseStyles, variantStyles[variant], sizeStyles[size]);
+  const classes = clsx(
+    baseStyles,
+    variantStyles[variant],
+    sizeStyles[size],
+    fullWidthStyles
+  );
 
   return (
     <button className={classes} onClick={onClick} disabled={isLoading}>

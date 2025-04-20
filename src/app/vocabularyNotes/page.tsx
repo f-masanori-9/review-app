@@ -19,9 +19,11 @@ export default function Page() {
   const router = useRouter();
   const { addVocabularyNote, isLoading: isLoadingAdding } =
     useAddVocabularyNote();
+  const [isProcessing, setIsProcessing] = useState(false);
   const onClickStartPlayVocabularyNote = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.stopPropagation();
+      setIsProcessing(true);
       router.push(`/vocabularyNotes/play`);
     },
     [router]
@@ -61,7 +63,10 @@ export default function Page() {
         ></Button>
       </div>
       <div className="fixed z-50 bottom-24 right-2  cursor-pointer">
-        <StartPlayVocabularyNote onClick={onClickStartPlayVocabularyNote} />
+        <StartPlayVocabularyNote
+          isLoading={isProcessing}
+          onClick={onClickStartPlayVocabularyNote}
+        />
       </div>
       {selectedVN && (
         <EditVocabularyNoteDialogCore

@@ -19,6 +19,7 @@ export default function Login() {
       setIsLoading(false);
     }
   }, []);
+
   if (status === "loading" || isLoading) {
     return <Loading />;
   }
@@ -27,15 +28,16 @@ export default function Login() {
     return (
       <>
         <div className="relative h-96 ">
-          {/* オーバーレイ */}
-          {/* <div className="absolute inset-0  bg-primary opacity-20"></div> */}
           <div className="container mx-auto px-4 py-16">
-            <h2 className="text-3xl text-center">アカウントを登録</h2>
+            <h2 className="text-3xl text-center">登録・ログイン</h2>
 
             {/* 登録ボタン */}
             <div className="flex justify-center mt-8">
               <div className="p-4 flex flex-col items-center">
-                <GoogleLoginButton onClickGoogleLogin={onClickGoogleLogin} />
+                <GoogleLoginButton
+                  isLoading={isLoading}
+                  onClickGoogleLogin={onClickGoogleLogin}
+                />
               </div>
             </div>
           </div>
@@ -47,12 +49,14 @@ export default function Login() {
   return <AlreadyLoggedIn />;
 }
 
-const GoogleLoginButton: FC<{ onClickGoogleLogin: () => void }> = ({
-  onClickGoogleLogin,
-}) => {
+const GoogleLoginButton: FC<{
+  onClickGoogleLogin: () => void;
+  isLoading?: boolean;
+}> = ({ onClickGoogleLogin, isLoading }) => {
   return (
     <button
       onClick={onClickGoogleLogin}
+      disabled={isLoading}
       className="flex items-center bg-white dark:bg-gray-900 border border-gray-300 rounded-lg shadow-md px-8 py-2 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 w-64"
     >
       <svg
@@ -97,7 +101,7 @@ const GoogleLoginButton: FC<{ onClickGoogleLogin: () => void }> = ({
           </g>
         </g>
       </svg>
-      <span>Google で登録/ログイン</span>
+      <span>{isLoading ? <Loading /> : `Google で登録/ログイン`}</span>
     </button>
   );
 };
@@ -106,7 +110,7 @@ const AlreadyLoggedIn = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/notes");
+    router.push("/vocabularyNotes");
   }, [router]);
 
   return null;
