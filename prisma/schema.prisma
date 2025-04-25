@@ -50,6 +50,8 @@ model User {
   sessions                Session[]
   VocabularyNote          VocabularyNote[]
   VocabularyNoteReviewLog VocabularyNoteReviewLog[]
+  Tag                     Tag[]
+  NoteToTagRelations      NoteToTagRelation[]
 }
 
 model VerificationToken {
@@ -69,6 +71,7 @@ model VocabularyNote {
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @default(now())
   vocabularyNoteReviewLogs VocabularyNoteReviewLog[]
+  NoteToTagRelations       NoteToTagRelation[]
 
   @@index([userId])
 }
@@ -82,4 +85,30 @@ model VocabularyNoteReviewLog {
   createdAt        DateTime       @default(now())
 
   @@index([userId])
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order  Int
+
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now())
+  NoteToTagRelations NoteToTagRelation[]
+}
+
+model NoteToTagRelation {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tagId            String
+  tag              Tag            @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  vocabularyNoteId String
+  vocabularyNote   VocabularyNote @relation(fields: [vocabularyNoteId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }

@@ -12,6 +12,11 @@ import {
 } from "@headlessui/react";
 import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
 import { generateApiClient } from "@/libs/apiClient";
+import { useTags } from "@/hooks/tag/useTags";
+import { useNoteToTagRelations } from "@/hooks/noteToTagRelation/useNoteToTagRelations";
+import { useEditNoteToTagRelations } from "@/hooks/noteToTagRelation/useEditNoteToTagRelations";
+import { CreatableAutoComplete } from "@/components/CreatableAutoComplete";
+import { useCreateTag } from "@/hooks/tag/useCreateTag";
 const client = generateApiClient();
 
 export const EditVocabularyNoteDialogCore: FC<{
@@ -71,9 +76,17 @@ const EditVocabularyNoteDialog: FC<{
   onClose: () => void;
 }> = ({ vocabularyNote, onClose }) => {
   const { updateVocabularyNoteDebounced } = useUpdateVocabularyNoteDebounced();
-
+  const { data: tags = [] } = useTags();
+  const {
+    data: noteToTagsRelations = [],
+    isLoading: isLoadingNoteToTagRelations,
+  } = useNoteToTagRelations({
+    noteId: vocabularyNote.id,
+  });
+  const { editNoteToTagRelations } = useEditNoteToTagRelations();
   const isOpen = !!vocabularyNote;
 
+  const { createTagWithId } = useCreateTag();
   const [content, setContent] = useState({
     frontContent: vocabularyNote?.frontContent || "",
     backContent: vocabularyNote?.backContent || "",
@@ -95,6 +108,34 @@ const EditVocabularyNoteDialog: FC<{
         <div className="fixed inset-0 flex w-screen items-center justify-center">
           <DialogPanel className="w-screen max-w-sm rounded bg-white  p-2">
             <DialogTitle>単語帳編集</DialogTitle>
+            <div className="h-10">
+              {isLoadingNoteToTagRelations ? (
+                <Loading />
+              ) : (
+                <CreatableAutoComplete
+                  onCreateItem={(item) => {
+                    createTagWithId({ tagId: item.value, tagName: item.label });
+                  }}
+                  defaultValueIds={noteToTagsRelations.map((r) => r.tagId)}
+                  onChange={(e) => {
+                    console.log(e);
+                    editNoteToTagRelations({
+                      noteId: vocabularyNote.id,
+                      tagIds: e.map((v) => v.value),
+                    });
+                  }}
+                  options={[
+                    ...tags.map((tag) => {
+                      return {
+                        value: tag.id,
+                        label: tag.name,
+                      };
+                    }),
+                  ]}
+                  placeholder="タグを選択"
+                />
+              )}
+            </div>
             <Description>
               <textarea
                 className="w-full h-40 p-2 border border-gray-300 rounded p-1"

@@ -18,9 +18,10 @@ export const Footer: FC = () => {
   return (
     <div className="fixed z-100 bottom-0 w-full p-2 mb-1 bg-white/90 flex justify-between">
       <div
-        className="flex justify-center items-center flex-1"
+        className="flex justify-between items-center flex-1"
         onClick={onClickToVocabularyNotes}
       >
+        <div />
         <div>
           <Image
             src="/icon192_maskable.png"
@@ -30,6 +31,21 @@ export const Footer: FC = () => {
           />
           <span className="text-sm">単語帳</span>
         </div>
+        <div>
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              padding: 4,
+              paddingInline: 8,
+            }}
+          >
+            <Image src="/tag_icon.png" alt="homeIcon" height={32} width={32} />
+          </div>
+
+          <span className="text-sm">タグ管理</span>
+        </div>
+        <div />
       </div>
     </div>
   );

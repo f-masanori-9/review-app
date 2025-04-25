@@ -9,6 +9,10 @@ import { patchVocabularyNoteHandler } from "./vocabulary-notes/patchVocabularyNo
 import { deleteVocabularyNoteHandler } from "./vocabulary-notes/deleteVocabularyNoteHandler";
 import { postVocabularyNoteReviewLogHandler } from "./vocabulary-notes/logs/postVocabularyNoteReviewLogHandler";
 import { getOneVocabularyNoteHandler } from "./vocabulary-notes/getOneVocabularyNoteHandler";
+import { getTagsHandler } from "./tags/getTagsHandler";
+import { postTagsHandler } from "./tags/postTagsHandler";
+import { getNoteToTagRelationsHandler } from "./note-to-tag-relations/getNoteToTagRelationsHandler";
+import { postNoteToTagRelationsHandler } from "./note-to-tag-relations/postNoteToTagRelationsHandler";
 
 const app = new Hono()
   .basePath("/api")
@@ -19,6 +23,10 @@ const app = new Hono()
   .patch("/vocabulary-notes/:id", ...patchVocabularyNoteHandler)
   .delete("/vocabulary-notes", ...deleteVocabularyNoteHandler)
   .post("/vocabulary-notes/review-logs", ...postVocabularyNoteReviewLogHandler)
+  .get("/tags", ...getTagsHandler)
+  .post("/tags", ...postTagsHandler)
+  .get("/note-to-tag-relations", ...getNoteToTagRelationsHandler)
+  .post("/note-to-tag-relations", ...postNoteToTagRelationsHandler)
 
   .onError((err, c) => {
     // TODO: エラーハンドリングを実装

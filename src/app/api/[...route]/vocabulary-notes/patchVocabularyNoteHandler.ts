@@ -4,16 +4,22 @@ import { z } from "zod";
 
 import { VocabularyNoteRepository } from "@/backend/repositories/VocabularyNoteRepository";
 import { prismaClient } from "@/server/prismaClient";
-import { VocabularyNote } from "@/backend/models/VocabularyNote";
 
 import { HTTPException } from "hono/http-exception";
 import { createHandlers } from "../createHandlers";
 
-const patchVocabularyNoteHandlerSchema = z.object({
-  id: z.string().uuid(),
-  frontContent: z.string(),
-  backContent: z.string(),
-});
+const patchVocabularyNoteHandlerSchema = z.discriminatedUnion("kind", [
+  z.object({
+    id: z.string().uuid(),
+    kind: z.literal("frontContent"),
+    frontContent: z.string(),
+  }),
+  z.object({
+    id: z.string().uuid(),
+    kind: z.literal("backContent"),
+    backContent: z.string(),
+  }),
+]);
 
 const vocabularyNoteRepository = new VocabularyNoteRepository(prismaClient);
 
@@ -33,13 +39,18 @@ export const patchVocabularyNoteHandler = createHandlers(
       throw new HTTPException(401, new Error("not fount vocabulary note"));
     }
 
-    await vocabularyNoteRepository.update(
-      new VocabularyNote({
-        ...vocabularyNote,
-        frontContent: body.frontContent,
-        backContent: body.backContent,
-      })
-    );
+    switch (body.kind) {
+      case "frontContent":
+        vocabularyNote.update({ frontContent: body.frontContent });
+        break;
+      case "backContent":
+        vocabularyNote.update({ backContent: body.backContent });
+        break;
+      default: {
+        const _exhaustiveCheck: never = body;
+      }
+    }
+    await vocabularyNoteRepository.update(vocabularyNote);
 
     return c.json(vocabularyNote);
   }

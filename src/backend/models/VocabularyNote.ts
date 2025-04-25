@@ -30,4 +30,16 @@ export class VocabularyNote {
       updatedAt: new Date(),
     });
   }
+
+  update(
+    params: Partial<
+      Omit<ExcludeMethods<VocabularyNote>, "createdAt" | "updatedAt">
+    >
+  ): VocabularyNote {
+    return new VocabularyNote({
+      ...this,
+      ...params,
+      updatedAt: new Date(),
+    });
+  }
 }
