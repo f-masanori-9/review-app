@@ -29,11 +29,3 @@ export const useEditNoteToTagRelations = () => {
 
   return { editNoteToTagRelations };
 };
-
-// export const useMutateTags = () => {
-//   const mutateTags = useCallback(async () => {
-//     await mutate(generateSWRKey());
-//   }, []);
-
-//   return { mutateTags };
-// };

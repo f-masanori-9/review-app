@@ -10,19 +10,43 @@ export const useUpdateVocabularyNote = () => {
   const { mutateNoteVN } = useMutateVocabularyNote();
   const { mutate: mutateVocabularyNotes } = useMutateVocabularyNotes();
   const { mutateNoteVN: mutateOneNoteVN } = useMutateOneVocabularyNote();
+
   const updateNote = useCallback(
-    async (noteId: string, content: string, answerText: string) => {
+    async (
+      args: { noteId: string } & (
+        | {
+            kind: "frontContent";
+            content: string;
+          }
+        | {
+            kind: "backContent";
+            content: string;
+          }
+      )
+    ) => {
+      const body = (() => {
+        switch (args.kind) {
+          case "frontContent":
+            return {
+              id: args.noteId,
+              kind: "frontContent",
+              frontContent: args.content,
+            } as const;
+          case "backContent":
+            return {
+              id: args.noteId,
+              kind: "backContent",
+              backContent: args.content,
+            } as const;
+        }
+      })();
       const response = await client.api["vocabulary-notes"][":id"].$patch({
-        param: { id: noteId },
-        json: {
-          id: noteId,
-          frontContent: content, // TODO:命名
-          backContent: answerText || "", // TODO:命名
-        },
+        param: { id: args.noteId },
+        json: body,
       });
-      await mutateNoteVN(noteId);
+      await mutateNoteVN(body.id);
       await mutateVocabularyNotes();
-      await mutateOneNoteVN(noteId);
+      await mutateOneNoteVN(body.id);
 
       const note = await response.json();
 

@@ -145,11 +145,11 @@ const EditVocabularyNoteDialog: FC<{
                     ...content,
                     frontContent: e.target.value,
                   });
-                  updateVocabularyNoteDebounced(
-                    vocabularyNote.id,
-                    e.target.value,
-                    vocabularyNote.backContent
-                  );
+                  updateVocabularyNoteDebounced({
+                    noteId: vocabularyNote.id,
+                    kind: "frontContent",
+                    content: vocabularyNote.frontContent,
+                  });
                 }}
                 placeholder="表面"
               />
@@ -161,11 +161,11 @@ const EditVocabularyNoteDialog: FC<{
                     ...content,
                     backContent: e.target.value,
                   });
-                  updateVocabularyNoteDebounced(
-                    vocabularyNote.id,
-                    vocabularyNote.frontContent,
-                    e.target.value
-                  );
+                  updateVocabularyNoteDebounced({
+                    noteId: vocabularyNote.id,
+                    kind: "backContent",
+                    content: vocabularyNote.backContent,
+                  });
                 }}
                 placeholder="裏面"
               />
