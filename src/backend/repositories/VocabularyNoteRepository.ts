@@ -4,6 +4,7 @@ import {
 } from "@prisma/client";
 import { VocabularyNote } from "../models/VocabularyNote";
 import { toVocabularyNoteReviewLog } from "./VocabularyNoteReviewLogRepository";
+import { toNoteToTagRelation } from "./NoteToTagRelationRepository";
 
 export class VocabularyNoteRepository {
   constructor(private readonly prismaClient: PrismaClient) {}
@@ -27,15 +28,34 @@ export class VocabularyNoteRepository {
   async findByUserId({ userId }: { userId: string }) {
     const results = await this.prismaClient.vocabularyNote.findMany({
       where: { userId },
-      include: { vocabularyNoteReviewLogs: true },
+      include: {
+        vocabularyNoteReviewLogs: true,
+        NoteToTagRelations: {
+          include: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
-    return results.map(({ vocabularyNoteReviewLogs, ...rest }) => {
-      const vocabularyNote = toVocabularyNote(rest);
-      const reviewLogs = vocabularyNoteReviewLogs.map(
-        toVocabularyNoteReviewLog
-      );
-      return Object.assign(vocabularyNote, { reviewLogs });
-    });
+    return results.map(
+      ({ vocabularyNoteReviewLogs, NoteToTagRelations, ...rest }) => {
+        const vocabularyNote = toVocabularyNote(rest);
+        const reviewLogs = vocabularyNoteReviewLogs.map(
+          toVocabularyNoteReviewLog
+        );
+        const noteToTagRelations = NoteToTagRelations.map(({ tag, ...d }) =>
+          Object.assign(toNoteToTagRelation(d), { tagName: tag.name })
+        );
+        return Object.assign(vocabularyNote, {
+          reviewLogs,
+          noteToTagRelations,
+        });
+      }
+    );
   }
 
   async create(vocabularyNote: VocabularyNote) {

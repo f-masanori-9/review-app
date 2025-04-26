@@ -53,13 +53,13 @@ export class NoteToTagRelationRepository {
   }
 }
 
-const toNoteToTagRelation = (
+export const toNoteToTagRelation = (
   tag: NoteToTagRelationModel
 ): NoteToTagRelation => {
   return new NoteToTagRelation(tag);
 };
 
-const toNoteToTagRelationModel = (
+export const toNoteToTagRelationModel = (
   tag: NoteToTagRelation
 ): NoteToTagRelationModel => {
   return {

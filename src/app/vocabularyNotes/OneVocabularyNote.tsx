@@ -23,8 +23,12 @@ export const OneVocabularyNote: FC<{
     backContent: string;
   };
   reviewCount: number;
+  tags: {
+    tagId: string;
+    tagName: string;
+  }[];
   onClickVN: (args: { vnId: string }) => void;
-}> = ({ note, reviewCount, onClickVN }) => {
+}> = ({ note, reviewCount, onClickVN, tags }) => {
   const { updateVocabularyNoteDebounced } = useUpdateVocabularyNoteDebounced();
 
   const { addVocabularyNoteReview } = useAddVocabularyNoteReview();
@@ -54,7 +58,16 @@ export const OneVocabularyNote: FC<{
             new Date(),
             note.createdAt
           )}日前`}</span>
-          <br />
+          <div className="flex flex-wrap gap-1 ml-2">
+            {tags.map((tag) => (
+              <span
+                key={tag.tagId}
+                className="text-xs text-white bg-primary rounded px-1"
+              >
+                {tag.tagName}
+              </span>
+            ))}
+          </div>
         </div>
         <div>
           <span

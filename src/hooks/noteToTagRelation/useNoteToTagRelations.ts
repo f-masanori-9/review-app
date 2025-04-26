@@ -4,6 +4,13 @@ import useSWR, { mutate } from "swr";
 
 const client = generateApiClient();
 
+type NoteToTagRelation = {
+  readonly id: string;
+  readonly userId: string;
+  readonly vocabularyNoteId: string;
+  readonly tagId: string;
+  readonly createdAt: string;
+};
 export const generateSWRKey = (arg: { noteId: string }) => {
   return {
     path: "useNoteToTagRelations",
@@ -14,7 +21,7 @@ export const generateSWRKey = (arg: { noteId: string }) => {
 };
 
 export const useNoteToTagRelations = ({ noteId }: { noteId: string }) => {
-  return useSWR(generateSWRKey({ noteId }), async () => {
+  return useSWR<NoteToTagRelation[]>(generateSWRKey({ noteId }), async () => {
     const response = await client.api["note-to-tag-relations"].$get({
       query: {
         noteId,
@@ -26,9 +33,12 @@ export const useNoteToTagRelations = ({ noteId }: { noteId: string }) => {
 };
 
 export const useMutateNoteToTagRelations = () => {
-  const mutateTags = useCallback(async ({ noteId }: { noteId: string }) => {
-    await mutate(generateSWRKey({ noteId }));
-  }, []);
+  const mutateNoteToTagRelations = useCallback(
+    async ({ noteId }: { noteId: string }) => {
+      await mutate<NoteToTagRelation>(generateSWRKey({ noteId }));
+    },
+    []
+  );
 
-  return { mutateTags };
+  return { mutateNoteToTagRelations };
 };

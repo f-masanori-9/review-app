@@ -20,7 +20,7 @@ export const useVocabularyNotes = () => {
 
 export const useMutateVocabularyNotes = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const mutate_ = useCallback(async () => {
+  const mutateVocabularyNotes = useCallback(async () => {
     try {
       setIsLoading(true);
       await mutate(generateSWRKey());
@@ -29,5 +29,5 @@ export const useMutateVocabularyNotes = () => {
     }
   }, []);
 
-  return { mutate: mutate_, isLoading };
+  return { mutate: mutateVocabularyNotes, isLoading };
 };

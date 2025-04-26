@@ -1,7 +1,7 @@
 "use client";
 
 import { Loading } from "@/components/Loading";
-import React, { FC, Fragment, useCallback, useState } from "react";
+import React, { FC, Fragment, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { OneVocabularyNote } from "./OneVocabularyNote";
@@ -12,7 +12,6 @@ import { StartPlayVocabularyNote } from "@/components/Buttons/StartPlayVocabular
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 import { EditVocabularyNoteDialogCore } from "./EditVocabularyNoteDialog";
 import { Button } from "@/components/Buttons/Button";
-import { AutoComplete } from "@/components/AutoComplete";
 import {
   Description,
   Dialog,
@@ -22,7 +21,9 @@ import {
   Transition,
 } from "@headlessui/react";
 import { useCreateTag } from "@/hooks/tag/useCreateTag";
-import { useTags } from "@/hooks/tag/useTags";
+import { useMutateTags, useTags } from "@/hooks/tag/useTags";
+import { CreatableAutoComplete } from "@/components/CreatableAutoComplete";
+import { intersection } from "lodash";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
@@ -45,43 +46,52 @@ export default function Page() {
   const [selectedVN, setSelectedVN] = useState<{
     id: string;
   } | null>(null);
+  const { createTagWithId } = useCreateTag();
+  const { mutateTags } = useMutateTags();
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
+  const filteredNotes = useMemo(() => {
+    return vocabularyNotes.filter((note) => {
+      if (!selectedTagIds.length) return true;
+      const noteTagsIds = note.noteToTagRelations.map((d) => d.tagId);
+      return intersection(selectedTagIds, noteTagsIds).length > 0;
+    });
+  }, [selectedTagIds, vocabularyNotes]);
+  console.log("tags", selectedTagIds);
   if (isLoading) {
     return <Loading />;
   }
 
   return (
     <div className="p-1 mb-28">
-      <AutoComplete
+      <CreatableAutoComplete
         options={[
-          {
-            value: "all",
-            label: "全てのタグ",
-            isFixed: true,
-          },
           ...tags.map((tag) => {
             return {
               value: tag.id,
               label: tag.name,
             };
           }),
-          {
-            value: "yellow",
-            label: "Yellow",
-            createButton: {
-              onClick: () => {
-                setIsOpenAddTagDialog(true);
-              },
-              label: "タグを追加",
-            },
-          },
         ]}
+        onChange={(selected) => {
+          setSelectedTagIds(selected.map((s) => s.value));
+        }}
+        placeholder="タグを選択"
+        onCreateItem={async (option) => {
+          createTagWithId({
+            tagId: option.value,
+            tagName: option.label,
+          }).then(() => {
+            mutateTags();
+          });
+        }}
       />
-      {shuffleArray(vocabularyNotes, generateSeedFromDatetime()).map((n) => {
+      {shuffleArray(filteredNotes, generateSeedFromDatetime()).map((n) => {
         return (
           <div key={n.id}>
             <OneVocabularyNote
               note={n}
+              tags={n.noteToTagRelations}
               reviewCount={n.reviewLogs.length}
               onClickVN={({ vnId }) => {
                 setSelectedVN({

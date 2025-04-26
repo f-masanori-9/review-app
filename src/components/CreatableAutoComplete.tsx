@@ -60,7 +60,7 @@ type Props = {
   ) => void;
   placeholder?: string;
   defaultValueIds?: string[];
-  onCreateItem: (arg: { value: string; label: string }) => void;
+  onCreateItem: (arg: { value: string; label: string }) => Promise<void>;
 };
 export const CreatableAutoComplete: FC<Props> = ({
   options,
@@ -78,7 +78,7 @@ export const CreatableAutoComplete: FC<Props> = ({
     orderOptions(defaultValues)
   );
 
-  const handleKeyDown: KeyboardEventHandler = (event) => {
+  const handleKeyDown: KeyboardEventHandler = async (event) => {
     if (!inputValue) return;
     switch (event.key) {
       case "Enter":

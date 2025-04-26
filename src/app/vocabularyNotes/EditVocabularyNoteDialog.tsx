@@ -12,11 +12,15 @@ import {
 } from "@headlessui/react";
 import { useUpdateVocabularyNoteDebounced } from "@/hooks/useUpdateVocabularyNoteDebounced";
 import { generateApiClient } from "@/libs/apiClient";
-import { useTags } from "@/hooks/tag/useTags";
-import { useNoteToTagRelations } from "@/hooks/noteToTagRelation/useNoteToTagRelations";
+import { useMutateTags, useTags } from "@/hooks/tag/useTags";
+import {
+  useMutateNoteToTagRelations,
+  useNoteToTagRelations,
+} from "@/hooks/noteToTagRelation/useNoteToTagRelations";
 import { useEditNoteToTagRelations } from "@/hooks/noteToTagRelation/useEditNoteToTagRelations";
 import { CreatableAutoComplete } from "@/components/CreatableAutoComplete";
 import { useCreateTag } from "@/hooks/tag/useCreateTag";
+import { useMutateVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 const client = generateApiClient();
 
 export const EditVocabularyNoteDialogCore: FC<{
@@ -83,6 +87,10 @@ const EditVocabularyNoteDialog: FC<{
   } = useNoteToTagRelations({
     noteId: vocabularyNote.id,
   });
+  const { mutateNoteToTagRelations } = useMutateNoteToTagRelations();
+  const { mutateTags } = useMutateTags();
+  const { mutate: mutateVocabularyNotes } = useMutateVocabularyNotes();
+
   const { editNoteToTagRelations } = useEditNoteToTagRelations();
   const isOpen = !!vocabularyNote;
 
@@ -113,8 +121,13 @@ const EditVocabularyNoteDialog: FC<{
                 <Loading />
               ) : (
                 <CreatableAutoComplete
-                  onCreateItem={(item) => {
-                    createTagWithId({ tagId: item.value, tagName: item.label });
+                  onCreateItem={async (item) => {
+                    createTagWithId({
+                      tagId: item.value,
+                      tagName: item.label,
+                    }).then(() => {
+                      mutateTags();
+                    });
                   }}
                   defaultValueIds={noteToTagsRelations.map((r) => r.tagId)}
                   onChange={(e) => {
@@ -122,6 +135,11 @@ const EditVocabularyNoteDialog: FC<{
                     editNoteToTagRelations({
                       noteId: vocabularyNote.id,
                       tagIds: e.map((v) => v.value),
+                    }).then(() => {
+                      mutateNoteToTagRelations({
+                        noteId: vocabularyNote.id,
+                      });
+                      mutateVocabularyNotes();
                     });
                   }}
                   options={[

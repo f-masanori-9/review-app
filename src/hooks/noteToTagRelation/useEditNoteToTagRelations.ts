@@ -12,20 +12,25 @@ export const generateSWRKey = (arg: { noteId: string }) => {
   } as const;
 };
 
-export const useEditNoteToTagRelations = () => {
-  const editNoteToTagRelations = useCallback(
-    async ({ noteId, tagIds }: { noteId: string; tagIds: string[] }) => {
-      const response = await client.api["note-to-tag-relations"].$post({
-        json: {
-          noteId: noteId,
-          tagIds: tagIds,
-        },
-      });
-      const json = await response.json();
-      return json;
+export const editNoteToTagRelations = async ({
+  noteId,
+  tagIds,
+}: {
+  noteId: string;
+  tagIds: string[];
+}) => {
+  const response = await client.api["note-to-tag-relations"].$post({
+    json: {
+      noteId: noteId,
+      tagIds: tagIds,
     },
-    []
-  );
+  });
+  const json = await response.json();
+  return json;
+};
 
-  return { editNoteToTagRelations };
+export const useEditNoteToTagRelations = () => {
+  const editNoteToTagRelations_ = useCallback(editNoteToTagRelations, []);
+
+  return { editNoteToTagRelations: editNoteToTagRelations_ };
 };
