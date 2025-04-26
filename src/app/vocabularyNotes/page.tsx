@@ -5,7 +5,6 @@ import React, { FC, Fragment, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { OneVocabularyNote } from "./OneVocabularyNote";
-import { generateSeedFromDatetime, shuffleArray } from "@/libs/shuffleArray";
 
 import { StartPlayVocabularyNote } from "@/components/Buttons/StartPlayVocabularyNote";
 
@@ -57,7 +56,7 @@ export default function Page() {
       return intersection(selectedTagIds, noteTagsIds).length > 0;
     });
   }, [selectedTagIds, vocabularyNotes]);
-  console.log("tags", selectedTagIds);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -86,7 +85,9 @@ export default function Page() {
           });
         }}
       />
-      {shuffleArray(filteredNotes, generateSeedFromDatetime()).map((n) => {
+      {/* TODO: いつかシャッフル */}
+      {/* {shuffleArray(filteredNotes, generateSeedFromDatetime()).map((n) => { */}
+      {filteredNotes.map((n) => {
         return (
           <div key={n.id}>
             <OneVocabularyNote

@@ -159,14 +159,15 @@ const EditVocabularyNoteDialog: FC<{
                 className="w-full h-40 p-2 border border-gray-300 rounded p-1"
                 value={content.frontContent}
                 onChange={(e) => {
+                  const newContent = e.target.value;
                   setContent({
                     ...content,
-                    frontContent: e.target.value,
+                    frontContent: newContent,
                   });
                   updateVocabularyNoteDebounced({
                     noteId: vocabularyNote.id,
                     kind: "frontContent",
-                    content: vocabularyNote.frontContent,
+                    content: newContent,
                   });
                 }}
                 placeholder="表面"
@@ -175,14 +176,15 @@ const EditVocabularyNoteDialog: FC<{
                 className="w-full h-40 p-2 border border-gray-300 rounded"
                 value={content.backContent}
                 onChange={(e) => {
+                  const newContent = e.target.value;
                   setContent({
                     ...content,
-                    backContent: e.target.value,
+                    backContent: newContent,
                   });
                   updateVocabularyNoteDebounced({
                     noteId: vocabularyNote.id,
                     kind: "backContent",
-                    content: vocabularyNote.backContent,
+                    content: newContent,
                   });
                 }}
                 placeholder="裏面"

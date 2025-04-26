@@ -29,7 +29,7 @@ export const patchVocabularyNoteHandler = createHandlers(
     const user = c.get("user");
     const body = c.req.valid("json");
 
-    const vocabularyNote = await vocabularyNoteRepository.findById({
+    let vocabularyNote = await vocabularyNoteRepository.findById({
       id: body.id,
       userId: user.id,
     });
@@ -41,10 +41,14 @@ export const patchVocabularyNoteHandler = createHandlers(
 
     switch (body.kind) {
       case "frontContent":
-        vocabularyNote.update({ frontContent: body.frontContent });
+        vocabularyNote = vocabularyNote.update({
+          frontContent: body.frontContent,
+        });
         break;
       case "backContent":
-        vocabularyNote.update({ backContent: body.backContent });
+        vocabularyNote = vocabularyNote.update({
+          backContent: body.backContent,
+        });
         break;
       default: {
         const _exhaustiveCheck: never = body;
