@@ -6,13 +6,13 @@ import {
   StylesConfig,
 } from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { FC, KeyboardEventHandler, useState } from "react";
+import { FC, KeyboardEventHandler, useCallback, useState } from "react";
 import { Button } from "./Buttons/Button";
 
 export interface AutoCompleteOption {
   readonly value: string;
   readonly label: string;
-  readonly isFixed?: boolean;
+  readonly isFixed?: boolean; // NOTE: isFixedは消す
   readonly createButton?: {
     onClick: () => void;
     label: string;
@@ -69,7 +69,7 @@ export const CreatableAutoComplete: FC<Props> = ({
   defaultValueIds = [],
   onCreateItem,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputLabel, setInputLabel] = useState("");
 
   const defaultValues = options.filter((v) =>
     defaultValueIds.includes(v.value)
@@ -78,48 +78,69 @@ export const CreatableAutoComplete: FC<Props> = ({
     orderOptions(defaultValues)
   );
 
+  const onCreateOption = useCallback(async () => {
+    const option = {
+      value: crypto.randomUUID(),
+      label: inputLabel,
+      isFixed: false,
+    };
+    setValue((prev) => [...prev, option]);
+    await onCreateItem(option);
+    setTimeout(() => setInputLabel(""), 10);
+    return option;
+  }, [inputLabel, onCreateItem]);
+
   const handleKeyDown: KeyboardEventHandler = async (event) => {
-    if (!inputValue) return;
+    if (!inputLabel) return;
     switch (event.key) {
       case "Enter":
       case "Tab":
-        const option = {
-          value: crypto.randomUUID(),
-          label: inputValue,
-          isFixed: false,
-        };
-        setValue((prev) => [...prev, option]);
-        onCreateItem(option);
-        setTimeout(() => setInputValue(""), 10);
-        event.preventDefault();
+        await onCreateOption();
     }
   };
 
-  const onChange = (
+  const onChange = async (
     newValue: OnChangeValue<AutoCompleteOption, true>,
     actionMeta: ActionMeta<AutoCompleteOption>
   ) => {
     switch (actionMeta.action) {
-      case "remove-value":
-      case "pop-value":
-        if (actionMeta.removedValue.isFixed) {
-          return;
+      case "select-option":
+      case "deselect-option": {
+        setValue(orderOptions(newValue));
+        onChange_?.(newValue, actionMeta);
+      }
+      case "create-option": {
+        if (inputLabel) {
+          const option = await onCreateOption();
+          onChange_?.(
+            newValue.map((v) => {
+              if (v.label === option.label) return option;
+              return v;
+            }),
+            actionMeta
+          );
         }
         break;
+      }
+      case "remove-value":
+      case "pop-value":
       case "clear":
         newValue = options.filter((v) => v.isFixed);
+        setValue(orderOptions(newValue));
+        onChange_?.(newValue, actionMeta);
         break;
+      default: {
+        const _exhaustiveCheck: never = actionMeta;
+        break;
+      }
     }
-
-    setValue(orderOptions(newValue));
-    onChange_?.(newValue, actionMeta);
   };
 
   return (
     <CreatableSelect
       value={value}
-      inputValue={inputValue}
-      onInputChange={(newValue) => setInputValue(newValue)}
+      inputValue={inputLabel}
+      onInputChange={(newValue) => setInputLabel(newValue)}
       isMulti
       components={{ Option, DropdownIndicator: null }}
       styles={styles}

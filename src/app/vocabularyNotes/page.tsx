@@ -30,13 +30,16 @@ export default function Page() {
   const { addVocabularyNote, isLoading: isLoadingAdding } =
     useAddVocabularyNote();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const onClickStartPlayVocabularyNote = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.stopPropagation();
       setIsProcessing(true);
-      router.push(`/vocabularyNotes/play`);
+      const queryParams = new URLSearchParams();
+      selectedTagIds.forEach((id) => queryParams.append("tagIds", id));
+      router.push(`/vocabularyNotes/play?${queryParams.toString()}`);
     },
-    [router]
+    [router, selectedTagIds]
   );
   const { data: tags = [] } = useTags();
 
@@ -47,7 +50,6 @@ export default function Page() {
   } | null>(null);
   const { createTagWithId } = useCreateTag();
   const { mutateTags } = useMutateTags();
-  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   const filteredNotes = useMemo(() => {
     return vocabularyNotes.filter((note) => {

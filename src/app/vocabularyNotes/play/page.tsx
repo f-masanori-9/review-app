@@ -8,9 +8,18 @@ import { useAddVocabularyNoteReview } from "@/hooks/useAddVocabularyNoteReview";
 import { useReward } from "react-rewards";
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 import { debounce } from "lodash";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
+  const searchParams = useSearchParams();
+  const tagIds = searchParams.getAll("tagIds");
+  const viewedVocabularyNotes = vocabularyNotes.filter((note) => {
+    if (tagIds.length === 0) return true;
+    return note.noteToTagRelations.some((relation) =>
+      tagIds.includes(relation.tagId)
+    );
+  });
 
   const wordCardsAreaRef = React.useRef<HTMLDivElement>(null);
 
@@ -61,10 +70,10 @@ export default function Page() {
         className="w-screen overflow-x-scroll h-[calc(100vh-100px)] snap-x snap-mandatory"
       >
         <div
-          style={{ width: `${100 * vocabularyNotes.length}vw` }}
+          style={{ width: `${100 * viewedVocabularyNotes.length}vw` }}
           className="flex"
         >
-          {vocabularyNotes.map((n, index) => {
+          {viewedVocabularyNotes.map((n, index) => {
             return (
               <OneVocabularyNoteCard
                 key={n.id}
@@ -74,7 +83,7 @@ export default function Page() {
                 reviewCount={n.reviewLogs.length}
                 isShowBackContent={isShowBackContent}
                 setIsShowBackContent={setIsShowBackContent}
-                allCardsCount={vocabularyNotes.length}
+                allCardsCount={viewedVocabularyNotes.length}
                 cardOrder={index + 1}
               />
             );
