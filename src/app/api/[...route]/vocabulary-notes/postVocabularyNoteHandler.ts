@@ -2,11 +2,10 @@ import { zValidator } from "@hono/zod-validator";
 
 import { z } from "zod";
 
-import { createFactory } from "hono/factory";
 import { VocabularyNoteRepository } from "@/backend/repositories/VocabularyNoteRepository";
 import { prismaClient } from "@/server/prismaClient";
 import { VocabularyNote } from "@/backend/models/VocabularyNote";
-import { authConfig } from "@/auth";
+import { createHandlers } from "../createHandlers";
 
 const postVocabularyNoteHandlerSchema = z.object({
   id: z.string().uuid(),
@@ -16,29 +15,21 @@ const postVocabularyNoteHandlerSchema = z.object({
 
 const vocabularyNoteRepository = new VocabularyNoteRepository(prismaClient);
 
-export const postVocabularyNoteHandler = createFactory().createHandlers(
+export const postVocabularyNoteHandler = createHandlers(
   zValidator("json", postVocabularyNoteHandlerSchema),
   async (c) => {
-    // TODO: ミドルウェアとして共通化
-    const session = await authConfig.auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-      return c.newResponse(JSON.stringify({ message: "Unauthorized" }), 401, {
-        "Content-Type": "application/json",
-      });
-    }
+    const user = c.get("user");
 
     const body = c.req.valid("json");
     const vocabularyNote = VocabularyNote.createNew({
       id: body.id,
-      userId,
+      userId: user.id,
       frontContent: body.frontContent,
       backContent: body.backContent,
     });
 
     await vocabularyNoteRepository.create(vocabularyNote);
 
-    return c.json(vocabularyNote);
+    return c.json({ vocabularyNote });
   }
 );

@@ -20,8 +20,8 @@ export const useAddVocabularyNote = () => {
       });
       await mutateVocabularyNotes();
 
-      const note = await response.json();
-      return note;
+      const { vocabularyNote } = await response.json();
+      return vocabularyNote;
     } catch (e) {
       console.error(e);
     } finally {

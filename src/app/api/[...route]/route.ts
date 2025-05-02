@@ -13,6 +13,7 @@ import { getTagsHandler } from "./tags/getTagsHandler";
 import { postTagsHandler } from "./tags/postTagsHandler";
 import { getNoteToTagRelationsHandler } from "./note-to-tag-relations/getNoteToTagRelationsHandler";
 import { postNoteToTagRelationsHandler } from "./note-to-tag-relations/postNoteToTagRelationsHandler";
+import { deleteTagsHandler } from "./tags/deleteTagsHandler";
 
 const app = new Hono()
   .basePath("/api")
@@ -25,6 +26,7 @@ const app = new Hono()
   .post("/vocabulary-notes/review-logs", ...postVocabularyNoteReviewLogHandler)
   .get("/tags", ...getTagsHandler)
   .post("/tags", ...postTagsHandler)
+  .delete("/tags", ...deleteTagsHandler)
   .get("/note-to-tag-relations", ...getNoteToTagRelationsHandler)
   .post("/note-to-tag-relations", ...postNoteToTagRelationsHandler)
 

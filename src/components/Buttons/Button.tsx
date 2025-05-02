@@ -9,6 +9,7 @@ type ButtonProps = {
   title: string;
   isLoading?: boolean;
   isDisabled?: boolean;
+  className?: string;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -18,9 +19,10 @@ export const Button: FC<ButtonProps> = ({
   isLoading,
   title,
   isDisabled,
+  className,
 }) => {
   const isFullWidth = size === "large" || size === "medium";
-  const baseStyles = "rounded font-medium focus:outline-none ";
+  const baseStyles = "rounded font-medium focus:outline-none bg-white";
   const variantStyles = {
     filled: "border-primary text-primary  ",
     outlined:
@@ -37,7 +39,8 @@ export const Button: FC<ButtonProps> = ({
     baseStyles,
     variantStyles[variant],
     sizeStyles[size],
-    fullWidthStyles
+    fullWidthStyles,
+    className
   );
 
   return (

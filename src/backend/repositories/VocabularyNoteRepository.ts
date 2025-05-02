@@ -28,6 +28,7 @@ export class VocabularyNoteRepository {
   async findByUserId({ userId }: { userId: string }) {
     const results = await this.prismaClient.vocabularyNote.findMany({
       where: { userId },
+      orderBy: { updatedAt: "asc" },
       include: {
         vocabularyNoteReviewLogs: true,
         NoteToTagRelations: {

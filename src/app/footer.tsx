@@ -11,18 +11,18 @@ export const Footer: FC = () => {
   const onClickToVocabularyNotes = () => {
     router.push("/vocabularyNotes");
   };
+  const onClickToTagManagement = () => {
+    router.push("/tags");
+  };
 
   if (status === "unauthenticated") {
     return null;
   }
   return (
     <div className="fixed z-100 bottom-0 w-full p-2 mb-1 bg-white/90 flex justify-between">
-      <div
-        className="flex justify-between items-center flex-1"
-        onClick={onClickToVocabularyNotes}
-      >
+      <div className="flex justify-between items-center flex-1">
         <div />
-        <div>
+        <div onClick={onClickToVocabularyNotes}>
           <Image
             src="/icon192_maskable.png"
             alt="homeIcon"
@@ -31,7 +31,10 @@ export const Footer: FC = () => {
           />
           <span className="text-sm">単語帳</span>
         </div>
-        <div>
+        <div
+          onClick={onClickToTagManagement}
+          className="flex flex-col items-center cursor-pointer"
+        >
           <div
             style={{
               width: 40,
@@ -39,9 +42,7 @@ export const Footer: FC = () => {
               padding: 4,
               paddingInline: 8,
             }}
-          >
-            <Image src="/tag_icon.png" alt="homeIcon" height={32} width={32} />
-          </div>
+          ></div>
 
           <span className="text-sm">タグ管理</span>
         </div>

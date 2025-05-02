@@ -15,6 +15,11 @@ export class TagRepository {
       data: toTagModel(tag),
     });
   }
+  async deleteOne({ tagId, userId }: { tagId: string; userId: string }) {
+    await this.prismaClient.tag.delete({
+      where: { id: tagId, userId: userId },
+    });
+  }
 }
 
 const toTag = (tag: TagModel): Tag => {

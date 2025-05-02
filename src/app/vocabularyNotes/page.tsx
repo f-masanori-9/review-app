@@ -31,6 +31,7 @@ export default function Page() {
     useAddVocabularyNote();
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+
   const onClickStartPlayVocabularyNote = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.stopPropagation();
@@ -58,6 +59,15 @@ export default function Page() {
       return intersection(selectedTagIds, noteTagsIds).length > 0;
     });
   }, [selectedTagIds, vocabularyNotes]);
+
+  const onClickAddNote = useCallback(async () => {
+    const note = await addVocabularyNote();
+    if (note) {
+      setSelectedVN({
+        id: note.id,
+      });
+    }
+  }, [addVocabularyNote]);
 
   if (isLoading) {
     return <Loading />;
@@ -108,7 +118,7 @@ export default function Page() {
       <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
         <Button
           variant="outlined"
-          onClick={addVocabularyNote}
+          onClick={onClickAddNote}
           title="単語帳を追加"
           isLoading={isLoadingAdding}
         ></Button>
