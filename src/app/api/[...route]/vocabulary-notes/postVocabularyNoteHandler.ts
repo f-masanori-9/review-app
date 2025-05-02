@@ -6,14 +6,20 @@ import { VocabularyNoteRepository } from "@/backend/repositories/VocabularyNoteR
 import { prismaClient } from "@/server/prismaClient";
 import { VocabularyNote } from "@/backend/models/VocabularyNote";
 import { createHandlers } from "../createHandlers";
+import { NoteToTagRelationRepository } from "@/backend/repositories/NoteToTagRelationRepository";
+import { NoteToTagRelation } from "@/backend/models/NoteToTagRelation";
 
 const postVocabularyNoteHandlerSchema = z.object({
   id: z.string().uuid(),
   frontContent: z.string(),
   backContent: z.string(),
+  tagIds: z.array(z.string()).optional(),
 });
 
 const vocabularyNoteRepository = new VocabularyNoteRepository(prismaClient);
+const noteToTagRelationRepository = new NoteToTagRelationRepository(
+  prismaClient
+);
 
 export const postVocabularyNoteHandler = createHandlers(
   zValidator("json", postVocabularyNoteHandlerSchema),
@@ -27,8 +33,20 @@ export const postVocabularyNoteHandler = createHandlers(
       frontContent: body.frontContent,
       backContent: body.backContent,
     });
+    const tagIds = body.tagIds || [];
 
     await vocabularyNoteRepository.create(vocabularyNote);
+    if (tagIds.length > 0) {
+      await noteToTagRelationRepository.createMany(
+        tagIds.map((tagId) =>
+          NoteToTagRelation.createNew({
+            userId: user.id,
+            tagId,
+            vocabularyNoteId: vocabularyNote.id,
+          })
+        )
+      );
+    }
 
     return c.json({ vocabularyNote });
   }

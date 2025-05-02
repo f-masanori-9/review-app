@@ -8,26 +8,30 @@ export const useAddVocabularyNote = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { mutate: mutateVocabularyNotes } = useMutateVocabularyNotes();
-  const addVocabularyNote = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await postNoteApiClient.api["vocabulary-notes"].$post({
-        json: {
-          id: crypto.randomUUID(),
-          frontContent: "未入力",
-          backContent: "🥚",
-        },
-      });
-      await mutateVocabularyNotes();
+  const addVocabularyNote = useCallback(
+    async ({ tagIds }: { tagIds?: string[] }) => {
+      try {
+        setIsLoading(true);
+        const response = await postNoteApiClient.api["vocabulary-notes"].$post({
+          json: {
+            id: crypto.randomUUID(),
+            frontContent: "未入力",
+            backContent: "🥚",
+            tagIds,
+          },
+        });
+        await mutateVocabularyNotes();
 
-      const { vocabularyNote } = await response.json();
-      return vocabularyNote;
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [mutateVocabularyNotes]);
+        const { vocabularyNote } = await response.json();
+        return vocabularyNote;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [mutateVocabularyNotes]
+  );
 
   return { addVocabularyNote, isLoading };
 };

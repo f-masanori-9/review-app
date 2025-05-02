@@ -61,7 +61,9 @@ export default function Page() {
   }, [selectedTagIds, vocabularyNotes]);
 
   const onClickAddNote = useCallback(async () => {
-    const note = await addVocabularyNote();
+    const note = await addVocabularyNote({
+      tagIds: selectedTagIds,
+    });
     if (note) {
       setSelectedVN({
         id: note.id,
