@@ -73,7 +73,7 @@ export const OneVocabularyNote: FC<{
         </div>
         <div className="h-6">
           <span
-            className=" font-black line-clamp-2 whitespace-pre-wrap break-words"
+            className=" font-black line-clamp-1 whitespace-pre-wrap break-words"
             style={{
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",

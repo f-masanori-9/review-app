@@ -29,7 +29,6 @@ const app = new Hono()
   .delete("/tags", ...deleteTagsHandler)
   .get("/note-to-tag-relations", ...getNoteToTagRelationsHandler)
   .post("/note-to-tag-relations", ...postNoteToTagRelationsHandler)
-
   .onError((err, c) => {
     // TODO: エラーハンドリングを実装
     if (err instanceof HTTPException) {
