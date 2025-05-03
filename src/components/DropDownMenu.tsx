@@ -13,10 +13,16 @@ export const DropDownMenu: FC<{
 }> = ({ menuButtonChildren, items }) => {
   return (
     <Menu>
-      <MenuButton>{menuButtonChildren}</MenuButton>
+      <MenuButton
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        {menuButtonChildren}
+      </MenuButton>
       <MenuItems
         anchor="bottom"
-        className="bg-white p-1 rounded-md border-[1px]"
+        className="bg-white p-2 rounded-md border-[1px] w-20"
       >
         {items.map(({ key, children, onClick }) => {
           return (

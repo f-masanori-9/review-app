@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
 import { OneVocabularyNote } from "./OneVocabularyNote";
 
-import { StartPlayVocabularyNote } from "@/components/Buttons/StartPlayVocabularyNote";
-
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 import { EditVocabularyNoteDialogCore } from "./EditVocabularyNoteDialog";
 import { Button } from "@/components/Buttons/Button";
@@ -23,6 +21,7 @@ import { useCreateTag } from "@/hooks/tag/useCreateTag";
 import { useMutateTags, useTags } from "@/hooks/tag/useTags";
 import { CreatableAutoComplete } from "@/components/CreatableAutoComplete";
 import { intersection } from "lodash";
+import { FaPlay } from "react-icons/fa";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
@@ -69,7 +68,7 @@ export default function Page() {
         id: note.id,
       });
     }
-  }, [addVocabularyNote]);
+  }, [addVocabularyNote, selectedTagIds]);
 
   if (isLoading) {
     return <Loading />;
@@ -126,9 +125,18 @@ export default function Page() {
         ></Button>
       </div>
       <div className="fixed z-50 bottom-24 right-2  cursor-pointer">
-        <StartPlayVocabularyNote
-          isLoading={isProcessing}
+        <Button
+          variant="outlined"
           onClick={onClickStartPlayVocabularyNote}
+          title="開始"
+          isLoading={isLoadingAdding}
+          startIcon={
+            <FaPlay
+              className="border-primary  rounded-md border-none mr-1 ml-1"
+              color="#06b6d4"
+              size={14}
+            />
+          }
         />
       </div>
       {selectedVN && (

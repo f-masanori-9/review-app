@@ -50,7 +50,9 @@ export const OneVocabularyNote: FC<{
   return (
     <div>
       <div
-        className={`${bgColorClass[opacity / 5]} p-2 `}
+        className={`${
+          bgColorClass[opacity / 5]
+        } p-2 flex flex-col gap-1 cursor-pointer`}
         onClick={() => onClickVN({ vnId: note.id })}
       >
         <div className="flex items-center">
@@ -69,9 +71,9 @@ export const OneVocabularyNote: FC<{
             ))}
           </div>
         </div>
-        <div>
+        <div className="h-6">
           <span
-            className=" font-black line-clamp-2"
+            className=" font-black line-clamp-2 whitespace-pre-wrap break-words"
             style={{
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",
@@ -82,52 +84,53 @@ export const OneVocabularyNote: FC<{
           </span>
         </div>
         <div className="border-b border-gray-300" />
-        <span
-          className="font-black line-clamp-2"
-          style={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {note.backContent}
-        </span>
-      </div>
-
-      <div className="flex justify-between p-2">
-        <div className="flex items-center gap-2 text-gray-500">
-          <ReviewButton
-            onClick={async (e) => {
-              e.stopPropagation();
-              await addVocabularyNoteReview(note.id);
-              setIsReviewed(true);
-              reward();
-              mutate();
+        <div className="h-14">
+          <span
+            className="font-black line-clamp-2 whitespace-pre-wrap break-words"
+            style={{
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
             }}
-            reviewCount={reviewCount}
-            isReviewed={isReviewed}
-            isLoading={isLoadingMutate}
+          >
+            {note.backContent}
+          </span>
+        </div>
+        <div className="flex justify-between h-8">
+          <div className="flex items-center gap-2 text-gray-500">
+            <ReviewButton
+              onClick={async (e) => {
+                e.stopPropagation();
+                await addVocabularyNoteReview(note.id);
+                setIsReviewed(true);
+                reward();
+                mutate();
+              }}
+              reviewCount={reviewCount}
+              isReviewed={isReviewed}
+              isLoading={isLoadingMutate}
+            />
+          </div>
+          <DropDownMenu
+            menuButtonChildren={<BsThreeDotsVertical size={18} />}
+            items={[
+              {
+                key: "delete",
+                children: (
+                  <div className="flex items-center gap-1">
+                    <FaTrash />
+                    <span>削除</span>
+                  </div>
+                ),
+                onClick: () => {
+                  if (confirm("削除しますか？")) {
+                    deleteVocabularyNote(note.id);
+                  }
+                },
+              },
+            ]}
           />
         </div>
-        <DropDownMenu
-          menuButtonChildren={<BsThreeDotsVertical />}
-          items={[
-            {
-              key: "delete",
-              children: (
-                <div className="flex items-center gap-1">
-                  <FaTrash />
-                  <span>削除</span>
-                </div>
-              ),
-              onClick: () => {
-                if (confirm("削除しますか？")) {
-                  deleteVocabularyNote(note.id);
-                }
-              },
-            },
-          ]}
-        />
       </div>
     </div>
   );

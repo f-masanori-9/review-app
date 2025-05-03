@@ -1,15 +1,16 @@
-import { FC } from "react";
+import { FC, MouseEventHandler } from "react";
 import clsx from "clsx";
 import { Loading } from "../Loading";
 
 type ButtonProps = {
   variant?: "outlined" | "filled";
   size?: "small" | "medium" | "large";
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   title: string;
   isLoading?: boolean;
   isDisabled?: boolean;
   className?: string;
+  startIcon?: React.ReactNode;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
   title,
   isDisabled,
   className,
+  startIcon,
 }) => {
   const isFullWidth = size === "large" || size === "medium";
   const baseStyles = "rounded font-medium focus:outline-none bg-white";
@@ -48,8 +50,11 @@ export const Button: FC<ButtonProps> = ({
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex-grow-0">
-          <span className="text-primary text-md font-bold">{title}</span>
+        <div className="flex items-center justify-center">
+          {startIcon && <span className="mr-2">{startIcon}</span>}
+          <div className="flex-grow-0">
+            <span className="text-primary text-md font-bold">{title}</span>
+          </div>
         </div>
       )}
     </button>
