@@ -4,7 +4,6 @@ import { Loading } from "@/components/Loading";
 import React, { FC, Fragment, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAddVocabularyNote } from "@/hooks/useAddVocabularyNote";
-import { OneVocabularyNote } from "./OneVocabularyNote";
 
 import { useVocabularyNotes } from "@/hooks/vocabularyNote/useVocabularyNotes";
 import { EditVocabularyNoteDialogCore } from "./EditVocabularyNoteDialog";
@@ -22,6 +21,8 @@ import { useMutateTags, useTags } from "@/hooks/tag/useTags";
 import { CreatableAutoComplete } from "@/components/CreatableAutoComplete";
 import { intersection } from "lodash";
 import { FaPlay } from "react-icons/fa";
+import { OneVocabularyNote } from "./_components/OneVocabularyNote/OneVocabularyNote";
+import { Box, Stack } from "@mui/material";
 
 export default function Page() {
   const { data: vocabularyNotes = [], isLoading } = useVocabularyNotes();
@@ -75,7 +76,7 @@ export default function Page() {
   }
 
   return (
-    <div className="p-1 mb-28">
+    <Stack spacing={1} p={1} mb={28}>
       <CreatableAutoComplete
         options={[
           ...tags.map((tag) => {
@@ -98,12 +99,11 @@ export default function Page() {
           });
         }}
       />
-      {/* TODO: いつかシャッフル */}
-      {/* {shuffleArray(filteredNotes, generateSeedFromDatetime()).map((n) => { */}
-      {filteredNotes.map((n) => {
-        return (
-          <div key={n.id}>
+      <Box>
+        {filteredNotes.map((n) => {
+          return (
             <OneVocabularyNote
+              key={n.id}
               note={n}
               tags={n.noteToTagRelations}
               reviewCount={n.reviewLogs.length}
@@ -113,9 +113,9 @@ export default function Page() {
                 });
               }}
             />
-          </div>
-        );
-      })}
+          );
+        })}
+      </Box>
       <div className="fixed z-50 bottom-24 left-2  cursor-pointer">
         <Button
           variant="outlined"
@@ -155,7 +155,7 @@ export default function Page() {
         }}
         isOpen={isOpenAddTagDialog}
       />
-    </div>
+    </Stack>
   );
 }
 

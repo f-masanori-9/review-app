@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="relative flex items-center justify-center overflow-hidden ">
       {/* 背景画像 */}
-      <div className="relative z-10  flex items-center justify-center">
+      <div className="relative z-10 flex items-center justify-center">
         <div className="max-w-4xl w-full p-8">
           {/* Main Content */}
           <section>

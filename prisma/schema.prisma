@@ -41,17 +41,33 @@ model Session {
 }
 
 model User {
-  id                      String                    @id @default(cuid())
-  name                    String?
-  email                   String?                   @unique
-  emailVerified           DateTime?
-  image                   String?
-  accounts                Account[]
-  sessions                Session[]
-  VocabularyNote          VocabularyNote[]
-  VocabularyNoteReviewLog VocabularyNoteReviewLog[]
-  Tag                     Tag[]
-  NoteToTagRelations      NoteToTagRelation[]
+  id                        String                      @id @default(cuid())
+  name                      String?
+  email                     String?                     @unique
+  emailVerified             DateTime?
+  image                     String?
+  accounts                  Account[]
+  sessions                  Session[]
+  VocabularyNote            VocabularyNote[]
+  VocabularyNoteReviewLog   VocabularyNoteReviewLog[]
+  Tag                       Tag[]
+  NoteToTagRelations        NoteToTagRelation[]
+  SharedVNoteToUserRelation SharedVNoteToUserRelation[]
+  friendUsers               UserFriendShip[]            @relation("friendUser")
+  UserFriendShip            UserFriendShip[]
+}
+
+model UserFriendShip {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Friend User @relation("friendUser", fields: [friendId], references: [id], onDelete: Cascade)
+  User   User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, friendId])
 }
 
 model VerificationToken {
@@ -63,17 +79,29 @@ model VerificationToken {
 }
 
 model VocabularyNote {
-  id                       String                    @id @default(cuid())
-  userId                   String
-  user                     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  frontContent             String
-  backContent              String
-  createdAt                DateTime                  @default(now())
-  updatedAt                DateTime                  @default(now())
-  vocabularyNoteReviewLogs VocabularyNoteReviewLog[]
-  NoteToTagRelations       NoteToTagRelation[]
+  id                        String                      @id @default(cuid())
+  userId                    String
+  user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  frontContent              String
+  backContent               String
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @default(now())
+  vocabularyNoteReviewLogs  VocabularyNoteReviewLog[]
+  NoteToTagRelations        NoteToTagRelation[]
+  SharedVNoteToUserRelation SharedVNoteToUserRelation[]
 
   @@index([userId])
+}
+
+model SharedVNoteToUserRelation {
+  id               String         @id @default(cuid())
+  sharedUserId     String
+  sharedUser       User           @relation(fields: [sharedUserId], references: [id], onDelete: Cascade)
+  vocabularyNoteId String
+  vocabularyNote   VocabularyNote @relation(fields: [vocabularyNoteId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+
+  @@index([sharedUserId])
 }
 
 model VocabularyNoteReviewLog {
